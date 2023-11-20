@@ -6,13 +6,19 @@ class TimeStampMixin(models.Model):
     updated_at      = models.DateTimeField(auto_now=True,null=True)
 
 class Client(TimeStampMixin, models.Model):
+    GENDER_CHOICES = [
+        ('male', 'رجالى'),
+        ('female', 'حريمى'),
+    ]
+
     FName       = models.CharField(max_length=15, null=True, blank=True, verbose_name="الاسم الاول") # الاسم الاول
     SName       = models.CharField(max_length=15, null=True, blank=True, verbose_name="الاسم الثانى") # الاسم الثانى
     TName       = models.CharField(max_length=15, null=True, blank=True, verbose_name="الاسم الثالث") # الاسم الثالث
     LName       = models.CharField(max_length=15, null=True, blank=True, verbose_name="الاسم الرابع") # الاسم الرابع
     name        = models.CharField(max_length=50, null=True, blank=True, db_index=True,verbose_name="الاسم بالكامل") # الاسم بالكامل
-    kindMale    = models.BooleanField(null=True, blank=True, verbose_name="نوع العميل : ذكر")
-    page        = models.PositiveIntegerField(null=True, blank=True, verbose_name="صفحة رقم")
+    kindMale    = models.CharField(max_length=10, choices=GENDER_CHOICES, null=True, blank=True, verbose_name="نوع العميل" )
+    book        = models.CharField(max_length=50, null=True, blank=True, verbose_name="اسم الدفتر")
+    page        = models.IntegerField(null=True, blank=True, verbose_name="صفحة رقم")
     phone       = models.CharField(max_length=11, null=True, blank=True, unique=True, db_index=True, verbose_name="رقم التليفون")
     address     = models.CharField(max_length=50, null=True, blank=True, verbose_name="العنوان")
 

@@ -1,0 +1,54 @@
+{% extends "homee/index.html" %}
+{% block title %}
+    <title>قائمة العملاء</title>
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mt-5 mb-3">
+        <div class="col-10 m-auto border border-danger p-3 text-center">
+            <form class="form" action="#" method="GET">
+                <div class="">
+                    <input name="q" class="form-control m-2" placeholder="ابحث باسم العميل">
+                    <input type="submit" class="form-control btn btn-info" value="ابحث">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 m-auto">
+            <h1>قائمة العملاء</h1>
+            <table class="table text-center table-striped table-hover table-bordered w-100" id="" style="">
+                <thead>
+                    <th>رقم العميل</th>
+                    <th>الاسم</th>
+                    <th>العنوان</th>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <td><a class="btn btn-info text-white"
+                                href="#">{{ client.id }}</a></td>
+                            <td>{{ client.name }}</td>
+                            <td>{{ client.address }}</td>
+                        </tr>
+
+                    {% empty %}
+                        <li>No client found.</li>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a class="btn btn-primary" href="#">اضافة عميل</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}
