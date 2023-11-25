@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'import_export',
+    'colorfield',
     'home',
     'client',
+    'storge',
     'crispy_forms',
     'crispy_bootstrap4',
 ]

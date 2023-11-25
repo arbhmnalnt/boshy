@@ -5,7 +5,7 @@ from import_export.admin import ImportExportModelAdmin
 
 class ClientAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields   = ('id', 'name', 'address', 'phone')
-    list_filter     = ('id', 'name', 'address')
+    list_filter     = ('address', 'book')
     list_display    = ('id', 'name', 'page', 'kindMale', 'address', 'phone', 'created_at')
 
 admin.site.register(Client, ClientAdmin)

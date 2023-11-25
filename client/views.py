@@ -6,14 +6,23 @@ from .forms import ClientForm
 from django.urls import reverse_lazy
 
 
+
+class ClientEditView(UpdateView):
+    model = Client
+    form_class = ClientForm
+    template_name = 'client/client_form.html'
+    success_url = reverse_lazy('client:list')
+
 class ClientCreateView(CreateView):
     model = Client
     form_class = ClientForm
     template_name = 'client/client_form.html'
-    success_url = reverse_lazy('client:client_list')
+    success_url = reverse_lazy('client:list')
+
+    def get_object(self, queryset=None):
+        return self.get_gueryset().get(pk=self.kwargs['pk'])
 
 
-# Create your views here.
 class clientListView(ListView):
     model = Client
     template_name = 'client/client_list.html'
@@ -26,4 +35,5 @@ class clientListView(ListView):
             queryset = queryset.filter(
                 Q(name__icontains=search_query) & Q(is_deleted=False)
             )
+        queryset = queryset.order_by('-created_at')
         return queryset

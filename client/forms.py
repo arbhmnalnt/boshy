@@ -7,7 +7,6 @@ class ClientForm(forms.ModelForm):
     SName    =   forms.CharField(label="الاسم الثانى")
     TName    =   forms.CharField(label="الاسم الثالث")
     LName    =   forms.CharField(label="الاسم الرابع")
-    kindMale =   forms.CharField(label="نوع العميل")
     book     =   forms.CharField(label="الدفتر")
     page     =   forms.CharField(label="رقم الصفحة")
     phone    =   forms.CharField(label="رقم التليفون")
