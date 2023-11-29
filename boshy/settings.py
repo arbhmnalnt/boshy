@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'import_export',
     'colorfield',
+    'simple_history',
+    'crispy_forms',
+    'crispy_bootstrap4',
     'home',
     'client',
     'storge',
-    'crispy_forms',
-    'crispy_bootstrap4',
+    
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -56,9 +58,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'boshy.urls'
+
+SIMPLE_HISTORY_HISTORY_CHANGE_REASON_USE_TEXT_FIELD=True
+
 
 TEMPLATES = [
     {

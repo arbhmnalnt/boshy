@@ -1,7 +1,6 @@
 from django.db import models
 # Create your models here.
 class TimeStampMixin(models.Model):
-    is_deleted      = models.BooleanField (default=False, db_index=True)
     created_at      = models.DateTimeField(auto_now_add=True,null=True)
     updated_at      = models.DateTimeField(auto_now=True,null=True)
 

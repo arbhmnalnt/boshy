@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import *
 from django.db.models import Q
 from .forms import *
 from django.urls import reverse_lazy
+from django.http import Http404
+
 
 
 class ClothUpdateView(UpdateView):
@@ -14,35 +16,33 @@ class ClothUpdateView(UpdateView):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
-        return Cloth.objects.get(pk=pk)
+        cloth = Cloth.objects.get(pk=pk)
+        clothRecord = ClothRecord.objects.create(clothh=cloth)   
+        return clothRecord 
     
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['initial'] = {'clothh': self.kwargs.get('pk')}
-        return kwargs
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        cloth = Cloth.objects.get(pk=pk)
+        # Add your custom variable to the context
+        context['historyRecords'] = ClothRecord.objects.filter(clothh=cloth, typee__isnull=False)
+        context['cloth'] = cloth
+        return context
+    
     def form_valid(self, form):
-        # Create a new ClothRecord
-        cloth_record = form.save(commit=False)
-        # Update the related Cloth with the new amount
-        cloth                   = Cloth.objects.get(pk=self.kwargs.get('pk'))
-        form_amount             = form.cleaned_data['amount']
-        previous_cloth_amount   = cloth.amount 
-        total_amount            = int(previous_cloth_amount) + int(form_amount)
-        form.cleaned_data['amount']            = total_amount
+        pk = self.kwargs.get('pk')
+        cloth = Cloth.objects.get(pk=pk)
 
-        print(f'{previous_cloth_amount} / {form_amount}  / {total_amount}  {type(cloth.amount)} = {type(total_amount)}')
+        cleaned_data = form.cleaned_data
+        amount = cleaned_data["amount"]
+        new_amount = amount + cloth.amount
+        cloth.amount = new_amount
         cloth.save()
-        # Save the ClothRecord
-        cloth_record.save()
-
-        #ClothRecord
-        newClothRecord   = ClothRecord.objects.create(
-            clothh   =  cloth,
-            amount  =  form_amount,
-            typee   = "inside"
-        )
-        return super().form_valid(form)
+        
+        response = super().form_valid(form)
+        
+        # Return the response
+        return response
     
 class ClothCreateView(CreateView):
     model = Cloth
