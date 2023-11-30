@@ -33,7 +33,7 @@ class clientListView(ListView):
         search_query = self.request.GET.get('q')
         if search_query:
             queryset = queryset.filter(
-                Q(name__icontains=search_query) & Q(is_deleted=False)
+                Q(name__icontains=search_query)
             )
         queryset = queryset.order_by('-created_at')
         return queryset

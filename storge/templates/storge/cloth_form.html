@@ -35,7 +35,7 @@
                 <tbody>
                     {% for entry in historyRecords %}
                         <tr>
-                            <td>{{ entry.id }}</td>
+                            <td>{{ entry.get_typee_display }}</td>
                             <td>{{ entry.amount }} متر</td>
                             <td>{{ entry.created_at|date:'Y-m-d'}}</td>
                         </tr>

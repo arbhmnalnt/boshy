@@ -27,9 +27,9 @@ class ClothRecord(TimeStampMixin, models.Model):
         ('inside', 'وارد'),
         ('outside', 'صادر'),
     ]
-    clothh     = models.ForeignKey('Cloth', on_delete=models.CASCADE, null=True, blank=True, verbose_name="القماش")
+    clothh     = models.ForeignKey('Cloth', on_delete=models.DO_NOTHING, null=True, blank=True, verbose_name="القماش")
     amount     = models.DecimalField(max_digits=5,decimal_places=2, null=True, blank=True, verbose_name="الكمية")
-    typee      = models.CharField(max_length=10, choices=Cloth_CHOICES, null=True, blank=True, verbose_name="نوع السجل" )
+    typee      = models.CharField(max_length=10, choices=Cloth_CHOICES, null=True, blank=True, verbose_name="نوع السجل", default="inside")
 
     def __str__(self):
         return self.clothh.name

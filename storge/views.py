@@ -18,6 +18,9 @@ class ClothUpdateView(UpdateView):
         pk = self.kwargs.get('pk')
         cloth = Cloth.objects.get(pk=pk)
         clothRecord = ClothRecord.objects.create(clothh=cloth)   
+        # cleanin 
+        x = ClothRecord.objects.filter(clothh=cloth, amount__isnull=True)
+        print(x.delete())
         return clothRecord 
     
     def get_context_data(self, **kwargs):
@@ -25,7 +28,7 @@ class ClothUpdateView(UpdateView):
         pk = self.kwargs.get('pk')
         cloth = Cloth.objects.get(pk=pk)
         # Add your custom variable to the context
-        context['historyRecords'] = ClothRecord.objects.filter(clothh=cloth, typee__isnull=False)
+        context['historyRecords'] = ClothRecord.objects.filter(clothh=cloth, amount__gt=0)
         context['cloth'] = cloth
         return context
     
