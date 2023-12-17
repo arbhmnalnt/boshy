@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('home.urls')),
     path('client/',include('client.urls')),
-    path('storge/',include('storge.urls'))
+    path('storge/',include('storge.urls')),
+    path('order/',include('order.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

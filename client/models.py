@@ -21,6 +21,20 @@ class Client(TimeStampMixin, models.Model):
     phone       = models.CharField(max_length=50, null=True, blank=True, db_index=True, verbose_name="رقم التليفون")
     address     = models.CharField(max_length=50, null=True, blank=True, verbose_name="العنوان")
 
+    def __str__(self):
+        return f"{self.name} ({str(self.id)}) "
+
+class ClientSizes(TimeStampMixin, models.Model):
+    clientS  = models.ForeignKey('Client', related_name='client', on_delete=models.CASCADE)
+    tall    = models.CharField(max_length=5, null=True, blank=True, verbose_name="الطول") # الطول
+    kom     = models.CharField(max_length=5, null=True, blank=True, verbose_name="الكم") # الكم
+    ktf     = models.CharField(max_length=5, null=True, blank=True, verbose_name="الكتف") # الكتف
+    sadr    = models.CharField(max_length=5, null=True, blank=True, verbose_name="الصدر") # الصدر
+    leaka   = models.CharField(max_length=5, null=True, blank=True, verbose_name="اللياقه") # اللياقه
+    kazna   = models.CharField(max_length=5, null=True, blank=True, verbose_name="الخزنه") # الخزنه
+    atak    = models.CharField(max_length=5, null=True, blank=True, verbose_name="الأتك") # الأتك
+
+
     def save(self, *args, **kwargs):
         # Automatically populate the 'name' field with the concatenation of fName, SName, TName, and LName
         self.name = f"{self.FName} {self.SName} {self.TName} {self.LName}".strip()

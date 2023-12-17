@@ -1,0 +1,9 @@
+from django.urls import path
+from.views import *
+
+app_name = "order"
+
+urlpatterns = [
+    path('createMain', MasterInvoiceFormCreateView.as_view(), name="createMain"),
+    path('createDetails/<int:pk>', DetailedOrderFormCreateView.as_view(), name="createDetails")
+]
