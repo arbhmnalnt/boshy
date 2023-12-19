@@ -27,9 +27,14 @@ class MasterInvoice( TimeStampMixin,models.Model):
 # ==========  tables for many orders in on Invoice
 class DetailedOrder (TimeStampMixin,models.Model):
     masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
-    name            = models.CharField(max_length=35, null=True, blank=True, verbose_name="اسم الطلب") 
+    name            = models.CharField(max_length=90, null=True, blank=True, verbose_name="اسم الطلب") 
     clothD          = models.ForeignKey(Cloth, on_delete=models.CASCADE, verbose_name="القماش")
     used            = models.DecimalField(max_digits=3, decimal_places=2,null=True, blank=True, verbose_name="الكمية المستخدمة")
     details         = models.TextField(null=True, blank=True, verbose_name="التفصيل")
 
-# ==========  tables for diffrent Invoices 
+# ==========  tables for basics infos 
+class basicInvoiceInfo(TimeStampMixin,models.Model):
+    masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
+    total           = models.DecimalField(max_digits=3, decimal_places=2,null=True, blank=True, verbose_name="المبلغ الإجمالى")
+    paid            = models.DecimalField(max_digits=3, decimal_places=2,null=True, blank=True, verbose_name="المبلغ المدفوع")
+    remain          = models.DecimalField(max_digits=3, decimal_places=2,null=True, blank=True, verbose_name="المبلغ المتبقى")

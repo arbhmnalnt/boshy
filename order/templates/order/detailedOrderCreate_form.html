@@ -13,12 +13,40 @@
 <div class="container-fluid text-center m-auto">
     <h1 class="h1 border p-3 mb-5 mt-3">{% if form.instance.pk %}تعديل{% else %} انشاء {% endif %} طلب </h1>
     <div class="row">
-        <div class="col-12 mb-5 border border-danger p-4">
+        <div class="col-5 mb-5 border border-danger p-4">
             <form method="post">
                     {% csrf_token %}
                     {{ form | crispy}}
                 <button type="submit" class="btn btn-danger text-white d-block w-100 h3 mt-3">تسجيل باقى البيانات</button>
             </form>
+        </div>
+        <div class="col-5 mr-auto ml-auto">
+            {% if detailedOrders %}
+                {% for detailed_order in detailedOrders %}
+                    <div class="border m-2 p-2">
+                        <label>اسم الطلب : </label>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample-{{detailed_order.id}}" aria-expanded="false" aria-controls="collapseExample-{{detailed_order.id}}">
+                            {{ detailed_order.name }}
+                        </button>
+                        <div class="collapse" id="collapseExample-{{detailed_order.id}}">
+                            <div class="card card-body mt-2">
+                                <p class="border p-2 text-info h6">رقم الفاتورة / العملية : {{ detailed_order.masterInvoice.id }}</p>
+                                <p class="border p-2 text-info h6">اسم العميل : {{ detailed_order.masterInvoice.clientMI.id }}</p>
+                                <p class="border p-2 text-info h6">رقم العميل : {{ detailed_order.masterInvoice.clientMI.name }}</p>
+                                <p class="border p-2 text-info h6">القماش : {{ detailed_order.clothD }}</p>
+                                <p class="border p-2 text-info h6">الكمية : {{ detailed_order.used }}</p>
+                                <p class="border p-2 text-info h6">التفاصيل : {{ detailed_order.details }}</p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                
+                {# Display other details from detailed_order if it exists #}
+            {% else %}
+                <h4>لا توجد طلبات سابقة لعملية البيع</h4>
+                {# Display other information when detailed_order does not exist #}
+            {% endif %}
         </div>
     </div>
 </div>

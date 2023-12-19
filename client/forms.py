@@ -15,3 +15,7 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = ['FName', 'SName', 'TName', 'LName', 'kindMale', 'book', 'page', 'phone', 'address']
+
+class ClientSizesForm(forms.ModelForm):
+    model   = ClientSizes
+    fields  = '__all__' 
