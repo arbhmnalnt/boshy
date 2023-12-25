@@ -21,10 +21,10 @@ class DetailedOrderForm(forms.ModelForm):
 
 class basicInvoiceInfoForm(forms.Form): 
     masterInvoice   = forms.ModelChoiceField(queryset=MasterInvoice.objects.all(), label="الفاتورة")
-    total           = forms.DecimalField(max_digits=3, decimal_places=2, required=False, label="المبلغ الإجمالى")
-    paid            = forms.DecimalField(max_digits=3, decimal_places=2, required=False, label="المبلغ المدفوع")
-    remain          = forms.DecimalField(max_digits=3, decimal_places=2, required=False, label="المبلغ المتبقى")
-    clientS         = forms.ModelChoiceField(queryset=Client.objects.all(), label="اسم العميل")
+    total           = forms.IntegerField(required=False, label="المبلغ الإجمالى")
+    paid            = forms.IntegerField(required=False, label="المبلغ المدفوع")
+    remain          = forms.IntegerField(required=False, label="المبلغ المتبقى")
+    clientS         = forms.ModelChoiceField(queryset=Client.objects.all(), label="اسم العميل", to_field_name='id')
     tall            = forms.CharField(max_length=5,  required=False, label="الطول") # الطول
     kom             = forms.CharField(max_length=5,  required=False, label="الكم") # الكم
     ktf             = forms.CharField(max_length=5,  required=False, label="الكتف") # الكتف

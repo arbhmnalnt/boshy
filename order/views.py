@@ -13,6 +13,7 @@ class ordersListView(ListView):
     model               =   MasterInvoice
     template_name       =   'order/ordersList.html'
     context_object_name =   'masterInvoices'
+    ordering            =   '-created_at'
 
 class BasicOrderFormCreateView(FormView):
     form_class  = basicInvoiceInfoForm
@@ -32,6 +33,12 @@ class BasicOrderFormCreateView(FormView):
             clientSizes = ClientSizes.objects.filter(clientS=client).first()
             # set sizes 
             initial['tall'] = clientSizes.tall
+            initial['kom'] = clientSizes.kom
+            initial['ktf'] = clientSizes.ktf
+            initial['sadr'] = clientSizes.sadr
+            initial['leaka'] = clientSizes.leaka
+            initial['kazna'] = clientSizes.kazna
+            initial['atak'] = clientSizes.atak
         else:
             pass
         return initial
@@ -43,11 +50,21 @@ class BasicOrderFormCreateView(FormView):
         leaka = form.cleaned_data["leaka"]
         kazna = form.cleaned_data["kazna"]
         atak  = form.cleaned_data["atak"] 
-        client_id = form.cleaned_data["clientS"]
+        client = form.cleaned_data["clientS"]
+
+        client_id = client.id
         # client = Client.objects.get(pk=client_id)
         ClientSizes.objects.update_or_create(
-            tall=tall, kom=kom, ktf=ktf, sadr=sadr, leaka=leaka, kazna=kazna,atak=atak,
-            defaults={'id':client_id}
+            clientS=client,  # Provide the clientS foreign key
+            defaults={
+                'tall': tall,
+                'kom': kom,
+                'ktf': ktf,
+                'sadr': sadr,
+                'leaka': leaka,
+                'kazna': kazna,
+                'atak': atak,
+            }
         )
 
         success_url = reverse('order:list')
@@ -69,16 +86,19 @@ class DetailedOrderFormCreateView(CreateView):
     def get_context_data(self, **kwargs):
         print(f"kwargs =>  {kwargs}")
         context = super().get_context_data()
-        pk = self.kwargs.get('pk')
-        detailedOrders = DetailedOrder.objects.filter(masterInvoice__id=pk)
+        master_invoice_pk = self.kwargs.get('pk')
+        detailedOrders = DetailedOrder.objects.filter(masterInvoice__id=master_invoice_pk).order_by('-created_at')
         context['detailedOrders'] = detailedOrders
+        context['master_invoice_pk'] = master_invoice_pk
         context['instance'] = None
+        
         return context
     def form_valid(self, form):
+        response    = super().form_valid(form)
         # Save the form instance and get the ID
         masterInvoice = form.cleaned_data["masterInvoice"]
         print(f'masterInvoice => {masterInvoice}')
-        success_url = reverse('order:finalPart', kwargs={'pk': masterInvoice.id})
+        success_url = reverse('order:createDetails', kwargs={'pk': masterInvoice.id})
         return HttpResponseRedirect(success_url)
 
 class MasterInvoiceFormCreateView(CreateView):

@@ -32,9 +32,12 @@ class DetailedOrder (TimeStampMixin,models.Model):
     used            = models.DecimalField(max_digits=3, decimal_places=2,null=True, blank=True, verbose_name="الكمية المستخدمة")
     details         = models.TextField(null=True, blank=True, verbose_name="التفصيل")
 
+    def get_absolute_url(self):
+            return reverse('order:createDetails', kwargs={'pk': self.pk})
+
 # ==========  tables for basics infos 
 class basicInvoiceInfo(TimeStampMixin,models.Model):
     masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
-    total           = models.DecimalField(max_digits=3, decimal_places=2,null=True, blank=True, verbose_name="المبلغ الإجمالى")
-    paid            = models.DecimalField(max_digits=3, decimal_places=2,null=True, blank=True, verbose_name="المبلغ المدفوع")
-    remain          = models.DecimalField(max_digits=3, decimal_places=2,null=True, blank=True, verbose_name="المبلغ المتبقى")
+    total           = models.IntegerField(null=True, blank=True, verbose_name="المبلغ الإجمالى")
+    paid            = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المدفوع")
+    remain          = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المتبقى")

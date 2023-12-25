@@ -25,7 +25,7 @@
                 {% for detailed_order in detailedOrders %}
                     <div class="border m-2 p-2">
                         <label>اسم الطلب : </label>
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample-{{detailed_order.id}}" aria-expanded="false" aria-controls="collapseExample-{{detailed_order.id}}">
+                        <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample-{{detailed_order.id}}" aria-expanded="false" aria-controls="collapseExample-{{detailed_order.id}}">
                             {{ detailed_order.name }}
                         </button>
                         <div class="collapse" id="collapseExample-{{detailed_order.id}}">
@@ -41,8 +41,9 @@
                         </div>
                     </div>
                 {% endfor %}
-                
-                {# Display other details from detailed_order if it exists #}
+                <hr>
+                <a class="btn btn-primary w-100 p-2" href="{% url 'order:finalPart' pk=master_invoice_pk %}">إستكمال باقى البيانات</a>
+
             {% else %}
                 <h4>لا توجد طلبات سابقة لعملية البيع</h4>
                 {# Display other information when detailed_order does not exist #}
