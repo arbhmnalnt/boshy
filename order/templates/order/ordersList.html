@@ -11,12 +11,24 @@
 
 {% block content %}
 <div class="container-fluid text-center m-auto">
-    <h1 class="h1 border p-3 mb-5 mt-3">سجل الطلبات</h1>
+    <h1 class="h4 mt-3">البحث</h1>
+    <form class="border p-3 mb-5 " action="#" >
+        <input name="q" placeholder="ابحث بالاسم / رقم العملية / رقم العميل">
+    </form>
+    <h1 class="h3 border p-3 mb-5 mt-3">سجل الطلبات</h1>
     <div class="row">
         <div class="col-12 border border-primary p-4">
             {% for masterInvoice in  masterInvoices%}
-            <div class="border p-3">
-                {{masterInvoice.id}}
+            <div class="border p-3 h5">
+                <label>رقم العملية : </label><span>{{masterInvoice.counter}}</span> /
+                <label>اسم العميل : </label><span>{{masterInvoice.clientMI.name}}</span> /
+                <label>نوع العملية : </label><span>{{masterInvoice.invoiceType}}</span> /
+                <label>الاجراءات</label>
+                <div>
+                    <a class="btn btn-primary d-100" href="#">عرض الطلب بالتفصيل</a>
+                    <a class="btn btn-info" href="#">اجراء اخر</a>
+                    <a class="btn btn-info" href="#">اجراء اخر</a>
+                </div>
             </div>
             {% endfor %}
         </div>

@@ -7,6 +7,7 @@ from django.urls import reverse
 
 
 class MasterInvoice( TimeStampMixin,models.Model):
+    counter = models.PositiveIntegerField(default=1, editable=False)
     invoiceType = [
         ('قماش الدكان-رجالى', 'قماش الدكان-رجالى'),
         ('قماش الدكان-حريمى', 'قماش الدكان-حريمى'),
@@ -16,6 +17,17 @@ class MasterInvoice( TimeStampMixin,models.Model):
     ]
     clientMI    = models.ForeignKey(Client, related_name='master_invoices', on_delete=models.CASCADE, verbose_name="العميل")
     invoiceType = models.CharField(max_length=35, choices=invoiceType, null=True, blank=True, verbose_name="نوع الطلب", default="قماش الدكان-رجالى")
+
+    def save(self, *args, **kwargs):
+        # Check if the instance is being saved for the first time
+        if not self.id:
+            # Query the maximum counter value in the table
+            max_counter = MasterInvoice.objects.all().aggregate(models.Max('counter'))['counter__max']
+
+            # Increment the counter value
+            self.counter = max_counter + 1 if max_counter else 1
+
+        super(MasterInvoice, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('order:createDetails', kwargs={'pk': self.pk})

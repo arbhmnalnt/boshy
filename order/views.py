@@ -18,6 +18,7 @@ class ordersListView(ListView):
 class BasicOrderFormCreateView(FormView):
     form_class  = basicInvoiceInfoForm
     template_name   = 'order/basicOrderCreate_form.html'
+    success_url = reverse_lazy('order:list')
 
     def get_initial(self):
         initial = super().get_initial()
@@ -43,6 +44,7 @@ class BasicOrderFormCreateView(FormView):
             pass
         return initial
     def form_valid(self, form):
+        response    = super().form_valid(form)
         tall  = form.cleaned_data["tall"]
         kom   = form.cleaned_data["kom"]
         ktf   = form.cleaned_data["ktf"] 
@@ -69,6 +71,7 @@ class BasicOrderFormCreateView(FormView):
 
         success_url = reverse('order:list')
         return HttpResponseRedirect(success_url)
+    
 
 class DetailedOrderFormCreateView(CreateView):
     model           = DetailedOrder
