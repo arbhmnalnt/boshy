@@ -13,10 +13,11 @@ class MasterInvoiceForm(forms.ModelForm):
 
 
 class DetailedOrderForm(forms.ModelForm):
+    storge = forms.CharField(max_length=10000, label="الكمية فى المخزن")
+    remain = forms.CharField(max_length=10000, label="الكمية المتبقية")
     class Meta:
         model = DetailedOrder
-        fields = '__all__'
-    
+        fields = ['masterInvoice','name','clothD','used','storge','remain','details']    
 
 
 class basicInvoiceInfoForm(forms.Form): 

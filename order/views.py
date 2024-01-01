@@ -6,8 +6,29 @@ from .forms import *
 from client.models import ClientSizes
 from client.forms import ClientSizesForm
 from django.urls import reverse_lazy
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.views.generic.edit import FormView
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt
+def getClothStorgedAmount(request):
+    if request.method == "POST":
+        data                    = json.loads(request.body.decode('utf-8'))
+        print(f"data =====================> {data}")
+        cloth_id                = data.get('clothId', 'No data received.')
+        print(f"cloth_id =====================> {cloth_id}")
+        cloth_storged_amount    = Cloth.objects.get(pk=cloth_id).amount
+    
+        response_data = {
+            'status': 'success',
+            'cloth_storged_amount': cloth_storged_amount
+        }
+
+    return JsonResponse(response_data)
+
+
+    
 
 class ordersListView(ListView):
     model               =   MasterInvoice
@@ -18,6 +39,7 @@ class ordersListView(ListView):
 class BasicOrderFormCreateView(FormView):
     form_class  = basicInvoiceInfoForm
     template_name   = 'order/basicOrderCreate_form.html'
+#    success_url    = reverse('order:list')
     success_url = reverse_lazy('order:list')
 
     def get_initial(self):
@@ -72,6 +94,7 @@ class BasicOrderFormCreateView(FormView):
         success_url = reverse('order:list')
         return HttpResponseRedirect(success_url)
     
+from decimal import Decimal
 
 class DetailedOrderFormCreateView(CreateView):
     model           = DetailedOrder
@@ -100,6 +123,14 @@ class DetailedOrderFormCreateView(CreateView):
         response    = super().form_valid(form)
         # Save the form instance and get the ID
         masterInvoice = form.cleaned_data["masterInvoice"]
+        clothId       = form.cleaned_data["clothD"]
+        used          = Decimal(form.cleaned_data["used"])
+        amountInStorge= Cloth.objects.get(pk=clothId).amount
+        remain = amountInStorge - used
+        print(f"remain =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {remain}")
+        Cloth.objects.filter(pk=clothId).update(amount=remain)
+
+
         print(f'masterInvoice => {masterInvoice}')
         success_url = reverse('order:createDetails', kwargs={'pk': masterInvoice.id})
         return HttpResponseRedirect(success_url)

@@ -11,7 +11,7 @@
 
 {% block content %}
 <div class="container-fluid text-center m-auto">
-    <h1 class="h1 border p-3 mb-5 mt-3">{% if form.instance.pk %}تعديل{% else %} انشاء {% endif %} طلب </h1>
+    <h4 class="h4 border p-3 mb-5 mt-3">{% if form.instance.pk %}تعديل{% else %} انشاء {% endif %} طلب </h4>
     <div class="row">
         <div class="col-5 mb-5 border border-danger p-4">
             <form method="post">
@@ -20,7 +20,7 @@
                 <button type="submit" class="btn btn-danger text-white d-block w-100 h3 mt-3">تسجيل باقى البيانات</button>
             </form>
         </div>
-        <div class="col-5 mr-auto ml-auto">
+        <div class="col-5 mr-auto ml-auto h4">
             {% if detailedOrders %}
                 {% for detailed_order in detailedOrders %}
                     <div class="border m-2 p-2">
@@ -30,12 +30,12 @@
                         </button>
                         <div class="collapse" id="collapseExample-{{detailed_order.id}}">
                             <div class="card card-body mt-2">
-                                <p class="border p-2 text-info h6">رقم الفاتورة / العملية : {{ detailed_order.masterInvoice.id }}</p>
-                                <p class="border p-2 text-info h6">اسم العميل : {{ detailed_order.masterInvoice.clientMI.id }}</p>
-                                <p class="border p-2 text-info h6">رقم العميل : {{ detailed_order.masterInvoice.clientMI.name }}</p>
-                                <p class="border p-2 text-info h6">القماش : {{ detailed_order.clothD }}</p>
-                                <p class="border p-2 text-info h6">الكمية : {{ detailed_order.used }}</p>
-                                <p class="border p-2 text-info h6">التفاصيل : {{ detailed_order.details }}</p>
+                                <p class="border p-2   h4">رقم الفاتورة / العملية : {{ detailed_order.masterInvoice.id }}</p>
+                                <p class="border p-2   h4">اسم العميل : {{ detailed_order.masterInvoice.clientMI.id }}</p>
+                                <p class="border p-2   h4">رقم العميل : {{ detailed_order.masterInvoice.clientMI.name }}</p>
+                                <p class="border p-2   h4">القماش : {{ detailed_order.clothD }}</p>
+                                <p class="border p-2   h4">الكمية : {{ detailed_order.used }}</p>
+                                <p class="border p-2   h4">التفاصيل : {{ detailed_order.details }}</p>
                                 
                             </div>
                         </div>
@@ -55,11 +55,79 @@
 {% endblock %}
 
 {% block script %}
-$("#id_clientMI").chosen();
-$(".chosen-results").css('font-size','1.2rem');
-$(".chosen-container.chosen-container-single").css('height', '3rem')
-$(".chosen-single").css('font-size','1.5rem');
-$(".chosen-single").css('height','100%');
-$(".chosen-single span").css('height','100%');
+
+$("#id_used").keyup(function(){
+    let cloth_storged_amount = ($("#id_storge").val()),
+        id_used              = ($("#id_used").val());
+    $("#id_remain").attr('value', cloth_storged_amount-id_used )
+    console.log("remain => ", cloth_storged_amount - id_used)
+})
+
+// get cloth storge amount
+
+$("#id_clothD").change(function(){
+    let clothId = $("#id_clothD").val();
+    $.post('/order/getClothStorgedAmount',   // url   
+        JSON.stringify({ clothId: clothId }), 
+            function(data, status, jqXHR) {// success callback
+                var cloth_storged_amount = data.cloth_storged_amount;
+                console.log("cloth_storged_amount => ", cloth_storged_amount)
+            //$('#id_storge').attr('value', cloth_storged_amount)
+            $('#id_storge').val(data.cloth_storged_amount)
+            
+        })
+})
+
+
+
+$("#div_id_is_deleted").hide()
+$("div.col-5.mb-5.border.border-danger.p-4").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+    
+})
+
+$("#id_masterInvoice").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+    "height":"3rem"
+})
+
+$("#id_name").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+})
+
+$("#id_clothD").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+    "height":"3rem"
+
+})
+
+$("#id_used").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+})
+
+
+$("#id_details").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+})
+
+$("#id_storge").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+})
+
+
+$("#id_remain").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+})
+
+
+/// make a fixed 2 function one to change font weight and size and aonther to change too the height of the field 
 
 {% endblock %}
