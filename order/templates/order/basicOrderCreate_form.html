@@ -39,6 +39,7 @@
                 </div>
                 <hr>
                 <div class="form-row">
+                    {{ form.media }}
                     <div class="form-group col-3">
                         {{ form.tall|as_crispy_field }}
                     </div>
@@ -60,6 +61,11 @@
                     <div class="form-group col-3">
                         {{ form.ktf|as_crispy_field }}
                     </div>
+                    <div class="form-group col-3">
+                        {{ form.receve_date|as_crispy_field }}
+                    </div>
+
+                    
                 </div>
                 <button type="submit" class="btn btn-danger text-white d-block w-100 h3 mt-3">تسجيل باقى البيانات</button>
             </form>

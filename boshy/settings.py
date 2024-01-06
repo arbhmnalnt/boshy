@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'simple_history',
     'crispy_forms',
     'crispy_bootstrap4',
+    'bootstrap_datepicker_plus',
     'home',
     'client',
     'storge',

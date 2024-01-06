@@ -27,14 +27,31 @@ def getClothStorgedAmount(request):
 
     return JsonResponse(response_data)
 
-
-    
-
 class ordersListView(ListView):
     model               =   MasterInvoice
     template_name       =   'order/ordersList.html'
     context_object_name =   'masterInvoices'
     ordering            =   '-created_at'
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q')
+        if search_query:
+            q_object = Q(clientMI__name__icontains=search_query)
+            q_object |= Q(invoiceType__icontains=search_query)
+            if search_query.isdigit():
+                q_object |= Q(counter=int(search_query))
+
+            queryset = queryset.filter(q_object)
+
+        queryset = queryset.order_by('-created_at')
+
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        print(f"kwargs =>  {kwargs}")
+        context = super().get_context_data()
+        basicInvoiceInfos = basicInvoiceInfo.objects()
+        return context
 
 class BasicOrderFormCreateView(FormView):
     form_class  = basicInvoiceInfoForm
@@ -51,7 +68,6 @@ class BasicOrderFormCreateView(FormView):
         initial['clientS'] = client
 
         clientSizes = ClientSizes.objects.filter(clientS=client).count()
-        print(f"clientSizes => {clientSizes}")
         if clientSizes > 0 :
             clientSizes = ClientSizes.objects.filter(clientS=client).first()
             # set sizes 
@@ -67,6 +83,23 @@ class BasicOrderFormCreateView(FormView):
         return initial
     def form_valid(self, form):
         response    = super().form_valid(form)
+        # make record save to basicInvoiceInfo,
+
+        masterInvoice = form.cleaned_data["masterInvoice"]
+        total       = form.cleaned_data["total"]
+        paid        = form.cleaned_data["paid"]
+        remain      = form.cleaned_data["remain"]
+        receve_date = form.cleaned_data["receve_date"]
+        basicInvoiceInfo.objects.update_or_create(
+            masterInvoice= masterInvoice,
+            defaults={
+                'total': total,
+                'paid': paid,
+                'remain':remain,
+                'receve_date':receve_date
+            }
+        )
+
         tall  = form.cleaned_data["tall"]
         kom   = form.cleaned_data["kom"]
         ktf   = form.cleaned_data["ktf"] 
@@ -77,7 +110,6 @@ class BasicOrderFormCreateView(FormView):
         client = form.cleaned_data["clientS"]
 
         client_id = client.id
-        # client = Client.objects.get(pk=client_id)
         ClientSizes.objects.update_or_create(
             clientS=client,  # Provide the clientS foreign key
             defaults={

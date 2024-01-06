@@ -12,22 +12,30 @@
 {% block content %}
 <div class="container-fluid text-center m-auto">
     <h1 class="h4 mt-3">البحث</h1>
-    <form class="border p-3 mb-5 " action="#" >
-        <input name="q" placeholder="ابحث بالاسم / رقم العملية / رقم العميل">
-    </form>
-    <h1 class="h3 border p-3 mb-5 mt-3">سجل الطلبات</h1>
     <div class="row">
-        <div class="col-12 border border-primary p-4">
+        <div class="col-12">
+            <form class="border m-auto " action="#" >
+                <input class="w-100 form-control" name="q" placeholder="ابحث بالاسم / رقم العملية / رقم العميل">
+                <input type="submit" class="form-control btn btn-info" value="ابحث">
+            </form>
+        </div>
+    </div>
+    <h1 class="h3 border p-3 mb-5 mt-3">سجل الطلبات</h1>
+    <div class="row mt-5 mb-3 bg-white w-100" style=" position: fixed; top: 14rem; display: inline-block; left: 0rem; z-index:2; overflow:scroll; height:67vh">
+        <div class="col-10 m-auto border border-primary p-4">
             {% for masterInvoice in  masterInvoices%}
             <div class="border p-3 h5">
                 <label>رقم العملية : </label><span>{{masterInvoice.counter}}</span> /
                 <label>اسم العميل : </label><span>{{masterInvoice.clientMI.name}}</span> /
                 <label>نوع العملية : </label><span>{{masterInvoice.invoiceType}}</span> /
-                <label>الاجراءات</label>
+                {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                        <!-- Display details from BasicInvoiceInfo model -->
+                        <label>تاريخ التسليم : </label><span> {{ basicInvoiceInfo.receve_date|date:'d-m-Y'}}</span>
+                        <!-- Add more fields as needed -->
+                {% endfor %}
                 <div>
-                    <a class="btn btn-primary d-100" href="#">عرض الطلب بالتفصيل</a>
-                    <a class="btn btn-info" href="#">اجراء اخر</a>
-                    <a class="btn btn-info" href="#">اجراء اخر</a>
+                    <a class="btn btn-danger d-100" href="{{masterInvoice.id}}">عرض الطلب بالتفصيل</a>
+                    <a class="btn btn-primary" href="#">اضافة مبلغ</a>
                 </div>
             </div>
             {% endfor %}

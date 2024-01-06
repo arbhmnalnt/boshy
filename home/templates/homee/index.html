@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static "homee/css/bootstrap.min.css" %}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" integrity="sha512-yVvxUQV0QESBt1SyZbNJMAwyKvFTLMyXSyBHDO4BG5t7k/Lw34tyqlSDlKIrIENIzCl+RVUNjmCPG+V/GMesRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="{% static 'homee/js/jquery.min.js' %}"></script>
     </style>
         {% block style %}
         {% endblock %}
@@ -29,12 +30,15 @@
                 <li class="nav-item">
                     <a class="nav-link btn btn-dark text-white" href="{% url "order:list" %}">البحث عن عملية بيع</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-dark text-white" href="{% url "order:createMain" %}">عملية بيع جديدة</a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">باقى لينكات الوصول السريع</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown01">
                         <a class="dropdown-item" href="{% url "client:list" %}">قائمة العملاء</a>
                         <a class="dropdown-item" href="{% url "client:create" %}">اضافة عميل جديد</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item" href="{% url "order:createMain" %}">عملية بيع جديدة</a>
                     </div>
                 </li>
             </ul>

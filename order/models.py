@@ -53,3 +53,4 @@ class basicInvoiceInfo(TimeStampMixin,models.Model):
     total           = models.IntegerField(null=True, blank=True, verbose_name="المبلغ الإجمالى")
     paid            = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المدفوع")
     remain          = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المتبقى")
+    receve_date     = models.DateField(blank=True, null=True)
