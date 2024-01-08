@@ -31,8 +31,8 @@
                         <div class="collapse" id="collapseExample-{{detailed_order.id}}">
                             <div class="card card-body mt-2">
                                 <p class="border p-2   h4">رقم الفاتورة / العملية : {{ detailed_order.masterInvoice.id }}</p>
-                                <p class="border p-2   h4">اسم العميل : {{ detailed_order.masterInvoice.clientMI.id }}</p>
-                                <p class="border p-2   h4">رقم العميل : {{ detailed_order.masterInvoice.clientMI.name }}</p>
+                                <p class="border p-2   h4">رقم العميل : {{ detailed_order.masterInvoice.clientMI.id }}</p>
+                                <p class="border p-2   h4">اسم العميل : <a href="#">{{ detailed_order.masterInvoice.clientMI.name }}</a></p>
                                 <p class="border p-2   h4">القماش : {{ detailed_order.clothD }}</p>
                                 <p class="border p-2   h4">الكمية : {{ detailed_order.used }}</p>
                                 <p class="border p-2   h4">التفاصيل : {{ detailed_order.details }}</p>

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'client',
     'storge',
     'order',
+    'kazna',
     
 ]
 

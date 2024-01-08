@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-    <title>سجل المبيعات</title>
+    <title>سجل الخزنة</title>
 {% endblock %}
 
 {% block style %}
@@ -23,18 +23,15 @@
     <h1 class="h3 border p-3 mb-5 mt-3">سجل الطلبات</h1>
     <div class="row mt-5 mb-3 bg-white w-100" style=" position: fixed; top: 14rem; display: inline-block; left: 0rem; z-index:2; overflow:scroll; height:67vh">
         <div class="col-10 m-auto border border-primary p-4">
-            {% for masterInvoice in  masterInvoices%}
+            {% for record in  records%}
             <div class="border p-3 h5">
-                <label>رقم العملية : </label><span>{{masterInvoice.counter}}</span> /
-                <label>اسم العميل : </label><span><a href="#">{{masterInvoice.clientMI.name}}</a></span> /
-                <label>نوع العملية : </label><span>{{masterInvoice.invoiceType}}</span> /
-                {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
-                        <!-- Display details from BasicInvoiceInfo model -->
-                        <label>تاريخ التسليم : </label><span> {{ basicInvoiceInfo.receve_date|date:'d-m-Y'}}</span>
-                        <!-- Add more fields as needed -->
-                {% endfor %}
+                <label>نوع العملية : </label><span>{{records.kind}}</span> /
+                <label>رقم الفاتورة : </label><span>{{record.masterInvoice.counter}}</span> /
+                <label>اسم العميل : </label><span><a href="#">{{record.masterInvoice.clientMI.name}}</a></span> /
+                <label>نوع العملية : </label><span>{{record.masterInvoice.invoiceType}}</span> /
+                <label>المبلغ : </label><span>{{record.amount}}</span> /
                 <div>
-                    <a class="btn btn-danger d-100" href="{% url 'order:listOrderDetails' masterInvoice.id %}">عرض الطلب بالتفصيل</a>
+                    <a class="btn btn-danger d-100" href="#">عرض الطلب بالتفصيل</a>
                     <a class="btn btn-primary" href="#">اضافة مبلغ</a>
                 </div>
             </div>
@@ -45,9 +42,4 @@
 {% endblock %}
 
 {% block script %}
-console.log("test")
-
-$("#id_paid").keyup(function(){
-    $("#id_remain").attr('value', $("#id_total").val() - $("#id_paid").val())
-})
 {% endblock %}

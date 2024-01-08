@@ -1,0 +1,107 @@
+{% extends "homee/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>تفاصيل الطلب رقم {{masterInvoices.counter}} للعميل {{masterInvoices.clientMI.name}} </title>
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid text-center m-auto">
+    <h1 class="h3 border p-3 mb-5 mt-3">
+        تفاصيل الطلب رقم {{masterInvoices.counter}} للعميل <a href="#">{{masterInvoices.clientMI.name}}</a> 
+    </h1>
+
+    <div>
+        <div id="accordion" class="row">
+            <div class="card col-5  pb-0 mb-0">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-primary w-100 d-block" data-toggle="collapse" data-target="#collapseMasterInfo" aria-expanded="true" aria-controls="collapseOne">
+                            <label class="h4">تفاصيل الفاتورة الرئيسية</label>
+                        </button>
+                    </h5>
+                </div>
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-primary w-100 d-block" data-toggle="collapse" data-target="#collapseMoney" aria-expanded="true" aria-controls="collapseOne">
+                            <label class="h4">تفاصيل المبلغ</label>
+                        </button>
+                    </h5>
+                </div>
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-primary w-100 d-block" data-toggle="collapse" data-target="#collapseDetails" aria-expanded="true" aria-controls="collapseOne">
+                            <label class="h4">تفاصيل الطلب</label>
+                        </button>
+                    </h5>
+                </div>
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-primary w-100 d-block" data-toggle="collapse" data-target="#collapseClientSizes" aria-expanded="true" aria-controls="collapseOne">
+                            <label class="h4">المقاسات</label>
+                        </button>
+                    </h5>
+                </div>
+            </div>
+            <div id="collapseClientSizes" class="border collapse col-6" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body p-3 h6 text-right h5" style="overflow:scroll">
+                    <ul class="d-inline-block text-center" style="font-size:1.5rem!important;flex-wrap: auto;">
+                        <li><label>الطول</label> : <span>{{clientSizes.tall}}</span></li>
+                        <li><label>الكم</label> : <span>{{clientSizes.kom}}</span></li>
+                        <li><label>الكتف</label> : <span>{{clientSizes.ktf}}</span></li>
+                        <li><label>الصدر</label> : <span>{{clientSizes.sadr}}</span></li>
+                        <li><label>اللياقة</label> : <span>{{clientSizes.leaka}}</span></li>
+                        <li><label>الخزنة</label> : <span>{{clientSizes.kazna}}</span></li>
+                        <li><label>الأتك</label> : <span>{{clientSizes.atak}}</span></li>
+                        <hr>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="collapseDetails" class="border collapse show col-6" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body p-3 h6 text-right h5" style="overflow:scroll">
+                    <ul class="d-inline-block" style="font-size:1.5rem!important;flex-wrap: auto;">
+                        {% for DetailedOrder in DetailedOrders %}
+                            <li><label>اسم الطلب</label> : <span>{{DetailedOrder.name}}</span></li>
+                            <li><label>القماش</label> : <span>{{DetailedOrder.clothD.name}}</span></li>
+                            <li><label>كمية القماش المستهلكة</label> : <span>{{DetailedOrder.used}}</span></li>
+                            <li class="m-2"><label>التفصيل</label> : <span class="border d-inline-block p-1 mt-1">{{DetailedOrder.details}}</span></li>
+                            <hr>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div id="collapseMasterInfo" class="border collapse col-6" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body p-3 h6 text-right">
+                    <ul class="d-inline-block" style="font-size:1.5rem!important">
+                        <li><label>رقم العملية / الفاتورة</label> : <span>{{masterInvoices.counter}}</span></li>
+                        <li><label>رقم العميل</label> : <span>{{masterInvoices.clientMI.id}}</span></li>
+                        <li><label>اسم العميل</label> : <span><a href="#">{{masterInvoices.clientMI.name}}</a></span></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="collapseMoney" class="border collapse col-6" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body p-3 h6 text-right h5">
+                    <ul class="d-inline-block" style="font-size:1.5rem!important">
+                        {% for basic_info in masterInvoices.basicinvoiceinfo_set.all %}
+                            
+                            <li><label>تاريخ الاستلام</label> : <span>{{basic_info.receve_date}}</span></li>
+                            <hr>
+                            <li><label>الاجمالى</label> : <span>{{basic_info.total}}</span></li>
+                            <li><label>المدفوع</label> : <span>{{basic_info.paid}}</span></li>
+                            <li><label>المتبقى</label> : <span>{{basic_info.remain}}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

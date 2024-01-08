@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView 
 from .models import *
 from django.db.models import Q
 from .forms import *
@@ -10,6 +10,7 @@ from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.views.generic.edit import FormView
 from django.views.decorators.csrf import csrf_exempt
 import json
+from kazna.services import *
 
 @csrf_exempt
 def getClothStorgedAmount(request):
@@ -26,6 +27,21 @@ def getClothStorgedAmount(request):
         }
 
     return JsonResponse(response_data)
+
+class ordersDetailView(DetailView):
+    model               =   MasterInvoice
+    template_name       =   'order/ordersDetailView.html'
+    context_object_name =   'masterInvoices'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        master_invoice_pk   = self.kwargs.get('pk')
+        masterInvoice       = MasterInvoice.objects.get(pk=master_invoice_pk)
+        clientMI            = masterInvoice.clientMI
+        context["masterInvoice"]   = masterInvoice
+        context["DetailedOrders"]   = DetailedOrder.objects.filter(masterInvoice=masterInvoice)
+        context["clientSizes"]   = ClientSizes.objects.get(clientS=clientMI)
+        return context
 
 class ordersListView(ListView):
     model               =   MasterInvoice
@@ -47,11 +63,7 @@ class ordersListView(ListView):
 
         return queryset
     
-    def get_context_data(self, **kwargs):
-        print(f"kwargs =>  {kwargs}")
-        context = super().get_context_data()
-        basicInvoiceInfos = basicInvoiceInfo.objects()
-        return context
+from decimal import Decimal
 
 class BasicOrderFormCreateView(FormView):
     form_class  = basicInvoiceInfoForm
@@ -99,6 +111,8 @@ class BasicOrderFormCreateView(FormView):
                 'receve_date':receve_date
             }
         )
+
+        record_money_in(Decimal(str(paid)),masterInvoice=masterInvoice, details=f"اجمالى المبلغ على العميل {masterInvoice.clientMI.name}  / {total}  / والمتبقى للدفع {remain}")
 
         tall  = form.cleaned_data["tall"]
         kom   = form.cleaned_data["kom"]

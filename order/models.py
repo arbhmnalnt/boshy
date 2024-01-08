@@ -41,7 +41,7 @@ class DetailedOrder (TimeStampMixin,models.Model):
     masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
     name            = models.CharField(max_length=90, null=True, blank=True, verbose_name="اسم الطلب") 
     clothD          = models.ForeignKey(Cloth, on_delete=models.CASCADE, verbose_name="القماش")
-    used            = models.DecimalField(max_digits=3, decimal_places=2,null=True, blank=True, verbose_name="الكمية المستخدمة")
+    used            = models.DecimalField(max_digits=4, decimal_places=2,null=True, blank=True, verbose_name="الكمية المستخدمة")
     details         = models.TextField(null=True, blank=True, verbose_name="التفصيل")
 
     def get_absolute_url(self):
