@@ -111,8 +111,7 @@ class BasicOrderFormCreateView(FormView):
                 'receve_date':receve_date
             }
         )
-
-        record_money_in(Decimal(str(paid)),masterInvoice=masterInvoice, details=f"اجمالى المبلغ على العميل {masterInvoice.clientMI.name}  / {total}  / والمتبقى للدفع {remain}")
+        record_money_in(Decimal(str(paid)),master_invoice=masterInvoice, details=f"اجمالى المبلغ على العميل {masterInvoice.clientMI.name}  / {total}  / والمتبقى للدفع {remain}")
 
         tall  = form.cleaned_data["tall"]
         kom   = form.cleaned_data["kom"]
