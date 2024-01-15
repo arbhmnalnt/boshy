@@ -28,13 +28,16 @@ class basicInvoiceInfoForm(forms.Form):
     remain          = forms.IntegerField(required=False, label="المبلغ المتبقى")
     clientS         = forms.ModelChoiceField(queryset=Client.objects.all(), label="اسم العميل", to_field_name='id')
     tall            = forms.CharField(max_length=5,  required=False, label="الطول") # الطول
+    sadr            = forms.CharField(max_length=5,  required=False, label="الصدر") # الصدر
     kom             = forms.CharField(max_length=5,  required=False, label="الكم") # الكم
     ktf             = forms.CharField(max_length=5,  required=False, label="الكتف") # الكتف
-    sadr            = forms.CharField(max_length=5,  required=False, label="الصدر") # الصدر
+    
     leaka           = forms.CharField(max_length=5,  required=False, label="اللياقه") # اللياقه
     kazna           = forms.CharField(max_length=5,  required=False, label="الخزنه") # الخزنه
     atak            = forms.CharField(max_length=5,  required=False, label="الأتك") # الأتك
     receve_date = forms.DateField( required=False, label="تاريخ التسليم", widget=DatePickerInput())
+
+    
 
 
     def clean(self):
