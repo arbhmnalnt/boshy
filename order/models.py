@@ -61,4 +61,4 @@ class basicInvoiceInfo(TimeStampMixin,models.Model):
     paid            = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المدفوع")
     remain          = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المتبقى")
     receve_date     = models.DateField(blank=True, null=True)
-    statue          = models.CharField(max_length=35, choices=orderStatue, null=True, blank=True, verbose_name="حالة الطلب", default="قماش الدكان-رجالى")
+    statue          = models.CharField(max_length=35, choices=orderStatue, null=True, blank=True, verbose_name="حالة الطلب", default="unknwon")

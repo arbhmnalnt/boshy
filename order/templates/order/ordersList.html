@@ -29,6 +29,7 @@
                     <th>اسم العميل</th>
                     <th>نوع الطلب</th>
                     <th>تاريخ الطلب</th>
+                    <th>حالة الطلب</th>
                     <th>تاريخ التسليم</th>
                     <th>أوامر</th>
                     <th>تسليم الطلب</th>
@@ -42,6 +43,13 @@
                         {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
                             <!-- Display details from BasicInvoiceInfo model -->
                           {{ basicInvoiceInfo.created_at|date:'Y-m-d'}}</span>
+                            <!-- Add more fields as needed -->
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                            <!-- Display details from BasicInvoiceInfo model -->
+                          {{ basicInvoiceInfo.get_statue_display}}</span>
                             <!-- Add more fields as needed -->
                         {% endfor %}
                     </td>
