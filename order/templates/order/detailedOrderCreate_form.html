@@ -6,7 +6,10 @@
 {% endblock %}
 
 {% block style %}
-
+        .image_id_input{
+            position:relative;
+            bottom:10rem
+        }
 {% endblock %}
 
 {% block content %}
@@ -20,7 +23,7 @@
                 <button type="submit" class="btn btn-danger text-white d-block w-100 h3 mt-3">تسجيل باقى البيانات</button>
             </form>
         </div>
-        <div class="col-5 mr-auto ml-auto h4">
+        <div class="col-3 mr-auto ml-auto h4">
             {% if detailedOrders %}
                 {% for detailed_order in detailedOrders %}
                     <div class="border m-2 p-2">
@@ -49,12 +52,73 @@
                 {# Display other information when detailed_order does not exist #}
             {% endif %}
         </div>
+        <div class="col-3">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                {%for img in imgs%}                
+                    <ol class="carousel-indicators">
+                        <li data-target="#myCarousel" data-slide-to="{{img.id}}" class="{% if forloop.first %}active{% endif %}"></li>
+                    </ol>
+                {%endfor%}
+                    <div class="carousel-inner">
+                        {%for img in imgs%}                
+                        
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <div class="image-container">
+                                <img src="{{ img.file.url }}" alt="{{ img.name }}" id="{{img.id}}" style="width: 100%; height: 25rem;">
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5 class="bg-dark text-white p-2">{{img.name}}</h5>
+                            </div>
+                        </div>
+                        {%endfor%}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-target="#myCarousel" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-target="#myCarousel" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                    </button>                
+            </div>
+            <div class="image_choosen_holder h3" style="padding-top:3rem">
+                <a class="btn btn-danger text-white mb-3" id="stopCarouselBtn">اختيار الصورة</a>
+            </div>
+        </div>
     </div>
 </div>
 
 {% endblock %}
 
 {% block script %}
+
+var myCarousel = $('#myCarousel');
+
+// Pause the carousel when the "Stop Carousel" button is clicked
+$('#stopCarouselBtn').on('click', function() {
+    myCarousel.carousel('pause');
+});
+
+$("#id_img").change(function(){
+    let val = $("#id_img").val();
+    $(".carousel-item").each(function(){
+        $(this).removeClass("active")
+    })
+    $(`img#${val}`).parent().parent().addClass("carousel-item active");
+})
+
+
+
+$("#id_img").chosen();
+$("#id_clothD").chosen();
+$(".chosen-results").css('font-size','1.2rem');
+$(".chosen-container.chosen-container-single").css('height', '4rem')
+$(".chosen-container.chosen-container-single").css('width', '20rem')
+$(".chosen-single").css('font-size','2rem');
+$(".chosen-single").css('height','100%');
+$(".chosen-single").css('line-height','3.5rem');
+$(".chosen-single span").css('height','100%');
+
 
 $("#id_used").keyup(function(){
     let cloth_storged_amount = ($("#id_storge").val()),

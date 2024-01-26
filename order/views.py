@@ -11,6 +11,7 @@ from django.views.generic.edit import FormView
 from django.views.decorators.csrf import csrf_exempt
 import json
 from kazna.services import *
+from img.models import *
 
 @csrf_exempt
 def getClothStorgedAmount(request):
@@ -151,6 +152,13 @@ class DetailedOrderFormCreateView(CreateView):
         master_invoice_pk = self.kwargs.get('pk')
         master_invoice = MasterInvoice.objects.get(pk=master_invoice_pk)
         initial['masterInvoice'] = master_invoice
+        orderType      = MasterInvoice.objects.get(pk=master_invoice_pk).invoiceType
+
+        if 'رجالى' in str(orderType):
+            imgs = Img.objects.filter(kind='male')
+        elif 'حريمى' in str(orderType):
+            imgs = Img.objects.filter(kind='femal')
+        initial['img'] = imgs
         return initial
 
     
@@ -159,9 +167,20 @@ class DetailedOrderFormCreateView(CreateView):
         context = super().get_context_data()
         master_invoice_pk = self.kwargs.get('pk')
         detailedOrders = DetailedOrder.objects.filter(masterInvoice__id=master_invoice_pk).order_by('-created_at')
-        context['detailedOrders'] = detailedOrders
-        context['master_invoice_pk'] = master_invoice_pk
-        context['instance'] = None
+        orderType      = MasterInvoice.objects.get(pk=master_invoice_pk).invoiceType
+
+        if 'رجالى' in str(orderType):
+            imgs = Img.objects.filter(kind='male')
+        elif 'حريمى' in str(orderType):
+            imgs = Img.objects.filter(kind='femal')
+        else:
+            imgs = ''
+
+        context['imgsCount']            = imgs.count()
+        context['imgs']                 = imgs
+        context['detailedOrders']       = detailedOrders
+        context['master_invoice_pk']    = master_invoice_pk
+        context['instance']             = None
         
         return context
     def form_valid(self, form):

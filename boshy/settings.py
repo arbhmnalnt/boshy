@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'storge',
     'order',
     'kazna',
+    'img',
     
 ]
 

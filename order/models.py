@@ -2,7 +2,7 @@ from django.db import models
 from client.models import TimeStampMixin, Client
 from storge.models import Cloth
 from django.urls import reverse
-
+from img.models import Img
 # Create your models here.
 
 
@@ -40,6 +40,7 @@ class MasterInvoice( TimeStampMixin,models.Model):
 class DetailedOrder (TimeStampMixin,models.Model):
     masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
     name            = models.CharField(max_length=90, null=True, blank=True, verbose_name="اسم الطلب") 
+    img             = models.ForeignKey(Img, on_delete=models.CASCADE,  null=True, blank=True, verbose_name="الصورة")
     clothD          = models.ForeignKey(Cloth, on_delete=models.CASCADE, verbose_name="القماش")
     used            = models.DecimalField(max_digits=4, decimal_places=2,null=True, blank=True, verbose_name="الكمية المستخدمة")
     details         = models.TextField(null=True, blank=True, verbose_name="التفصيل")
@@ -49,8 +50,15 @@ class DetailedOrder (TimeStampMixin,models.Model):
 
 # ==========  tables for basics infos 
 class basicInvoiceInfo(TimeStampMixin,models.Model):
+    orderStatue = [
+        ('unknwon','غير محدد'),
+        ('sent','تم ارسالها الى المشغل'),
+        ('done','جاهز للتسليم'),
+        ('delivered','تم التسليم')
+    ]
     masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
     total           = models.IntegerField(null=True, blank=True, verbose_name="المبلغ الإجمالى")
     paid            = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المدفوع")
     remain          = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المتبقى")
     receve_date     = models.DateField(blank=True, null=True)
+    statue          = models.CharField(max_length=35, choices=orderStatue, null=True, blank=True, verbose_name="حالة الطلب", default="قماش الدكان-رجالى")

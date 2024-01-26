@@ -23,23 +23,47 @@
     <h1 class="h3 border p-3 mb-5 mt-3">سجل الطلبات</h1>
     <div class="row mt-5 mb-3 bg-white w-100" style=" position: fixed; top: 14rem; display: inline-block; left: 0rem; z-index:2; overflow:scroll; height:67vh">
         <div class="col-10 m-auto border border-primary p-4">
-            {% for masterInvoice in  masterInvoices%}
-            <div class="border p-3 h5">
-                <label>رقم العملية : </label><span>{{masterInvoice.counter}}</span> /
-                <label>اسم العميل : </label><span><a href="#">{{masterInvoice.clientMI.name}}</a></span> /
-                <label>نوع العملية : </label><span>{{masterInvoice.invoiceType}}</span> /
-                {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
-                        <!-- Display details from BasicInvoiceInfo model -->
-                        <label>تاريخ التسليم : </label><span> {{ basicInvoiceInfo.receve_date|date:'d-m-Y'}}</span>
-                        <!-- Add more fields as needed -->
-                {% endfor %}
-                <div>
-                    <a class="btn btn-danger d-100" href="{% url 'order:listOrderDetails' masterInvoice.id %}">عرض الطلب بالتفصيل</a>
-                    <a class="btn btn-primary" href="#">اضافة مبلغ</a>
-                </div>
-            </div>
-            {% endfor %}
+            <table class="table text-center table-striped table-hover table-bordered w-100" id="" style="">
+                <tr>
+                    <th>رقم العملية</th>
+                    <th>اسم العميل</th>
+                    <th>نوع الطلب</th>
+                    <th>تاريخ الطلب</th>
+                    <th>تاريخ التسليم</th>
+                    <th>أوامر</th>
+                    <th>تسليم الطلب</th>
+                </tr>
+                {% for masterInvoice in  masterInvoices%}
+                <tr>
+                    <td>{{masterInvoice.counter}}</td>
+                    <td>{{masterInvoice.clientMI.name}}</td>
+                    <td>{{masterInvoice.invoiceType}}</td>
+                    <td>
+                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                            <!-- Display details from BasicInvoiceInfo model -->
+                          {{ basicInvoiceInfo.created_at|date:'Y-m-d'}}</span>
+                            <!-- Add more fields as needed -->
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                            <!-- Display details from BasicInvoiceInfo model -->
+                            {{ basicInvoiceInfo.receve_date|date:'Y-m-d'}}</span>
+                            <!-- Add more fields as needed -->
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a class="btn btn-primary text-white">btn</a>
+                        <a class="btn btn-info text-white">btn</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger text-white">btn</a>
+                    </td>
+                </tr>
+                {% endfor %}    
+            </table>
         </div>
+    </div>
 </div>
 
 {% endblock %}

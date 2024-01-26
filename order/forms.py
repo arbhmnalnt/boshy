@@ -18,7 +18,7 @@ class DetailedOrderForm(forms.ModelForm):
     remain = forms.CharField(max_length=10000, label="الكمية المتبقية")
     class Meta:
         model = DetailedOrder
-        fields = ['masterInvoice','name','clothD','used','storge','remain','details']    
+        fields = ['masterInvoice','name', 'img', 'clothD','used','storge','remain','details']    
 
 
 class basicInvoiceInfoForm(forms.Form): 
@@ -35,6 +35,7 @@ class basicInvoiceInfoForm(forms.Form):
     leaka           = forms.CharField(max_length=5,  required=False, label="اللياقه") # اللياقه
     kazna           = forms.CharField(max_length=5,  required=False, label="الخزنه") # الخزنه
     atak            = forms.CharField(max_length=5,  required=False, label="الأتك") # الأتك
+    statue          = forms.ChoiceField(choices=basicInvoiceInfo.orderStatue, required=False, label="حالة الطلب", initial='unknwon')
     receve_date = forms.DateField( required=False, label="تاريخ التسليم", widget=DatePickerInput())
 
     
