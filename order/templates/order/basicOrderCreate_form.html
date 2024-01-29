@@ -12,10 +12,11 @@
 
 {% block content %}
 <div class="container-fluid text-center m-auto">
-    <h1 class="h1 border p-3 mb-5 mt-3">{% if form.instance.pk %}تعديل{% else %} انشاء {% endif %} عملية بيع </h1>
+    <h1 class="h1 border p-3 mb-5 mt-3">{% if form.instance.pk %}تعديل{% else %} انشاء {% endif %} عملية تفصيل </h1>
     <div class="row">
         <div class="col-12 mb-5 border border-danger p-4">
             <form method="post" class="h3">
+                {{ form.media }}
                 {% csrf_token %}
                 <div class="form-row">
                     <div class="form-group col-4 mb-0">
@@ -43,25 +44,25 @@
                 <hr>
                 <div class="form-row">
                     {{ form.media }}
-                    <div class="form-group col-3">
+                    <div class="form-group col">
                         {{ form.tall|as_crispy_field }}
                     </div>
-                    <div class="form-group col-3">
+                    <div class="form-group col">
                         {{ form.sadr|as_crispy_field }}
                     </div>
-                    <div class="form-group col-3">
+                    <div class="form-group col">
                         {{ form.kom|as_crispy_field }}
                     </div>
-                    <div class="form-group col-3">
+                    <div class="form-group col">
                         {{ form.ktf|as_crispy_field }}
                     </div>
-                    <div class="form-group col-3">
+                    <div class="form-group col">
                         {{ form.leaka|as_crispy_field }}
                     </div>
-                    <div class="form-group col-3">
+                    <div class="form-group col">
                         {{ form.kazna|as_crispy_field }}
                     </div>
-                    <div class="form-group col-3">
+                    <div class="form-group col">
                         {{ form.atak|as_crispy_field }}
                     </div>
                     <div class="form-group col-3">
@@ -70,6 +71,7 @@
 
                     
                 </div>
+
                 <button type="submit" class="btn btn-danger text-white d-block w-100 h3 mt-3">تسجيل باقى البيانات</button>
             </form>
         </div>

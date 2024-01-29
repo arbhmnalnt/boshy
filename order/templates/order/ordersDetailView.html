@@ -6,6 +6,10 @@
 {% endblock %}
 
 {% block style %}
+    span{
+        font-weight:900;
+        font-size:2rem;
+    }
 {% endblock %}
 
 
@@ -17,13 +21,13 @@
 
     <div>
         <div id="accordion" class="row">
-            <div class="card col-5  pb-0 mb-0">
+            <div class="card col-4  pb-0 mb-0">
                 <div class="card-header" id="headingOne">
-                    <h5 class="mb-0">
+                    <h6 class="mb-0">
                         <button class="btn btn-primary w-100 d-block" data-toggle="collapse" data-target="#collapseMasterInfo" aria-expanded="true" aria-controls="collapseOne">
                             <label class="h4">تفاصيل الفاتورة الرئيسية</label>
                         </button>
-                    </h5>
+                    </h6>
                 </div>
                 <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
@@ -62,7 +66,7 @@
                 </div>
             </div>
 
-            <div id="collapseDetails" class="border collapse show col-6" aria-labelledby="headingOne" data-parent="#accordion">
+            <div id="collapseDetails" class="border collapse show col-8" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body p-3 h6 text-right h5" style="overflow:scroll">
                     <ul class="d-inline-block" style="font-size:1.5rem!important;flex-wrap: auto;">
                         {% for DetailedOrder in DetailedOrders %}
@@ -70,6 +74,7 @@
                             <li><label>القماش</label> : <span>{{DetailedOrder.clothD.name}}</span></li>
                             <li><label>كمية القماش المستهلكة</label> : <span>{{DetailedOrder.used}}</span></li>
                             <li class="m-2"><label>التفصيل</label> : <span class="border d-inline-block p-1 mt-1">{{DetailedOrder.details}}</span></li>
+                            <div><img class="w-100" src="/media/{{DetailedOrder.img.file}}"></div>
                             <hr>
                         {% endfor %}
                     </ul>
@@ -89,11 +94,12 @@
                     <ul class="d-inline-block" style="font-size:1.5rem!important">
                         {% for basic_info in masterInvoices.basicinvoiceinfo_set.all %}
                             
-                            <li><label>تاريخ الاستلام</label> : <span>{{basic_info.receve_date}}</span></li>
+                            <li><label>تاريخ الطلب</label> : <span>{{basic_info.created_at|date:'Y-m-d'}}</span></li>
                             <hr>
                             <li><label>الاجمالى</label> : <span>{{basic_info.total}}</span></li>
                             <li><label>المدفوع</label> : <span>{{basic_info.paid}}</span></li>
                             <li><label>المتبقى</label> : <span>{{basic_info.remain}}</span></li>
+                            <li><label>تاريخ الاستلام</label> : <span>{{basic_info.receve_date|date:'Y-m-d'}}</span></li>
                         {% endfor %}
                     </ul>
                 </div>
