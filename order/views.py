@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView 
 from .models import *
 from django.db.models import Q
@@ -12,6 +12,26 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from kazna.services import *
 from img.models import *
+
+@csrf_exempt
+def chabgeOrderStatue(request, pk):
+    statueVal = request.POST.get('change_order_statue')
+    if statueVal == "0" :
+        val = "unknwon"
+    elif statueVal == "1":
+        val = "sent"
+    elif statueVal == "2" :
+        val = "done"
+    else :
+        val = "unknwon"
+
+    print(f"statueVal => {statueVal}")
+    print(f"val => {val}")
+
+    masterInvoice = MasterInvoice.objects.get(pk=pk)
+    basicInvoiceInfoRecord = basicInvoiceInfo.objects.filter(masterInvoice=masterInvoice).update(statue=val)
+    return JsonResponse({'message': 'done'})
+
 
 @csrf_exempt
 def getClothStorgedAmount(request):

@@ -5,6 +5,7 @@ app_name = "order"
 
 urlpatterns = [
     # ========= API
+    path('changeOrderStatue/<int:pk>', chabgeOrderStatue),
     path('getClothStorgedAmount', getClothStorgedAmount),
     # ========= API
 
