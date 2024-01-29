@@ -18,3 +18,9 @@ class basicInvoiceInfoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display    = ('id',)
 
 admin.site.register(basicInvoiceInfo, basicInvoiceInfoAdmin)
+
+class DeliverdAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    search_fields   = ('id',)
+    list_display    = ('id',)
+
+admin.site.register(Deliverd, DeliverdAdmin)

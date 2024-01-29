@@ -25,11 +25,16 @@ class imgListView(ListView):
     def get_queryset(self):
         queryset        =   super().get_queryset()
         search_query    =   self.request.GET.get('q')
+        if str(search_query) == "NoneType":
+            try:
+                # Try to filter by ID if the search query is a valid integer
+                id_query = Q(id__exact=int(search_query))
+            except ValueError:
+                # If not a valid integer, exclude the ID filter
+                id_query = Q()
 
-        if search_query : 
             queryset = queryset.filter(
-                Q(name_icontains=search_query)|
-                Q(id_eq=search_query)
+                Q(name__icontains=search_query) | id_query
             )
         queryset = queryset.order_by('-id')
         return queryset

@@ -8,7 +8,7 @@ urlpatterns = [
     path('changeOrderStatue/<int:pk>', chabgeOrderStatue),
     path('getClothStorgedAmount', getClothStorgedAmount),
     # ========= API
-
+    path('createDeliverd/<int:pk>', DeliverdFormCreateView.as_view(), name="createDeliverd"),
     path('createMain', MasterInvoiceFormCreateView.as_view(), name="createMain"),
     path('createDetails/<int:pk>', DetailedOrderFormCreateView.as_view(), name="createDetails"),
     path('createBasicInfos/<int:pk>', BasicOrderFormCreateView.as_view(),name="finalPart"),

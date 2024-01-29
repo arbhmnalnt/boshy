@@ -6,32 +6,32 @@
     <!-- Your styles go here -->
 {% endblock %}
 {% block content %}
-    <div class="row border p-4">
+    <div class="row border p-5" style="margin-top:8rem!important">
         <div class="col-4">
-            <a class="btn btn-info w-100 text-white" href="{% url 'client:list' %}" style="font-size:1.7rem">إدارة العملاء</a>
+            <a class="btn btn-info w-100 text-white home" href="{% url 'client:list' %}" style="">إدارة العملاء</a>
         </div>
         <div class="col-4">
-            <a class="btn btn-info w-100 text-white" href="{% url 'cloth:list' %}" style="font-size:1.7rem">إدارة القماش</a>
+            <a class="btn btn-info w-100 text-white home" href="{% url 'cloth:list' %}" style="">إدارة القماش</a>
         </div>
 
         <div class="col-4">
-            <a class="btn btn-info w-100 text-white" href="{% url 'order:createMain' %}" style="font-size:1.7rem">عملية بيع جديدة</a>
+            <a class="btn btn-info w-100 text-white home" href="{% url 'order:createMain' %}" style="">عملية بيع جديدة</a>
         </div>
     </div>
     <div class="row border p-4">
         <div class="col-4">
-            <a class="btn btn-danger w-100 text-white" href="{% url 'order:list' %}" style="font-size:1.7rem">سجل عمليات البيع</a>
+            <a class="btn btn-danger w-100 text-white home" href="{% url 'order:list' %}" style="">سجل عمليات البيع</a>
         </div>
         <div class="col-4">
-            <a class="btn btn-danger w-100 text-white" href="{% url 'kazna:list' %}" style="font-size:1.7rem">الخزنة</a>
+            <a class="btn btn-danger w-100 text-white home" href="{% url 'kazna:list' %}" style="">الخزنة</a>
         </div>
         <div class="col-4">
-            <a class="btn btn-danger w-100 text-white" href="#" style="font-size:1.7rem">متابعة وتسليم الطلبات</a>
+            <a class="btn btn-danger w-100 text-white home" href="#" style="">متابعة وتسليم الطلبات</a>
         </div>
     </div>
     <div class="row border p-4">
         <div class="col-4">
-            <a class="btn btn-success w-100 text-white" href="{% url 'img:list' %}" style="font-size:1.7rem">إدارة مكتبة الصور</a>
+            <a class="btn btn-success w-100 text-white home" href="{% url 'img:list' %}" style="">إدارة مكتبة الصور</a>
         </div>
     </div>
 

@@ -62,3 +62,16 @@ class basicInvoiceInfo(TimeStampMixin,models.Model):
     remain          = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المتبقى")
     receve_date     = models.DateField(blank=True, null=True)
     statue          = models.CharField(max_length=35, choices=orderStatue, null=True, blank=True, verbose_name="حالة الطلب", default="unknwon")
+
+class Deliverd(TimeStampMixin, models.Model):
+    deliveredKind = [
+        ('withCard','تسليم بالكارت'),
+        ('withoutCard','تسليم بدون كارت')
+    ]
+    masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
+    kind            = models.CharField(max_length=35, choices=deliveredKind, null=True, blank=True, verbose_name="نوع التسليم", default="بالكارت")
+    reciever        = models.CharField(max_length=100, null=True, blank=True, verbose_name="اسم المستلم")
+    phone           = models.CharField(max_length=100, null=True, blank=True, verbose_name="رقم التليفون")
+    relation        = models.CharField(max_length=100, null=True, blank=True, verbose_name="صله القرابة")
+    naId            = models.CharField(max_length=14, null=True, blank=True, verbose_name="الرقم القومى")
+    img             = models.FileField(upload_to='deliverd/', max_length=100, null=True, blank=True, verbose_name="صورة الرقم القومى")

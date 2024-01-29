@@ -13,6 +13,19 @@ import json
 from kazna.services import *
 from img.models import *
 
+class DeliverdFormCreateView(CreateView):
+    form_class  = DeliverdForm
+    template_name   = 'order/deliverdCreate_form.html'
+    success_url = reverse_lazy('order:list')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        master_invoice_pk = self.kwargs.get('pk')
+        master_invoice = MasterInvoice.objects.get(pk=master_invoice_pk)
+        basicInvoiceInfo_record = basicInvoiceInfo.objects.filter(masterInvoice=master_invoice).update(statue='delivered')
+        initial['masterInvoice'] = master_invoice
+        return initial
+
 @csrf_exempt
 def chabgeOrderStatue(request, pk):
     statueVal = request.POST.get('change_order_statue')
@@ -89,7 +102,6 @@ from decimal import Decimal
 class BasicOrderFormCreateView(FormView):
     form_class  = basicInvoiceInfoForm
     template_name   = 'order/basicOrderCreate_form.html'
-#    success_url    = reverse('order:list')
     success_url = reverse_lazy('order:list')
 
     def get_initial(self):

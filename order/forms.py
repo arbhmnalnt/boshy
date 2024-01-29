@@ -5,8 +5,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Submit
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 
-
-
 class MasterInvoiceForm(forms.ModelForm):
     class Meta:
         model = MasterInvoice
@@ -38,9 +36,6 @@ class basicInvoiceInfoForm(forms.Form):
     statue          = forms.ChoiceField(choices=basicInvoiceInfo.orderStatue, required=False, label="حالة الطلب", initial='unknwon')
     receve_date = forms.DateField( required=False, label="تاريخ التسليم", widget=DatePickerInput())
 
-    
-
-
     def clean(self):
         cleaned_data = super().clean()
         total   = cleaned_data.get('total')
@@ -51,3 +46,8 @@ class basicInvoiceInfoForm(forms.Form):
             cleaned_data['remain'] = remain
 
         return cleaned_data
+
+class DeliverdForm(forms.ModelForm):
+    class Meta:
+        model = Deliverd
+        fields = '__all__'
