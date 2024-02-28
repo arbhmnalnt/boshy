@@ -54,7 +54,9 @@ class basicInvoiceInfo(TimeStampMixin,models.Model):
         ('unknwon','غير محدد'),
         ('sent','تم ارسالها الى المشغل'),
         ('done','جاهز للتسليم'),
-        ('delivered','تم التسليم')
+        ('delivered','تم التسليم'),
+        ('returned','مرتجع'),
+        ('doneAgain','تسليم بعد المرتجع')
     ]
     masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
     total           = models.IntegerField(null=True, blank=True, verbose_name="المبلغ الإجمالى")

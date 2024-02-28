@@ -1,9 +1,9 @@
 # kazna/services.py
 from .models import Record
 
-def record_money_in(amount, master_invoice, details):
+def record_money_in(classs,amount, master_invoice, details):
     if master_invoice:
-        Record.objects.create(amount=amount, kind='in', masterInvoice=master_invoice, details=details)
+        Record.objects.create(classs=classs,amount=amount, kind='in', masterInvoice=master_invoice, details=details)
     else:
         Record.objects.create(amount=amount, kind='in', masterInvoice=None, details=details)
 

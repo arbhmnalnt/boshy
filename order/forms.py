@@ -6,6 +6,11 @@ from crispy_forms.layout import Layout, Fieldset, Submit
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 
 class MasterInvoiceForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['clientMI'].queryset = Client.objects.all().order_by('-created_at')
+
+
     class Meta:
         model = MasterInvoice
         fields = '__all__'
@@ -25,14 +30,14 @@ class basicInvoiceInfoForm(forms.Form):
     paid            = forms.IntegerField(required=False, label="المبلغ المدفوع")
     remain          = forms.IntegerField(required=False, label="المبلغ المتبقى")
     clientS         = forms.ModelChoiceField(queryset=Client.objects.all(), label="اسم العميل", to_field_name='id')
-    tall            = forms.CharField(max_length=5,  required=False, label="الطول") # الطول
-    sadr            = forms.CharField(max_length=5,  required=False, label="الصدر") # الصدر
-    kom             = forms.CharField(max_length=5,  required=False, label="الكم") # الكم
-    ktf             = forms.CharField(max_length=5,  required=False, label="الكتف") # الكتف
-    
-    leaka           = forms.CharField(max_length=5,  required=False, label="اللياقه") # اللياقه
-    kazna           = forms.CharField(max_length=5,  required=False, label="الخزنه") # الخزنه
-    atak            = forms.CharField(max_length=5,  required=False, label="الأتك") # الأتك
+    tall            = forms.CharField(max_length=15,  required=False, label="الطول") # الطول
+    sadr            = forms.CharField(max_length=15,  required=False, label="الصدر") # الصدر
+    kom             = forms.CharField(max_length=15,  required=False, label="الكم") # الكم
+    ktf             = forms.CharField(max_length=15,  required=False, label="الكتف") # الكتف
+    t               = forms.CharField(max_length=15,  required=False, label="T") # دوران الرقبة
+    leaka           = forms.CharField(max_length=15,  required=False, label="اللياقه") # اللياقه
+    kazna           = forms.CharField(max_length=15,  required=False, label="الخزنه") # الخزنه
+    atak            = forms.CharField(max_length=15,  required=False, label="الأتك") # الأتك
     statue          = forms.ChoiceField(choices=basicInvoiceInfo.orderStatue, required=False, label="حالة الطلب", initial='unknwon')
     receve_date = forms.DateField( required=False, label="تاريخ التسليم", widget=DatePickerInput())
 

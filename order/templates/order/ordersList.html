@@ -15,12 +15,33 @@
     <div class="row">
         <div class="col-12">
             <form class="border m-auto " action="#" >
-                <input class="w-100 form-control" name="q" placeholder="ابحث بالاسم / رقم العملية / رقم العميل">
-                <input type="submit" class="form-control btn btn-info" value="ابحث">
+                <div class="row">
+                    <div class="col-4">
+                        <input class="w-100 form-control mt-4" name="q" placeholder="ابحث بالاسم / رقم العملية / رقم العميل">
+                    </div>
+                    <div class="col-2">
+                        <select class="form-control mt-4" name="search_by">
+                            <option value="0" selected>اختر</option>
+                            <option value="created">تاريخ الطلب</option>
+                            <option value="receve">تاريخ التسليم</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        من :
+                        <input type="date" class="w-100 form-control" name="from">
+                    </div>
+                    <div class="col-3">
+                        إلى
+                        <input type="date" class="w-100 form-control" name="to">
+                    </div>
+                    <div class="col-10 mr-auto ml-auto mt-2 mb-2">
+                        <input type="submit" class="form-control btn btn-info w-100" value="ابحث">    
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-    <h1 class="h3 border p-3 mb-5 mt-3">سجل الطلبات</h1>
+    <h1 class="h3 border p-3 mb-5 mt-2">سجل الطلبات</h1>
     <div class="row mt-5 mb-3 bg-white w-100" style=" position: fixed; top: 16rem; display: inline-block; left: 0rem; z-index:2; overflow:scroll; height:67vh">
         <div class="col-12 m-auto border border-primary p-4">
             <table class="table text-center table-striped table-hover table-bordered w-100 h3" id="" style="">
@@ -58,6 +79,10 @@
                                 <p class="bg-success text-white p-1 h4 w-100">جاهز للتسليم</p>
                             {% elif basicInvoiceInfo.get_statue_display == "تم التسليم" %}
                                 <p class="bg-secondary text-white p-1 h4 w-100 done_pay_statue">تم التسليم</p>
+                            {% elif basicInvoiceInfo.get_statue_display == "تسليم بعد المرتجع" %}
+                            <p class="bg-warning text-white p-1 h4 w-100 done_pay_statue">تسليم بعد المرتجع</p>
+                                {% elif basicInvoiceInfo.get_statue_display == "مرتجع" %}
+                            <p class="bg-danger text-white p-2 h4 w-100" style="font-size: 2rem; font-weight: 900;">مرتجع</p>
                             {% endif %}
                             <!-- Add more fields as needed -->
                         {% endfor %}
@@ -89,11 +114,13 @@
                         <a class="btn btn-primary text-white" href="{% url 'order:listOrderDetails'  masterInvoice.id%}">عرض الطلب</a>
                     </td>
                     <td>
-                        <select class="form-control h5" id="change_order_statue{{masterInvoice.id}}" name="change_order_statue"  hx-post="/order/changeOrderStatue/{{masterInvoice.id}}">
+                        <select class="form-control h5 change_order_statue" id="change_order_statue{{masterInvoice.id}}" name="change_order_statue"  hx-post="/order/changeOrderStatue/{{masterInvoice.id}}">
                             <option>اختر لتغيير الحالة</option>
                             <option value="0">غير محدد</option>
                             <option value="1">تم ارسالها الى المشغل</option>
                             <option value="2">جاهز للتسليم</option>
+                            <option value="3">مرتجع</option>
+                            <option value="4">تسليم بعد المرتجع</option>
                         </select>
                     </td>
                 </tr>
@@ -134,9 +161,13 @@ $(".add_pay_input").each(function(){
     })
 })
 
-$("select").change(function(){
-    location.reload()
+$("select.change_order_statue").each(function(){
+    $(this).change(function(){
+        location.reload()
+    })
 })
+
+
 $("#id_paid").keyup(function(){
     $("#id_remain").attr('value', $("#id_total").val() - $("#id_paid").val())
 })

@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from kazna.services import *
 from img.models import *
+from django.utils.timezone import make_aware
+
 
 class DeliverdFormCreateView(CreateView):
     form_class  = DeliverdForm
@@ -35,6 +37,10 @@ def chabgeOrderStatue(request, pk):
         val = "sent"
     elif statueVal == "2" :
         val = "done"
+    elif statueVal == "3":
+        val = "returned"
+    elif statueVal == "4":
+        val = "doneAgain"
     else :
         val = "unknwon"
 
@@ -77,25 +83,43 @@ class ordersDetailView(DetailView):
         context["clientSizes"]   = ClientSizes.objects.get(clientS=clientMI)
         return context
 
+from datetime import datetime
+
 class ordersListView(ListView):
-    model               =   MasterInvoice
-    template_name       =   'order/ordersList.html'
-    context_object_name =   'masterInvoices'
-    ordering            =   '-created_at'
+    model = MasterInvoice
+    template_name = 'order/ordersList.html'
+    context_object_name = 'masterInvoices'
+    ordering = '-created_at'
+
     def get_queryset(self):
         queryset = super().get_queryset()
         search_query = self.request.GET.get('q')
+        search_by = self.request.GET.get('search_by')
+
         if search_query:
             q_object = Q(clientMI__name__icontains=search_query)
             q_object |= Q(invoiceType__icontains=search_query)
             if search_query.isdigit():
                 q_object |= Q(counter=int(search_query))
-
             queryset = queryset.filter(q_object)
+        elif search_by == "receve":
+            from_date = self.request.GET.get('from')
+            to_date = self.request.GET.get('to')
 
-        queryset = queryset.order_by('-created_at')
+            # Ensure both from_date and to_date are provided
+            if from_date and to_date:
+                from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
+                to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d"))
+                
+                # Filter based on receve_date in basicInvoiceInfo
+                basic_invoice_info_queryset = basicInvoiceInfo.objects.filter(receve_date__gte=from_date_aware, receve_date__lte=to_date_aware)
+                
+                # Get the related MasterInvoice records
+                master_invoices = MasterInvoice.objects.filter(id__in=basic_invoice_info_queryset.values('masterInvoice')).distinct()
+                
+                return master_invoices
 
-        return queryset
+        return queryset.order_by('-created_at')
     
 from decimal import Decimal
 
@@ -144,7 +168,8 @@ class BasicOrderFormCreateView(FormView):
                 'receve_date':receve_date
             }
         )
-        record_money_in(Decimal(str(paid)),master_invoice=masterInvoice, details=f"اجمالى المبلغ على العميل {masterInvoice.clientMI.name}  / {total}  / والمتبقى للدفع {remain}")
+        classs = 'تفصيل - أول دفع'
+        record_money_in(classs,Decimal(str(paid)),master_invoice=masterInvoice, details=f"اجمالى المبلغ على العميل {masterInvoice.clientMI.name}  / {total}  / والمتبقى للدفع {remain}")
 
         tall  = form.cleaned_data["tall"]
         kom   = form.cleaned_data["kom"]
@@ -172,8 +197,6 @@ class BasicOrderFormCreateView(FormView):
         success_url = reverse('order:list')
         return HttpResponseRedirect(success_url)
     
-from decimal import Decimal
-
 class DetailedOrderFormCreateView(CreateView):
     model           = DetailedOrder
     form_class       = DetailedOrderForm

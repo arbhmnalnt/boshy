@@ -9,10 +9,10 @@ class ClasssAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display    = ('id', 'name')
 admin.site.register(Classs,ClasssAdmin)
 
-class ClothAdmin(ImportExportModelAdmin, SimpleHistoryAdmin, admin.ModelAdmin):
+class ClothAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields   = ('id', 'name', 'amount', 'classs__name', 'typee')
     list_filter     = ('classs__name', 'typee')
-    list_display    = ('id', 'name', 'amount', 'typee', 'color', 'created_at')
+    list_display    = ('id', 'name', 'amount', 'typee', 'color')
 admin.site.register(Cloth, ClothAdmin)
 
 class ClothRecordAdmin(ImportExportModelAdmin, admin.ModelAdmin):

@@ -12,7 +12,7 @@ class Classs(models.Model):
 
 class Cloth(TimeStampMixin, models.Model):
     name       = models.CharField(max_length=50, null=True, blank=True, verbose_name="اسم القماش") 
-    amount     = models.DecimalField(max_digits=5,decimal_places=2, null=True, blank=True, verbose_name="الكمية") 
+    amount     = models.DecimalField(max_digits=9,decimal_places=2, null=True, blank=True, verbose_name="الكمية") 
     price      = models.CharField(max_length=5, null=True, blank=True, verbose_name="سعر المتر") 
     classs     = models.ForeignKey('Classs', on_delete=models.CASCADE, null=True, blank=True, verbose_name="التصنيف")
     typee      = models.CharField(max_length=50, null=True, blank=True, db_index=True,verbose_name="النوع") 

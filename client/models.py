@@ -39,6 +39,7 @@ class ClientSizes(TimeStampMixin, models.Model):
     sadr    = models.CharField(max_length=5, null=True, blank=True, verbose_name="الصدر") # الصدر
     leaka   = models.CharField(max_length=5, null=True, blank=True, verbose_name="اللياقه") # اللياقه
     kazna   = models.CharField(max_length=5, null=True, blank=True, verbose_name="الخزنه") # الخزنه
+    t       = models.CharField(max_length=5, null=True, blank=True, verbose_name="دوران الرقبه")
     atak    = models.CharField(max_length=5, null=True, blank=True, verbose_name="الأتك") # الأتك
         
     def __str__(self):

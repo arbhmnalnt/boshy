@@ -14,6 +14,7 @@
         
         {% endblock %}
     </style>
+    {{ form.media }}
 </head>
 <body style="direction:rtl">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -30,11 +31,12 @@
                     <a class="nav-link btn btn-danger text-white ml-4" href="{% url "client:create" %}">اضافة عميل</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link btn btn-primary text-white ml-4" href="{% url "order:list" %}">البحث عن عملية بيع</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link btn btn-danger text-white ml-4" href="{% url "order:createMain" %}">عملية بيع جديدة</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary text-white ml-4" href="{% url "order:list" %}">البحث عن عملية بيع</a>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link btn btn-primary text-white ml-4" href="{% url "kazna:list" %}">سجل الخزنة</a>
                 </li>
