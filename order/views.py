@@ -78,9 +78,11 @@ class ordersDetailView(DetailView):
         master_invoice_pk   = self.kwargs.get('pk')
         masterInvoice       = MasterInvoice.objects.get(pk=master_invoice_pk)
         clientMI            = masterInvoice.clientMI
-        context["masterInvoice"]   = masterInvoice
+        context["masterInvoice"]    = masterInvoice
         context["DetailedOrders"]   = DetailedOrder.objects.filter(masterInvoice=masterInvoice)
-        context["clientSizes"]   = ClientSizes.objects.get(clientS=clientMI)
+        context['basicInfo']        = basicInvoiceInfo.objects.get(masterInvoice=masterInvoice)
+        context["clientSizes"]      = ClientSizes.objects.get(clientS=clientMI)
+        context["kaznaRecords"]     = Record.objects.filter(masterInvoice=master_invoice_pk)
         return context
 
 from datetime import datetime
