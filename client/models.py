@@ -1,5 +1,7 @@
 from django.db import models
-# Create your models here.
+from django.contrib import messages
+
+
 class TimeStampMixin(models.Model):
     created_at      = models.DateTimeField(auto_now_add=True,null=True)
     updated_at      = models.DateTimeField(auto_now=True,null=True)
@@ -27,8 +29,13 @@ class Client(TimeStampMixin, models.Model):
         return f"{self.name} ({str(self.id)}) "
     
     def save(self, *args, **kwargs):
-        # Automatically populate the 'name' field with the concatenation of fName, SName, TName, and LName
+        # Automatically populate the 'name' field with the concatenation of FName, SName, TName, and LName
         self.name = f"{self.FName} {self.SName} {self.TName} {self.LName}".strip()
+        
+        # Check if a client with the same 'name' already exists
+        if Client.objects.filter(name=self.name).exists():
+            raise ValueError("Client already exists!")  # Raise an exception
+
         super().save(*args, **kwargs)
 
 class ClientSizes(TimeStampMixin, models.Model):
