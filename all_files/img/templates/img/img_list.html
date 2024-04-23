@@ -57,6 +57,7 @@
                     <th>النوع</th>
                     <th>التصنيف</th>
                     <th>معاينة</th>
+                    <th>تعديل</th>
                     <th>حذف الصورة</th>
                 </thead>
                 <tbody>
@@ -71,7 +72,8 @@
                                     <img src="{{ img.file.url }}" alt="{{ img.name }}" style="max-width: 10rem; max-height: 10rem;">
                                 </div>
                             </td>
-                            <td class="pt-5"><a href="#" class="btn btn-danger">حذف<a/></td>
+                            <td class="pt-5"><a href="{% url 'img:edit' img.id %}" class="btn btn-info">تعديل</a></td>
+                            <td class="pt-5"><a href="#" class="btn btn-danger">حذف</a></td>
                         </tr>
 
                     {% empty %}

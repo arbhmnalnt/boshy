@@ -5,6 +5,11 @@ from django.db.models import Q
 from .forms import *
 from django.urls import reverse_lazy
 
+class imgUpdateView(UpdateView):
+    model           =   Img
+    form_class      =   ImgForm
+    template_name   =   'img/img_form.html'
+    success_url = reverse_lazy('img:list')
 
 class imgCreateView(CreateView):
     model = Img
