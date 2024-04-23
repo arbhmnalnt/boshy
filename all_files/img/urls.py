@@ -6,7 +6,8 @@ app_name = "img"
 urlpatterns = [
     path('list/', imgListView.as_view(), name="list"),
     path('create/', imgCreateView.as_view(), name="create"),
-    path('update/<int:pk>', imgUpdateView.as_view(), name="edit")
+    path('update/<int:pk>', imgUpdateView.as_view(), name="edit"),
+    path('delete/<int:pk>', imgDeleteView.as_view(), name="delete")
     
     # path('listOrderDetails/<int:pk>', ordersDetailView.as_view(), name="listOrderDetails")
 ]
