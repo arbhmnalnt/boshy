@@ -23,7 +23,7 @@
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav">
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'home:homepage' %}">الرئيسية <span class="sr-only">(current)</span></a>
                 </li>
@@ -40,12 +40,13 @@
                 <li class="nav-item">
                     <a class="nav-link btn btn-primary text-white ml-4" href="{% url "kazna:list" %}">سجل الخزنة</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">باقى لينكات الوصول السريع</a>
+                <li class="nav-item dropdown d-inline-block  mr-auto">
+                    <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="width: 100%;position: relative;right: 90%;">باقى لينكات الوصول السريع</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown01">
                         <a class="dropdown-item btn btn-success" href="{% url "client:list" %}">قائمة العملاء</a>
                         <a class="dropdown-item btn btn-info" href="{% url "client:create" %}">اضافة عميل جديد</a>
                         <a class="dropdown-item btn btn-danger" href="{% url "order:createMain" %}">عملية بيع جديدة</a>
+                        <a class="dropdown-item btn btn-danger" href="{% url "cloth:list" %}">مخزن القماش</a>
                     </div>
                 </li>
             </ul>

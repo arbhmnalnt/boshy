@@ -15,6 +15,13 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = ['FName', 'SName', 'TName', 'LName', 'kindMale', 'book', 'page', 'phone', 'address']
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        name = f"{cleaned_data.get('FName')} {cleaned_data.get('SName')} {cleaned_data.get('TName')} {cleaned_data.get('LName')}".strip()
+        if Client.objects.filter(name=name).exists():
+            raise forms.ValidationError("هذا العميل مسجل من قبل !")
+        return cleaned_data
 
 class ClientSizesForm(forms.ModelForm):
     model   = ClientSizes
