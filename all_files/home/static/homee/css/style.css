@@ -1,6 +1,6 @@
 body, .h3, h1.h1, .btn:not(:disabled):not(.disabled), label, select, input{
     text-align: center!important;
-    font-size: 1.7rem!important;
+    font-size: 1.2rem!important;
     font-weight: 900!important;
     font-family: none!important;
 }

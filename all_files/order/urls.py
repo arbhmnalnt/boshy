@@ -4,14 +4,16 @@ from.views import *
 app_name = "order"
 
 urlpatterns = [
-    # ========= API
+    # ========= START API  ==================
     path('changeOrderStatue/<int:pk>', chabgeOrderStatue),
     path('getClothStorgedAmount', getClothStorgedAmount),
-    # ========= API
+    # ========= END API    ==================
     path('createDeliverd/<int:pk>', DeliverdFormCreateView.as_view(), name="createDeliverd"),
     path('createMain', MasterInvoiceFormCreateView.as_view(), name="createMain"),
     path('createDetails/<int:pk>', DetailedOrderFormCreateView.as_view(), name="createDetails"),
     path('createBasicInfos/<int:pk>', BasicOrderFormCreateView.as_view(),name="finalPart"),
     path('list', ordersListView.as_view(), name="list"),
-    path('listOrderDetails/<int:pk>', ordersDetailView.as_view(), name="listOrderDetails")
+    path('listOrderDetails/<int:pk>', ordersDetailView.as_view(), name="listOrderDetails"),
+    path('listorderStatus/', orderStatusListView.as_view(), name="orderStatus")
+
 ]

@@ -87,6 +87,23 @@ class ordersDetailView(DetailView):
 
 from datetime import datetime
 
+class orderStatusListView(ListView):
+    #TODO filter orders based on statues  
+    model = MasterInvoice
+    template_name = 'order/orders_statue_List.html'
+    context_object_name = 'masterInvoices'
+    ordering = '-created_at'
+
+    def get_queryset(self):
+        # Get the desired order status from the URL query parameters
+        order_status = self.request.GET.get('order_status')
+
+        # Filter the MasterInvoice instances based on the selected order status
+        if order_status:
+            return MasterInvoice.objects.filter(basicinvoiceinfo__statue=order_status)
+        else:
+            return MasterInvoice.objects.all()  
+    
 class ordersListView(ListView):
     model = MasterInvoice
     template_name = 'order/ordersList.html'
@@ -94,6 +111,7 @@ class ordersListView(ListView):
     ordering = '-created_at'
 
     def get_queryset(self):
+        not_confirmed_orders = MasterInvoice.objects.filter(confirmed=False).delete()
         queryset = super().get_queryset()
         search_query = self.request.GET.get('q')
         search_by = self.request.GET.get('search_by')
@@ -155,8 +173,11 @@ class BasicOrderFormCreateView(FormView):
     def form_valid(self, form):
         response    = super().form_valid(form)
         # make record save to basicInvoiceInfo,
+        
 
         masterInvoice = form.cleaned_data["masterInvoice"]
+        masterInvoice.confirmed=True
+        masterInvoice.save()
         total       = form.cleaned_data["total"]
         paid        = form.cleaned_data["paid"]
         remain      = form.cleaned_data["remain"]
@@ -195,7 +216,7 @@ class BasicOrderFormCreateView(FormView):
                 'atak': atak,
             }
         )
-
+        
         success_url = reverse('order:list')
         return HttpResponseRedirect(success_url)
     
@@ -248,7 +269,7 @@ class DetailedOrderFormCreateView(CreateView):
         used          = Decimal(form.cleaned_data["used"])
         amountInStorge= Cloth.objects.get(pk=clothId).amount
         remain = amountInStorge - used
-        print(f"remain =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {remain}")
+        self.request.session['second_step_complete']= True
         Cloth.objects.filter(pk=clothId).update(amount=remain)
 
 
@@ -265,6 +286,23 @@ class MasterInvoiceFormCreateView(CreateView):
         response    = super().form_valid(form)
         form_id     = self.object.id
         invoiceType = form.cleaned_data["invoiceType"]
-        print(f'invoiceType => {invoiceType}')
+        # print(f'invoiceType => {invoiceType}')
+        self.request.session['first_step_complete'] = True
+        
+        print(f"self.request.session['first_step_complete'] => {self.request.session['first_step_complete']}")
         success_url = reverse('order:createDetails', kwargs={'pk': form_id})
         return HttpResponseRedirect(success_url)
+
+##TO Do   make a function as first step order create is done already 
+##TO Do   make a function as second step order create is done already 
+##TO Do   make a function as third step order create is done already 
+##TO Do   function to check a;; 3 steps is done already or delete all the order related records 
+
+#-------------------- functions
+## createMain_ConfirmStep()
+
+## createDetails_ConfirmStep()
+## createDetails_ConfirmStep()
+
+## confirm order all info or delete all order related info
+### Confirm_Order_or_delete_all_realted_order_info()
