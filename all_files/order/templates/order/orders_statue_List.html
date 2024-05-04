@@ -11,18 +11,21 @@
 
 {% block content %}
 <div class="container-fluid text-center">
-    <h1 class="h3 border p-3 mb-5 mt-2">حالة الطلبات</h1>
-    <form method="GET" action="#">
+    <h1 class="h3 border">حالة الطلبات 
+        / عرض الطلبات ذات الحالة : 
+    </h1>
+    <form method="GET" action="./" name="order_status_select">
         <div class="form-control">
-            <label>عرض الطلبات ذات الحالة : </label>
-            <select class="form-control">
+            <select class="form-control" name="order_status">
                 <option value="sent">تم التسليم</option>
-                <option></option>
-                <option></option>
-                <option></option>
-                <option></option>
+                <option value="unknown">غير محدد</option>
+                <option value="done">جاهز للتسليم</option>
+                <option value="delivered">تم التسليم</option>
+                <option value="returned">مرتجع</option>
+                <option value="doneAgain">تسليم بعد المرتجع</option>
             </select>
         </div>
+        <input class="form-control btn btn-primary" type="submit" value="بحث فى السجل">
     </form>
     <div class="row " style="">
         <div class="col-12 m-auto border border-primary p-4">
