@@ -97,11 +97,39 @@ class orderStatusListView(ListView):
     def get_queryset(self):
         # Get the desired order status from the URL query parameters
         order_status = self.request.GET.get('order_status')
+        search_by    = self.request.GET.get('search_by')
 
         # Filter the MasterInvoice instances based on the selected order status
-        if order_status:
-            return MasterInvoice.objects.filter(basicinvoiceinfo__statue=order_status)
+        if search_by == "receve" and order_status:
+            # print(f"here =>>>>>>>>>> 1  // {order_status}")
+            from_date = self.request.GET.get('from')
+            to_date = self.request.GET.get('to')
+
+            # Ensure both from_date and to_date are provided
+            if from_date and to_date:
+                from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
+                to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d"))
+                # print(f"here =>>>>>>>>>> 1 {from_date_aware}  // {to_date_aware}")
+                
+                # Filter based on receve_date in basicInvoiceInfo
+                return MasterInvoice.objects.filter(basicinvoiceinfo__statue=order_status, basicinvoiceinfo__receve_date__gte=from_date_aware, basicinvoiceinfo__receve_date__lte=to_date_aware)
+        elif search_by == "receve":
+            # print("here =>>>>>>>>>> 2")
+            from_date = self.request.GET.get('from')
+            to_date = self.request.GET.get('to')
+
+            # Ensure both from_date and to_date are provided
+            if from_date and to_date:
+                from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
+                to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d"))
+                
+                # Filter based on receve_date in basicInvoiceInfo
+                return MasterInvoice.objects.filter(basicinvoiceinfo__receve_date__gte=from_date_aware, basicinvoiceinfo__receve_date__lte=to_date_aware)
+        elif order_status:
+            # print("here =>>>>>>>>>> 3")
+            return MasterInvoice.objects.filter(basicinvoiceinfo__statue=order_status)        
         else:
+            # print("here =>>>>>>>>>> 4")
             return MasterInvoice.objects.all()  
     
 class ordersListView(ListView):

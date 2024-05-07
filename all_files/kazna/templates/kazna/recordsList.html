@@ -63,8 +63,8 @@
                     {% if record.difference == 0%} - أخر دفع {% else %}  {% endif %}
                     </td>
                     <td>{{record.amount}}</td>
-                    <td>                            
-                        {{record.difference }}
+                    <td>     
+                        {{record.masterInvoice.basicinvoiceinfo_set.first.remain}}
                     </td>
                     <td>{{record.created_at|date:'d-m-Y'}}</td>
                 </tr>

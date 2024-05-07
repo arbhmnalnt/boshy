@@ -65,7 +65,7 @@ class recordsListView(ListView):
         context = super().get_context_data(**kwargs)
 
         # Calculate the difference for each record
-        for record in context['records']:
-            record.difference = record.masterInvoice.basicinvoiceinfo_set.aggregate(Sum('total'))['total__sum'] - record.amount
+        # for record in context['records']:
+        #     record.difference = record.masterInvoice.basicinvoiceinfo_set.aggregate(Sum('total'))['total__sum'] - record.amount
 
         return context
