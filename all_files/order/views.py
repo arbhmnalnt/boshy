@@ -220,7 +220,10 @@ class BasicOrderFormCreateView(FormView):
             }
         )
         classs = 'تفصيل - أول دفع'
-        record_money_in(classs,Decimal(str(paid)),master_invoice=masterInvoice, details=f"اجمالى المبلغ على العميل {masterInvoice.clientMI.name}  / {total}  / والمتبقى للدفع {remain}")
+        # record_money_in(classs,Decimal(str(paid)),master_invoice=masterInvoice, details=f"اجمالى المبلغ على العميل {masterInvoice.clientMI.name}  / {total}  / والمتبقى للدفع {remain}")
+        client = masterInvoice.clientMI
+        print(f'client == > {client.id} // {client.name}')
+        record_money_in( classs, Decimal(str(paid)),master_invoice=masterInvoice, clientt=client, remain=remain,details=f"اجمالى المبلغ على العميل {masterInvoice.clientMI.name}  / {total}  / والمتبقى للدفع {remain}")
 
         tall  = form.cleaned_data["tall"]
         kom   = form.cleaned_data["kom"]

@@ -23,20 +23,24 @@ from datetime import *
 def pay(request, pk, paid):
     paid_user = paid
     masterInvoice = MasterInvoice.objects.get(pk=pk)
-    
+    client = masterInvoice.clientMI
     total = basicInvoiceInfo.objects.get(masterInvoice=masterInvoice).total
     paid = basicInvoiceInfo.objects.get(masterInvoice=masterInvoice).paid
     remain = total - (paid_user + paid)
     paid   =  paid_user + paid
     basicInvoiceInfo_records = basicInvoiceInfo.objects.filter(masterInvoice=masterInvoice).update(remain=remain, paid=paid)
     classs = 'استكمال مبلغ'
-    record_money_in( classs, Decimal(str(paid)),master_invoice=masterInvoice, details=f"اجمالى المبلغ على العميل {masterInvoice.clientMI.name}  / {total}  / والمتبقى للدفع {remain}")
+    print(f">>>> >>>>>   starting detail pay record recording ")
+    record_money_in( classs, Decimal(str(paid_user)),master_invoice=masterInvoice, clientt=client, remain=remain,details=f"اجمالى المبلغ على العميل {masterInvoice.clientMI.name}  / {total}  / والمتبقى للدفع {remain}")
+    print(f" ending detail pay record recording <<<<<")
+    # client 
+    
     return redirect('order:list')
 
 
 
 class recordsListView(ListView):
-    model               =   Record
+    model               =   DetailpayRecord
     template_name       =   'kazna/recordsList.html'
     context_object_name =   'records'
     ordering            =   '-created_at'
@@ -46,8 +50,13 @@ class recordsListView(ListView):
         search_query = self.request.GET.get('q')
         from_date = self.request.GET.get('from')
         to_date = self.request.GET.get('to')
-
-        if search_query:
+        
+        if search_query and from_date and to_date :
+            from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
+            to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d")) 
+            q_object = Q(masterInvoice__clientMI__name__icontains=search_query , created_at__gte=from_date_aware, created_at__lte=to_date_aware)
+            queryset = queryset.filter(q_object)
+        elif search_query:
             q_object = Q(masterInvoice__clientMI__name__icontains=search_query)
             q_object |= Q(masterInvoice__invoiceType__icontains=search_query)
             if search_query.isdigit():
@@ -63,7 +72,9 @@ class recordsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        records = context['records']
+        total_paid = sum(record.paid for record in records)
+        context['total_paid'] = total_paid
         # Calculate the difference for each record
         # for record in context['records']:
         #     record.difference = record.masterInvoice.basicinvoiceinfo_set.aggregate(Sum('total'))['total__sum'] - record.amount

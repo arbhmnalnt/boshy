@@ -21,7 +21,10 @@ class Record (TimeStampMixin,models.Model):
     # المبلغ المتبقى - حقيقى - مجرد - غير مجمع
     # تاريخ الدفع
 class DetailpayRecord(TimeStampMixin,models.Model):
+    clientt          = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name="العميل")
     masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
-    classs           = models.CharField(max_length=35, null=True, blank=True, verbose_name="تصنيف الدفع")
+    classs           = models.CharField(max_length=35, null=True, blank=True, verbose_name="تصنيف الدفع", default='-')
     paid              = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المدفوع")
     remain              = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المتبقى")
+
+    
