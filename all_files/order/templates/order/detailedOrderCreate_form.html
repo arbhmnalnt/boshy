@@ -49,7 +49,17 @@
 
             {% else %}
                 <h4>لا توجد طلبات سابقة لعملية البيع</h4>
-                {# Display other information when detailed_order does not exist #}
+                ----
+                <h6>
+                    <input disabled id="activated_img_name" value="اسم الصورة">
+                    <label for="new_img_name">تعديل اسم الصورة</label>
+                    <input id="new_img_name" placeholder="تعديل اسم الصورة">
+                    <button class="btn btn-warning mt-3" id="update_button"
+                            hx-confirm="هل تريد تعديل الاسم؟"
+                            hx-swap="none" hx-trigger="click">
+                        تعديل الاسم
+                    </button>
+                </h6>
             {% endif %}
         </div>
         <div class="col-3">
@@ -91,6 +101,33 @@
 {% endblock %}
 
 {% block script %}
+$("#new_img_name").keyup(function(){
+    console.log("updated")
+    var activatedImgId = document.getElementById('activated_img_name').value;
+        var newImgName = document.getElementById('new_img_name').value;
+    $("#update_button").attr('hx-get', "/update_record/" + activatedImgId+"/"+newImgName);
+})
+
+
+
+$("#update_button").click(function(){
+    var activatedImgId = document.getElementById('activated_img_name').value;
+    var newImgName = document.getElementById('new_img_name').value;
+    $.post(`/img/update_record/`,   // url   
+        JSON.stringify({ activatedImgId: activatedImgId,  newImgName:newImgName}), 
+            function(data, status, jqXHR) {// success callback            
+            alert('تم تعديل السجل بنجاح');
+            location.reload();
+        })
+
+    
+})
+
+setInterval(function(){
+    img_id      = $("div.carousel-item.active").find("img").attr("id")
+    img_name    = $("div.carousel-item.active").find("h5").text()
+    $("#activated_img_name").attr('value', img_name);
+},500)
 
 var myCarousel = $('#myCarousel');
 
