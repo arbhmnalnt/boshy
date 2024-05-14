@@ -4,6 +4,7 @@ from.views import *
 app_name = "kazna"
 
 urlpatterns = [
+    path('old_list/', oldRecordsListView.as_view(), name="old_list"),
     path('list/', recordsListView.as_view(), name="list"),
     path('pay/<int:pk>/<int:paid>', pay),
     # path('createDetails/<int:pk>', DetailedOrderFormCreateView.as_view(), name="createDetails"),

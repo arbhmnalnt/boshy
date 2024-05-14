@@ -37,8 +37,48 @@ def pay(request, pk, paid):
     
     return redirect('order:list')
 
+class oldRecordsListView(ListView):
+    model               =   Record
+    template_name       =   'kazna/oldRecordsList.html'
+    context_object_name =   'records'
+    ordering            =   '-created_at'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q')
+        from_date = self.request.GET.get('from')
+        to_date = self.request.GET.get('to')
+        
+        if search_query and from_date and to_date :
+            from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
+            to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d")) 
+            q_object = Q(masterInvoice__clientMI__name__icontains=search_query , created_at__gte=from_date_aware, created_at__lte=to_date_aware)
+            queryset = queryset.filter(q_object)
+        elif search_query:
+            q_object = Q(masterInvoice__clientMI__name__icontains=search_query)
+            q_object |= Q(masterInvoice__invoiceType__icontains=search_query)
+            if search_query.isdigit():
+                q_object |= Q(masterInvoice__counter=int(search_query))
+            queryset = queryset.filter(q_object)
+        elif from_date and to_date:
+            from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
+            to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d")) 
+            q_object = Q(created_at__gte=from_date_aware, created_at__lte=to_date_aware)
+            queryset = queryset.filter(q_object)
 
+        return queryset.order_by('-created_at')
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     records = context['records']
+    #     total_paid = sum(record.paid for record in records)
+    #     context['total_paid'] = total_paid
+    #     # Calculate the difference for each record
+    #     # for record in context['records']:
+    #     #     record.difference = record.masterInvoice.basicinvoiceinfo_set.aggregate(Sum('total'))['total__sum'] - record.amount
+
+    #     return context
+    
 class recordsListView(ListView):
     model               =   DetailpayRecord
     template_name       =   'kazna/recordsList.html'
