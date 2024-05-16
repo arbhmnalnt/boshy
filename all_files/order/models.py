@@ -18,7 +18,7 @@ class MasterInvoice( TimeStampMixin,models.Model):
     clientMI    = models.ForeignKey(Client, related_name='master_invoices', on_delete=models.CASCADE, verbose_name="العميل")
     invoiceType = models.CharField(max_length=35, choices=invoiceType, null=True, blank=True, verbose_name="نوع الطلب", default="قماش الدكان-رجالى")
     confirmed   = models.BooleanField(default=False)
-
+    
     def save(self, *args, **kwargs):
         # Check if the instance is being saved for the first time
         if not self.id:

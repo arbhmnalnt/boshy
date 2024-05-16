@@ -7,6 +7,7 @@ urlpatterns = [
     # ========= START API  ==================
     path('changeOrderStatue/<int:pk>', chabgeOrderStatue),
     path('getClothStorgedAmount', getClothStorgedAmount),
+    path('dublicate/<int:pk>', dublicate),
     # ========= END API    ==================
     path('createDeliverd/<int:pk>', DeliverdFormCreateView.as_view(), name="createDeliverd"),
     path('createMain', MasterInvoiceFormCreateView.as_view(), name="createMain"),

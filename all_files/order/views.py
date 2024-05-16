@@ -15,6 +15,41 @@ from img.models import *
 from django.utils.timezone import make_aware
 
 
+def dublicate(request,pk):
+    print("here >>>>>>>> 1")
+    masterInvoicePK = pk
+    #  old data
+    old_master_invoice      = MasterInvoice.objects.get(pk=masterInvoicePK)
+    old_DetailedOrder       = DetailedOrder.objects.get(masterInvoice=old_master_invoice)
+    old_basicInvoiceInfo    = basicInvoiceInfo.objects.get(masterInvoice=old_master_invoice)
+    # create new records 
+    new_master_invoice = MasterInvoice.objects.create(
+        invoiceType =old_master_invoice.invoiceType,
+        clientMI    =old_master_invoice.clientMI,
+        confirmed   =True
+    )
+    print("here >>>>>>>> 2")
+    new_detail = DetailedOrder.objects.create(
+        masterInvoice   =  new_master_invoice,
+        name            =  old_DetailedOrder.name ,
+        img             =  old_DetailedOrder.img,  
+        clothD          =  old_DetailedOrder.clothD ,
+        used            =  old_DetailedOrder.used,
+        details         =  old_DetailedOrder.details ,
+    )
+
+    print("here >>>>>>>> 3")
+    new_basicInvoiceInfo = basicInvoiceInfo.objects.create(
+        masterInvoice   =   new_master_invoice,
+        total           =   old_basicInvoiceInfo.total,
+        remain          =   old_basicInvoiceInfo.remain,
+        receve_date     =   old_basicInvoiceInfo.receve_date,
+        statue          =   'unknwon'
+    )
+    print("done!")
+    success_url = reverse('order:list')
+    return HttpResponseRedirect(success_url)
+
 class DeliverdFormCreateView(CreateView):
     form_class  = DeliverdForm
     template_name   = 'order/deliverdCreate_form.html'
