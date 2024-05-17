@@ -43,7 +43,9 @@
                             </div>
                         </div>
                     </div>
+                    <a class="btn btn-danger" href="{% url 'order:delete_details' pk=detailed_order.masterInvoice.id%}" style=" position: relative; top: 10rem; ">حذف الطلبات<a>
                 {% endfor %}
+                
                 <hr>
                 <a class="btn btn-primary w-100 p-2" href="{% url 'order:finalPart' pk=master_invoice_pk %}">إستكمال باقى البيانات</a>
 

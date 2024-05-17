@@ -15,8 +15,15 @@ from img.models import *
 from django.utils.timezone import make_aware
 
 
+def DetailedOrderDelete(request, pk):
+    masterInvoicePK = pk
+    # delete details order 
+    old_DetailedOrder       = DetailedOrder.objects.filter(masterInvoice=masterInvoicePK).delete()
+    print("done!")
+    success_url = reverse('order:createDetails', kwargs={'pk': masterInvoicePK})
+    return HttpResponseRedirect(success_url)
+
 def dublicate(request,pk):
-    print("here >>>>>>>> 1")
     masterInvoicePK = pk
     #  old data
     old_master_invoice      = MasterInvoice.objects.get(pk=masterInvoicePK)
@@ -28,7 +35,6 @@ def dublicate(request,pk):
         clientMI    =old_master_invoice.clientMI,
         confirmed   =True
     )
-    print("here >>>>>>>> 2")
     new_detail = DetailedOrder.objects.create(
         masterInvoice   =  new_master_invoice,
         name            =  old_DetailedOrder.name ,
@@ -38,7 +44,6 @@ def dublicate(request,pk):
         details         =  old_DetailedOrder.details ,
     )
 
-    print("here >>>>>>>> 3")
     new_basicInvoiceInfo = basicInvoiceInfo.objects.create(
         masterInvoice   =   new_master_invoice,
         total           =   old_basicInvoiceInfo.total,

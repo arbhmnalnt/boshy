@@ -45,9 +45,19 @@
                 </div>
                 <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
+                        <a class="btn btn-danger p-2" id="edit" href="{% url 'order:createDetails'  masterInvoice.id %}">تعديل التفاصيل</a>
+                    </h5>
+                </div>
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
                         <button class="btn btn-primary w-100 d-block" data-toggle="collapse" data-target="#collapseKaznaDetails" aria-expanded="true" aria-controls="collapseOne">
                             <label class="h4">تفاصيل الدفع</label>
                         </button>
+                    </h5>
+                </div>
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <a class="btn btn-danger p-2" id="dublicate" href="/order/dublicate/{{masterInvoice.id}}">تكرار عملية البيع</a>
                     </h5>
                 </div>
             </div>
