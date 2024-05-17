@@ -17,9 +17,9 @@
     </style>
     {{ form.media }}
 </head>
-<body style="direction:rtl">
+<body style="direction:rtl;background-image:url('/static/homee/imgs/back-med.jpg');background-size: cover;background-position: center;">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand h3" href="{% url 'home:homepage' %}">البوشى</a>
+        <a class="navbar-brand h3" href="{% url 'home:homepage' %}">اسم المحل</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -61,7 +61,7 @@
             
         </div>
     </nav>
-    <main role="main" class="container mt-5 pt-3">
+    <main role="main" class="container mt-5 pt-3" style="background-color:#ffffff52">
         {% block content %}{% endblock %}
     </main>
     
