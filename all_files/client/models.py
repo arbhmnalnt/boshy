@@ -1,4 +1,10 @@
 from django.db import models
+from django.db.models import Max
+
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
+from django.db import connection
+
 # Create your models here.
 class TimeStampMixin(models.Model):
     created_at      = models.DateTimeField(auto_now_add=True,null=True)
@@ -11,7 +17,7 @@ class Client(TimeStampMixin, models.Model):
         ('male', 'رجالى'),
         ('female', 'حريمى'),
     ]
-
+    counter     = models.PositiveIntegerField(default=0, verbose_name="رقم العميل")
     FName       = models.CharField(max_length=15, null=True, blank=True, verbose_name="الاسم الاول") # الاسم الاول
     SName       = models.CharField(max_length=15, null=True, blank=True, verbose_name="الاسم الثانى") # الاسم الثانى
     TName       = models.CharField(max_length=15, null=True, blank=True, verbose_name="الاسم الثالث") # الاسم الثالث
@@ -30,6 +36,39 @@ class Client(TimeStampMixin, models.Model):
         # Automatically populate the 'name' field with the concatenation of fName, SName, TName, and LName
         self.name = f"{self.FName} {self.SName} {self.TName} {self.LName}".strip()
         super().save(*args, **kwargs)
+
+@receiver(post_save, sender=Client)
+def update_counter(sender, instance, created, **kwargs):
+    if created:
+        # Get the maximum existing counter value
+        max_counter = Client.objects.aggregate(Max('counter'))['counter__max']
+        if max_counter is not None:
+            # Increment the counter for the newly created instance
+            instance.counter = max_counter + 1
+        else:
+            # If there are no existing records, set the counter to 1
+            instance.counter = 1
+        instance.save()
+
+@receiver(pre_delete, sender=Client)
+def decrement_counter(sender, instance, **kwargs):
+    # Decrement counter for deleted instance
+    Client.objects.filter(id__gt=instance.id).update(counter=models.F('counter') - 1)
+
+    # Reset counter sequence starting from the oldest record
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT setval(pg_get_serial_sequence('yourappname_client', 'id'), 1);")
+
+class CounterField(models.PositiveIntegerField):
+    def pre_save(self, model_instance, add):
+        value = super().pre_save(model_instance, add)
+        if add:
+            last_client = Client.objects.last()
+            if last_client:
+                value = last_client.counter + 1
+            else:
+                value = 1
+        return value
 
 class ClientSizes(TimeStampMixin, models.Model):
     clientS  = models.ForeignKey('Client', related_name='client', on_delete=models.CASCADE)
