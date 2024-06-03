@@ -10,11 +10,11 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="row mt-5 mb-3 bg-white w-100" style=" position: fixed; top: 0.50rem; display: inline-block; left: 0rem; z-index:2;">
-        
+    <div class="row bg-white w-100" style="">
         <div class="col-10 m-auto p-3 text-center">
             <a class="btn btn-primary w-50 m-auto" href="{% url "client:create" %}">اضافة عميل</a>
-            <form class="form" action="#" method="GET" style="">
+            <button class="btn btn-danger" type="button" data-toggle="collapse" data-target="#search_collapse" aria-expanded="false" aria-controls="search_collapse">البحث عن عميل</button>
+            <form class="form collapse" action="#" method="GET" style="" id="search_collapse">
                 <div class="">
                     <input name="q" class="form-control m-2" placeholder="ابحث باسم العميل">
                     <input type="submit" class="form-control btn btn-info" value="ابحث">
@@ -23,11 +23,11 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12 mb-5" style="padding-top:6rem">
-            <h1 class="text-right">قائمة العملاء</h1>
+        <div class="col-12" style="">
+            <h4 class="text-right">قائمة العملاء</h4>
             <table class="table text-center table-striped table-hover table-bordered w-100" id="" style="">
                 <thead>
-                    <th class="bg-success text-white">رقم العميل - معدل</th>
+                    <th class="bg-success text-white">رقم العميل - جديد</th>
                     <th>رقم العميل</th>
                     <th>الاسم</th>
                     <th>العنوان</th>

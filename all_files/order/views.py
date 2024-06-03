@@ -179,8 +179,20 @@ class ordersListView(ListView):
     ordering = '-created_at'
 
     def get_queryset(self):
+        # MasterInvoice
         not_confirmed_orders = MasterInvoice.objects.filter(confirmed=False).delete()
         queryset = super().get_queryset()
+        order_counter = len(queryset.all()) + 1
+        print(f'order_counter = > {order_counter}')
+        for ord in queryset:            
+            print(f"order_counter before = > {order_counter}")
+            if ord.counter == None or ord.counter == 0:
+                order_counter -= 1
+                ord.counter = order_counter
+                print(f'client id => {ord.id} // client counter =>>>>>>>>>>>{ord.counter}')
+                ord.save()
+            else:
+                pass
         search_query = self.request.GET.get('q')
         search_by = self.request.GET.get('search_by')
 

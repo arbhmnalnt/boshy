@@ -7,7 +7,8 @@ from img.models import Img
 
 
 class MasterInvoice( TimeStampMixin,models.Model):
-    counter = models.PositiveIntegerField(default=1, editable=False)
+    old_counter = models.PositiveIntegerField(default=1, editable=False)
+    counter     = models.PositiveIntegerField(default=1, editable=False)
     invoiceType = [
         ('قماش الدكان-رجالى', 'قماش الدكان-رجالى'),
         ('قماش الدكان-حريمى', 'قماش الدكان-حريمى'),

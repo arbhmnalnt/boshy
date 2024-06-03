@@ -28,12 +28,24 @@ class clientListView(ListView):
     template_name = 'client/client_list.html'
     context_object_name = 'clients'
 
+
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().order_by('-id')
+        clinets_counter = len(queryset.all()) + 1
+        print(f'order_counter = > {clinets_counter}')
+        for cl in queryset:            
+            if cl.counter == None or cl.counter == 0:
+                print(f"order_counter before = > {clinets_counter}")
+                clinets_counter -= 1
+                cl.counter = clinets_counter
+                print(f'client id => {cl.id} // client counter =>>>>>>>>>>>{cl.counter}')
+                cl.save()
+            else:
+                pass            
         search_query = self.request.GET.get('q')
         if search_query:
             queryset = queryset.filter(
-                Q(name__icontains=search_query)
-            )
-        queryset = queryset.order_by('-created_at')
+                Q(name__icontains=search_query) | Q(counter=search_query)
+            ).order_by('-id')
+        queryset = queryset.order_by('-id')
         return queryset

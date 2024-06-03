@@ -3,14 +3,20 @@ from .models import *
 
 
 class ClientForm(forms.ModelForm):
-    FName    =   forms.CharField(label="الاسم الاول")
-    SName    =   forms.CharField(label="الاسم الثانى")
-    TName    =   forms.CharField(label="الاسم الثالث")
-    LName    =   forms.CharField(label="الاسم الرابع")
-    book     =   forms.CharField(label="الدفتر")
-    page     =   forms.CharField(label="رقم الصفحة")
-    phone    =   forms.CharField(label="رقم التليفون")
-    address  =   forms.CharField(label="العنوان ")
+    FName    =   forms.CharField(label="الاسم الاول", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    SName    =   forms.CharField(label="الاسم الثانى", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    TName    =   forms.CharField(label="الاسم الثالث", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    LName    =   forms.CharField(label="الاسم الرابع", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    book     =   forms.CharField(label="الدفتر", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    page     =   forms.CharField(label="رقم الصفحة", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    phone    =   forms.CharField(label="رقم التليفون", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    address  =   forms.CharField(label="العنوان ", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    
+    kindMale = forms.ChoiceField(
+        label="نوع العميل", 
+        choices=Client.GENDER_CHOICES, 
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
 
     class Meta:
         model = Client
