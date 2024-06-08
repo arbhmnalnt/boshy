@@ -13,6 +13,8 @@ import json
 from kazna.services import *
 from img.models import *
 from django.utils.timezone import make_aware
+from django.utils import timezone
+
 
 
 def DetailedOrderDelete(request, pk):
@@ -126,7 +128,6 @@ class ordersDetailView(DetailView):
         return context
 
 from datetime import datetime
-
 class orderStatusListView(ListView):
     #TODO filter orders based on statues  
     model = MasterInvoice
@@ -135,42 +136,36 @@ class orderStatusListView(ListView):
     ordering = '-created_at'
 
     def get_queryset(self):
-        # Get the desired order status from the URL query parameters
         order_status = self.request.GET.get('order_status')
-        search_by    = self.request.GET.get('search_by')
+        search_by = self.request.GET.get('search_by')
+        from_date = self.request.GET.get('from')
+        to_date = self.request.GET.get('to')
+        today_date = timezone.now().date()
 
-        # Filter the MasterInvoice instances based on the selected order status
-        if search_by == "receve" and order_status:
-            # print(f"here =>>>>>>>>>> 1  // {order_status}")
-            from_date = self.request.GET.get('from')
-            to_date = self.request.GET.get('to')
+        queryset = MasterInvoice.objects.all().order_by('-basicinvoiceinfo__receve_date')
 
-            # Ensure both from_date and to_date are provided
-            if from_date and to_date:
-                from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
-                to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d"))
-                # print(f"here =>>>>>>>>>> 1 {from_date_aware}  // {to_date_aware}")
-                
-                # Filter based on receve_date in basicInvoiceInfo
-                return MasterInvoice.objects.filter(basicinvoiceinfo__statue=order_status, basicinvoiceinfo__receve_date__gte=from_date_aware, basicinvoiceinfo__receve_date__lte=to_date_aware)
-        elif search_by == "receve":
-            # print("here =>>>>>>>>>> 2")
-            from_date = self.request.GET.get('from')
-            to_date = self.request.GET.get('to')
+        # Filter by outdated status
+        if order_status == "outdated":
+            queryset = queryset.filter(
+                ~Q(basicinvoiceinfo__statue='delivered'),
+                ~Q(basicinvoiceinfo__statue='done'),
+                basicinvoiceinfo__receve_date__lte=today_date
+            ).order_by('-basicinvoiceinfo__receve_date')
+        
+        # Filter by receve date range
+        if search_by == "receve" and from_date and to_date:
+            from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
+            to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d"))
+            queryset = queryset.filter(
+                basicinvoiceinfo__receve_date__gte=from_date_aware,
+                basicinvoiceinfo__receve_date__lte=to_date_aware
+            ).order_by('-basicinvoiceinfo__receve_date')
+        
+        # Filter by specific order status if not already filtered by outdated status
+        if order_status and order_status != "outdated":
+            queryset = queryset.filter(basicinvoiceinfo__statue=order_status).order_by('-basicinvoiceinfo__receve_date')
 
-            # Ensure both from_date and to_date are provided
-            if from_date and to_date:
-                from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
-                to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d"))
-                
-                # Filter based on receve_date in basicInvoiceInfo
-                return MasterInvoice.objects.filter(basicinvoiceinfo__receve_date__gte=from_date_aware, basicinvoiceinfo__receve_date__lte=to_date_aware)
-        elif order_status:
-            # print("here =>>>>>>>>>> 3")
-            return MasterInvoice.objects.filter(basicinvoiceinfo__statue=order_status)        
-        else:
-            # print("here =>>>>>>>>>> 4")
-            return MasterInvoice.objects.all()  
+        return queryset
     
 class ordersListView(ListView):
     model = MasterInvoice
