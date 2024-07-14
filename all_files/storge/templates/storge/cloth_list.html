@@ -1,0 +1,64 @@
+{% extends "homee/index.html" %}
+{% block title %}
+    <title>مخزن القماش</title>
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mt-5 mb-3 bg-white w-100" style=" position: fixed; top: 0rem; display: inline-block; left: 0rem; z-index:2;">
+        <div class="col-10 m-auto p-3 text-center">
+            <form class="form" action="#" method="GET" style="">
+                <div class="">
+                    <input name="q" class="form-control m-2" placeholder="ابحث باسم القماش">
+                    <input type="submit" class="form-control btn btn-info" value="ابحث">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mb-5" style="padding-top:6rem">
+            <h1 class="text-right">قائمة مخزن القماش</h1>
+            <a class="btn btn-primary w-50 p-3 mb-3" href="{% url "cloth:create" %}">اضافة قماش جديد</a>
+            <table class="table text-center table-striped table-hover table-bordered w-100 h3" id="" style="">
+                <thead>
+                    <th>الرقم</th>
+                    <th>اسم القماش</th>
+                    <th>اللون</th>
+                    <th>الكمية الموجودة حاليا</th>
+                    <th>سعر المتر</th>
+                    <th>تاريخ اخر تعديل للكمية</th>
+                    <th>اضافة كمية</th>
+                </thead>
+                <tbody>
+                    {% for cloth in cloths %}
+                        <tr class="p-4">
+                            <td>
+                                <a class="btn btn-info text-white"href="#">{{ cloth.id }}</a>
+                            </td>
+                            <td style="color: {{ cloth.color }}"><p class="d-inline-block bg-white h4 p-2">{{ cloth.name }}</p></td>
+                            <td><input type="color" value="{{ cloth.color }}"></td>
+                            <td>{{ cloth.amount }}</td>
+                            <td>{{ cloth.price }}</td>
+                            <td>{{ cloth.created_at|date:"Y-m-d / h:i" }}</td>
+                            <td><a class="btn btn-danger" href="{% url "cloth:edit" cloth.id %}">اضافة كمية جديدة</a></td>
+                        </tr>
+
+                    {% empty %}
+                        <li>No client found.</li>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a class="btn btn-primary" href="{% url "cloth:create" %}">اضافة قماش جديد</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "homee/index.html" %}
+{% block title %}
+    <title>معرض الصور</title>
+{% endblock %}
+
+{% block style %}
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .image-container img {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .image-container:hover{
+            position:relative;
+            translate:10rem;
+            z-index:3;
+            transform: scale(3.8); /* Increase the scale value for a larger zoom effect */
+        }
+
+        thead th{
+            font-size:1.7rem;
+            font-weight:bolder;
+        }
+
+        tbody td,tbody a.btn{
+            font-size:1.7rem;
+            font-weight:bolder;
+        }
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mt-5 mb-3 bg-white w-100" style=" position: fixed; top: 1rem; display: inline-block; left: 0rem; z-index:2;">
+        
+        <div class="col-10 m-auto p-3 text-center">
+            <a class="btn btn-primary w-50 m-auto" href="{% url "img:create"%}">اضافة صورة جديدة</a>
+            <form class="form" action="#" method="GET" style="">
+                <div class="">
+                    <input name="q" class="form-control m-2" placeholder="ابحث برقم الصورة أو بالاسم">
+                    <input type="submit" class="form-control btn btn-info" value="ابحث">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mb-5" style="padding-top:9.5rem">
+            <h1 class="text-right pb-4">معرض الصور</h1>
+            <table class="table text-center table-striped table-hover table-bordered w-100 pt-2" id="" style="">
+                <thead>
+                    <th>الرقم</th>
+                    <th>الاسم</th>
+                    <th>النوع</th>
+                    <th>التصنيف</th>
+                    <th>معاينة</th>
+                    <th>تعديل</th>
+                    <th>حذف الصورة</th>
+                </thead>
+                <tbody>
+                    {% for img in imgs %}
+                        <tr>
+                            <td class="pt-5">{{img.id}}</td>
+                            <td class="pt-5">{{img.name}}</td>
+                            <td class="pt-5">{{img.get_kind_display}}</td>
+                            <td class="pt-5">{{img.sort}}</td>
+                            <td>
+                                <div class="image-container">
+                                    <img src="{{ img.file.url }}" alt="{{ img.name }}" style="max-width: 10rem; max-height: 10rem;">
+                                </div>
+                            </td>
+                            <td class="pt-5"><a href="{% url 'img:edit' img.id %}" class="btn btn-info">تعديل</a></td>
+                            <td class="pt-5"><a href="#" class="btn btn-danger">حذف</a></td>
+                        </tr>
+
+                    {% empty %}
+                        <li>No client found.</li>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

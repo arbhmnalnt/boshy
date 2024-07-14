@@ -1,0 +1,50 @@
+{% extends "homee/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>اضافة / تعديل سجل قماش</title>
+{% endblock %}
+
+{% block style %}
+
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid text-center m-auto">
+    <h1 class="h1 border p-3 mb-5 mt-3">{% if form.instance.pk %}تعديل{% else %} انشاء {% endif %} فاتورة بيع </h1>
+    <div class="row">
+        <div class="col-8 mb-5 border border-danger p-4">
+            <form method="post">
+                    {% csrf_token %}
+                    {{ form | crispy}}
+                <button type="submit" class="btn btn-danger text-white d-block w-100 h3 mt-3">تسجيل باقى البيانات</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+$("#id_clientMI").chosen();
+$(".chosen-results").css('font-size','1.2rem');
+$(".chosen-container.chosen-container-single").css('height', '4rem')
+$(".chosen-container.chosen-container-single").css('width', '30rem')
+$(".chosen-single").css('font-size','2rem');
+$(".chosen-single").css('height','100%');
+$(".chosen-single").css('line-height','3.5rem');
+$(".chosen-single span").css('height','100%');
+
+
+// 
+$("#id_invoiceType").css({
+    "width":"30rem",
+    "height":"4rem",
+    "margin":"auto",
+    "font-size":"2rem",
+    "font-weight":"900"
+})
+
+$("#div_id_is_deleted").hide()
+{% endblock %}

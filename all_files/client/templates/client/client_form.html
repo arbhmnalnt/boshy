@@ -1,0 +1,76 @@
+{% extends "homee/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>اضافة / تعديل سجل عميل</title>
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid text-center m-auto">
+    <h1>{% if form.instance.pk %}تعديل{% else %} انشاء {% endif %} عميل</h1>
+    <div class="row">
+        <div class="col-10 ml-auto mr-auto mb-5 border border-danger p-4">
+            <form method="post" class="form-inline">
+                    {% csrf_token %}
+                    <div class="form-group mb-2 ml-2 mr-sm-2" style="width: 250px;">
+                    {{ form.FName.label_tag }}
+                    {{ form.FName }}
+                </div>
+                <div class="form-group mb-2 ml-2 mr-2 mr-sm-2" style="width: 250px;">
+                    {{ form.SName.label_tag }}
+                    {{ form.SName }}
+                </div>
+                <div class="form-group mb-2 ml-2 mr-sm-2" style="width: 250px;">
+                    {{ form.TName.label_tag }}
+                    {{ form.TName }}
+                </div>
+                <div class="form-group mb-2 ml-2 mr-sm-2" style="width: 250px;">
+                    {{ form.LName.label_tag }}
+                    {{ form.LName }}
+                </div>
+                <div class="form-group mb-2 mr-sm-2" style="width: 250px;">
+                    {{ form.book.label_tag }}
+                    {{ form.book }}
+                </div>
+                <div class="form-group mb-2 mr-sm-3" style="width: 250px;">
+                    {{ form.page.label_tag }}
+                    {{ form.page }}
+                </div>
+                <div class="form-group mb-2 mr-sm-2" style="width: 250px;">
+                    {{ form.phone.label_tag }}
+                    {{ form.phone }}
+                </div>
+                <div class="form-group mb-2 mr-sm-3" style="width: 250px;">
+                    {{ form.address.label_tag }}
+                    {{ form.address }}
+                </div>
+                <div class="form-group mb-2 mr-sm-2 " style="width: 250px;">
+                    <span class="d-inline-block mr-2">
+                        {{ form.kindMale.label_tag }}
+                    </span>
+                    {{ form.kindMale }}
+                </div>
+
+                <button type="submit" class="btn btn-danger text-white d-block w-100 h3">حفظ</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+console.log("assasaaaaaaaaa")
+
+$('button[type="submit"]').click(function(){
+    alert("جارى اضافة عميل جديد")
+    setTimeout(function(){
+        console.log("testst 1")
+        
+    },300)
+})
+{% endblock %}
