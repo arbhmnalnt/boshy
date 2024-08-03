@@ -56,3 +56,8 @@ class DeliverdForm(forms.ModelForm):
     class Meta:
         model = Deliverd
         fields = '__all__'
+
+class DebitForm(forms.ModelForm):
+    class Meta:
+        model  = DebitOrder
+        fields  = ['MasterInvoice', 'paid', 'remain', 'total']

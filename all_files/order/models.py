@@ -67,6 +67,19 @@ class basicInvoiceInfo(TimeStampMixin,models.Model):
     receve_date     = models.DateField(blank=True, null=True)
     statue          = models.CharField(max_length=35, choices=orderStatue, null=True, blank=True, verbose_name="حالة الطلب", default="unknwon")
 
+class DebitOrder(TimeStampMixin, models.Model):
+    MasterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
+    paid            = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المدفوع")
+    remain          = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المتبقى")
+    total           = models.IntegerField(null=True, blank=True, verbose_name="المجموع")
+
+class DebitPay(TimeStampMixin, models.Model):
+    DebitOrderRecord = models.ForeignKey(DebitOrder, on_delete=models.CASCADE, verbose_name="الفاتورة")
+    paid            = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المدفوع")
+    remain          = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المتبقى")
+    total           = models.IntegerField(null=True, blank=True, verbose_name="المجموع")
+
+
 class Deliverd(TimeStampMixin, models.Model):
     deliveredKind = [
         ('withCard','تسليم بالكارت'),

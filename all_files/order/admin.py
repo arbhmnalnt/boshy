@@ -19,6 +19,19 @@ class basicInvoiceInfoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 admin.site.register(basicInvoiceInfo, basicInvoiceInfoAdmin)
 
+class PayDebitAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    search_fields = ('id',)
+    list_display  = ('id',)
+  
+admin.site.register(DebitOrder, PayDebitAdmin)
+
+class DebitPayAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    search_fields = ('id',)
+    list_display  = ('id',)
+
+admin.site.register(DebitPay, DebitPayAdmin)
+
+
 class DeliverdAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields   = ('id',)
     list_display    = ('id',)

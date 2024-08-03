@@ -16,6 +16,60 @@ from django.utils.timezone import make_aware
 from django.utils import timezone
 
 
+class editDebitFormEditView(UpdateView):
+    model           = DebitOrder
+    form_class      = DebitForm
+    template_name   = 'order/edit_debit.html'
+    success_url = reverse_lazy('order:listDebit')
+
+class debitListView(ListView):
+    model = DebitOrder
+    template_name = 'order/debit_List.html'
+    context_object_name = 'orders'
+    ordering = '-created_at'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        orders = self.get_queryset()
+        order_pay_records = {}
+        for order in orders:
+            order_pay_records[order.pk] = DebitPay.objects.filter(DebitOrderRecord_id=order)
+        context['order_pay_records'] = order_pay_records
+        return context
+
+def payDebitRecord(request, pk, paid):
+    debitRecordPk = pk
+    paid          = paid
+    debitRecord   = DebitOrder.objects.get(pk=debitRecordPk)
+    old_paid      = debitRecord.paid
+    old_remain    = debitRecord.remain
+    old_total     = debitRecord.total
+    new_remain    = old_remain - paid
+    new_paid      = old_paid + paid
+    new_total     = new_remain + new_paid
+    print(f"new_total: {new_total}, old_total: {old_total}")
+    debitRecord.paid      = new_paid
+    debitRecord.remain    = new_remain
+    debitRecord.total     = new_total
+    debitRecord.save()
+
+    ### new debit record
+    DebitPay.objects.create(DebitOrderRecord=debitRecord , paid=paid, remain = new_remain, total = new_total)
+    success_url = reverse('order:listDebit')
+    return HttpResponseRedirect(success_url)
+
+
+def payDebit(request, pk):
+    MasterInvoicePk = pk
+    masterinvoicee = MasterInvoice.objects.get(pk=MasterInvoicePk)
+    basic_info = basicInvoiceInfo.objects.filter(masterInvoice=masterinvoicee)[0]
+    new_debitRecord =DebitOrder.objects.create(MasterInvoice=masterinvoicee, paid=basic_info.paid, remain = basic_info.remain)
+    basic_info.remain = 0
+    basic_info.save()
+    DebitPay.objects.create(DebitOrderRecord=new_debitRecord , paid=basic_info.paid, remain = basic_info.remain, total = basic_info.total)
+    success_url = reverse('order:list')
+    return HttpResponseRedirect(success_url)
+
 
 def DetailedOrderDelete(request, pk):
     masterInvoicePK = pk

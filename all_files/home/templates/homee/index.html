@@ -45,6 +45,10 @@
                 <li class="nav-item">
                     <a class="nav-link btn btn-info text-white ml-4" href="{% url "kazna:list" %}">سجل اليومية</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link btn btn-info"  href="{% url 'order:listDebit' %}"> صفحة المديونيات</a>
+                </li>
+                
 
                 
                 <li class="nav-item dropdown d-inline-block">
@@ -55,13 +59,16 @@
                         <a class="dropdown-item btn btn-danger" href="{% url "order:createMain" %}">عملية بيع جديدة</a>
                         <a class="dropdown-item btn btn-danger" href="{% url "cloth:list" %}">مخزن القماش</a>
                         <a class="dropdown-item btn btn-danger" href="{% url 'order:orderStatus' %}">متابعة وتسليم الطلبات</a>
+                        <a class="btn btn-warning text-white w-100 home"  href="{% url 'order:listDebit' %}">
+                          صفحة المديونيات
+                        </a>
                     </div>
                 </li>
             </ul>
             
         </div>
     </nav>
-    <main role="main" class="container mt-5 pt-3" style="background-color:#ffffff52">
+    <main role="main" class="container-fluid mt-5 pt-3" style="background-color:#ffffff52">
         {% block content %}{% endblock %}
     </main>
     

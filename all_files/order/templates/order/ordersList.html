@@ -114,6 +114,14 @@
                     </td>
                     <td>
                         <a class="btn btn-primary text-white" href="{% url 'order:listOrderDetails'  masterInvoice.id%}">عرض الطلب</a>
+                        <hr>
+                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                            {% if basicInvoiceInfo.remain == 0 %}
+                            
+                            {% else %}
+                                <a class="btn btn-warning text-white" href="{% url 'order:payDebit'  masterInvoice.id%}">دفع بمديونية</a>
+                            {% endif %}
+                        {% endfor %}
                     </td>
                     <td>
                         <select class="form-control h5 change_order_statue" id="change_order_statue{{masterInvoice.id}}" name="change_order_statue"  hx-post="/order/changeOrderStatue/{{masterInvoice.id}}">

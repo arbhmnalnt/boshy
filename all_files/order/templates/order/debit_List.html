@@ -1,0 +1,122 @@
+{% extends "homee/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>سجل المديونيات</title>
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid text-center m-auto">
+    <button class="h4 btn btn-danger" type="button" data-toggle="collapse" data-target="#search_collapse" aria-expanded="false" aria-controls="search_collapse">البحث</button>
+    <div class="row">
+        <div class="col-12">
+            <form class="border m-auto collapse" action="#" id="search_collapse">
+                <div class="row">
+                    <div class="col-4">
+                        <input class="w-100 form-control mt-4" name="q" placeholder="ابحث بالاسم / رقم العملية / رقم العميل">
+                    </div>
+                    <div class="col-2">
+                        <select class="form-control mt-4" name="search_by">
+                            <option value="0" selected>اختر</option>
+                            <option value="created">تاريخ الطلب</option>
+                            <option value="receve">تاريخ التسليم</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        من :
+                        <input type="date" class="w-100 form-control" name="from">
+                    </div>
+                    <div class="col-3">
+                        إلى
+                        <input type="date" class="w-100 form-control" name="to">
+                    </div>
+                    <div class="col-10 mr-auto ml-auto mt-2 mb-2">
+                        <input type="submit" class="form-control btn btn-info w-100" value="ابحث">    
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <h1 class="h3 border p-3">سجل الطلبات</h1>
+    <div class="row mb-3 bg-white w-100" style="">
+        <div class="col-12 border border-primary p-4">
+            <table class="table text-center table-striped table-hover table-bordered w-100 h3" id="" style="">
+                <tr>
+                  <thead>
+                    <th>رقم العملية</th>
+                    <th>اسم العميل</th>
+                    <th class="bg-success text-white">رقم العميل - جديد</th>
+                    <th>رقم العميل - قديم</th>
+                    <th>المدفوع</th>
+                    <th>المتبقى</th>
+                    <th>تاريخ الدفع بالمديونية</th>
+                    <th>سجل المبالغ المدفوعة</th>
+                    <th>دفع مبلغ</th>
+
+                  </thead>
+                </tr>
+                {% for order in orders %}
+                <tr>
+                  <tbody>
+                    <td>{{order.MasterInvoice.counter}}</td>
+                    <td>{{order.MasterInvoice.clientMI.name}}</td>
+                    <td class="bg-success text-white">{{order.MasterInvoice.clientMI.counter}}</td>
+                    <td>{{order.MasterInvoice.clientMI.id}}</td>
+                    <td>{{order.paid}}</td>
+                    <td>{{order.remain}}</td>
+                    <td>
+                      {% for order_pk, records in order_pay_records.items %}
+                          {% if order_pk == order.pk %}
+                              {% for rec in records %}
+                                  <p>{{ rec.created_at|date:'Y-m-d' }}</p>
+                              {% endfor %}
+                          {% endif %}
+                      {% endfor %}
+                    
+                    </td>
+                    <td class="payForLoop">
+                      {% for order_pk, records in order_pay_records.items %}
+                        {% if order_pk == order.pk %}
+                            {% for rec in records %}
+                                <p>{{ rec.paid }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                    <td>
+                      {% if order.remain > 0%}
+                      <input value="" class="form-control mr-auto mb-2 paid">
+                      <input class="recordId" type="hidden" value="{{order.pk}}">
+                      <a href="" class="btn btn-danger pay">دفع مبلغ</a>
+                      {% else %}
+                      <p class="text-danger">تم السداد بالكامل</p>
+                      {% endif %}
+                    </td>
+                  </tbody>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+$(".paid").each(function() {
+  console.log("test")
+  $(this).keyup(function(){
+    let paid      = $(this).val(),
+        recordId  = $(this).siblings(".recordId").val();
+    $(this).siblings(".pay").attr("href", `/order/payDebitRecord/${recordId}/${paid}`);
+    console.log("test")
+  });
+  
+})
+
+{% endblock %}
