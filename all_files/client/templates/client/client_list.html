@@ -27,7 +27,6 @@
             <h4 class="text-right">قائمة العملاء</h4>
             <table class="table text-center table-striped table-hover table-bordered w-100" id="" style="">
                 <thead>
-                    <th class="bg-success text-white">رقم العميل - جديد</th>
                     <th>رقم العميل</th>
                     <th>الاسم</th>
                     <th>العنوان</th>
@@ -37,10 +36,8 @@
                 <tbody>
                     {% for client in clients %}
                         <tr>
-                            <td class="bg-success text-white"><a class="btn btn-info text-white"
-                                href="#">{{ client.counter }}</a></td>
                             <td><a class="btn btn-info text-white"
-                                href="#">{{ client.id }} - رقم قديم</a></td>
+                                href="#">{{ client.id }}</a></td>
                             <td>{{ client.name }}</td>
                             <td>{{ client.address }}</td>
                             <td>{{ client.page }}</td>
@@ -52,7 +49,7 @@
                     {% endfor %}
                 </tbody>
             </table>
-            
+
         </div>
     </div>
 </div>

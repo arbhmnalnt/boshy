@@ -28,10 +28,10 @@ class Client(TimeStampMixin, models.Model):
     page        = models.IntegerField(null=True, blank=True, verbose_name="صفحة رقم")
     phone       = models.CharField(max_length=50, null=True, blank=True, db_index=True, verbose_name="رقم التليفون")
     address     = models.CharField(max_length=50, null=True, blank=True, verbose_name="العنوان")
-    
+
     def __str__(self):
         return f"{self.name} ({str(self.id)}) "
-    
+
     def save(self, *args, **kwargs):
         # Automatically populate the 'name' field with the concatenation of fName, SName, TName, and LName
         self.name = f"{self.FName} {self.SName} {self.TName} {self.LName}".strip()
@@ -55,9 +55,6 @@ def decrement_counter(sender, instance, **kwargs):
     # Decrement counter for deleted instance
     Client.objects.filter(id__gt=instance.id).update(counter=models.F('counter') - 1)
 
-    # Reset counter sequence starting from the oldest record
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT setval(pg_get_serial_sequence('yourappname_client', 'id'), 1);")
 
 class CounterField(models.PositiveIntegerField):
     def pre_save(self, model_instance, add):
@@ -80,6 +77,6 @@ class ClientSizes(TimeStampMixin, models.Model):
     kazna   = models.CharField(max_length=5, null=True, blank=True, verbose_name="الخزنه") # الخزنه
     t       = models.CharField(max_length=5, null=True, blank=True, verbose_name="دوران الرقبه")
     atak    = models.CharField(max_length=5, null=True, blank=True, verbose_name="الأتك") # الأتك
-        
+
     def __str__(self):
         return self.clientS.name
