@@ -144,7 +144,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # default static files settings for PythonAnywhere.
-offlineLocalPath = "/boshy_holder/"
+offlineLocalPath = "/boshy_holder/all_files"
 
 # see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
 MEDIA_ROOT = offlineLocalPath + '/media'
