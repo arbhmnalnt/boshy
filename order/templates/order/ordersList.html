@@ -1,0 +1,184 @@
+{% extends "homee/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>سجل المبيعات</title>
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid text-center m-auto">
+    <button class="h4 btn btn-danger" type="button" data-toggle="collapse" data-target="#search_collapse" aria-expanded="false" aria-controls="search_collapse">البحث</button>
+    <div class="row">
+        <div class="col-12">
+            <form class="border m-auto collapse" action="#" id="search_collapse">
+                <div class="row">
+                    <div class="col-4">
+                        <input class="w-100 form-control mt-4" name="q" placeholder="ابحث بالاسم / رقم العملية / رقم العميل">
+                    </div>
+                    <div class="col-2">
+                        <select class="form-control mt-4" name="search_by">
+                            <option value="0" selected>اختر</option>
+                            <option value="created">تاريخ الطلب</option>
+                            <option value="receve">تاريخ التسليم</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        من :
+                        <input type="date" class="w-100 form-control" name="from">
+                    </div>
+                    <div class="col-3">
+                        إلى
+                        <input type="date" class="w-100 form-control" name="to">
+                    </div>
+                    <div class="col-10 mr-auto ml-auto mt-2 mb-2">
+                        <input type="submit" class="form-control btn btn-info w-100" value="ابحث">    
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <h1 class="h3 border p-3">سجل الطلبات</h1>
+    <div class="row mb-3 bg-white w-100" style="">
+        <div class="col-12 border border-primary p-4">
+            <table class="table text-center table-striped table-hover table-bordered w-100 h3" id="" style="">
+                <tr>
+                    <th>رقم العملية</th>
+                    <th>أمر تكرار</th>
+                    <th>اسم العميل</th>
+                    <th>نوع الطلب</th>
+                    <th>تاريخ الطلب</th>
+                    <th>حالة الطلب</th>
+                    <th>تاريخ التسليم</th>
+                    <th>المتبقى</th>
+                    <th>عرض</th>
+                    <th>تعديل الحالة</th>
+                </tr>
+                {% for masterInvoice in  masterInvoices%}
+                <tr>
+                    <td class="bg-success text-white">{{masterInvoice.counter}}</td>
+                    <td><a class="btn btn-danger p-2" id="dublicate" href="/order/dublicate/{{masterInvoice.id}}">تكرار عملية البيع</a></td>
+                    <td>{{masterInvoice.clientMI.name}}</td>
+                    <td>{{masterInvoice.invoiceType}}</td>
+                    <td>
+                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                            <!-- Display details from BasicInvoiceInfo model -->
+                          {{ basicInvoiceInfo.created_at|date:'Y-m-d'}}</span>
+                            <!-- Add more fields as needed -->
+                        {% endfor %}
+                    </td>
+                    <td id="reload-container">
+                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                            <!-- Display details from BasicInvoiceInfo model -->
+                            {% if basicInvoiceInfo.get_statue_display == "غير محدد" %}
+                                <p class="bg-dark text-white p-1 h4 w-100">غير محدد</p>
+                            {% elif basicInvoiceInfo.get_statue_display == "تم ارسالها الى المشغل" %}
+                                <p class="bg-info text-white p-1 h4 w-100">تم ارسالها الى المشغل</p>
+                            {% elif basicInvoiceInfo.get_statue_display == "جاهز للتسليم" %}
+                                <p class="bg-success text-white p-1 h4 w-100">جاهز للتسليم</p>
+                            {% elif basicInvoiceInfo.get_statue_display == "تم التسليم" %}
+                                <p class="bg-secondary text-white p-1 h4 w-100 done_pay_statue">تم التسليم</p>
+                            {% elif basicInvoiceInfo.get_statue_display == "تسليم بعد المرتجع" %}
+                            <p class="bg-warning text-white p-1 h4 w-100 done_pay_statue">تسليم بعد المرتجع</p>
+                                {% elif basicInvoiceInfo.get_statue_display == "مرتجع" %}
+                            <p class="bg-danger text-white p-2 h4 w-100" style="font-size: 2rem; font-weight: 900;">مرتجع</p>
+                            {% endif %}
+                            <!-- Add more fields as needed -->
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                            <!-- Display details from BasicInvoiceInfo model -->
+                            {{ basicInvoiceInfo.receve_date|date:'Y-m-d'}}</span>
+                            <!-- Add more fields as needed -->
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                            {% if basicInvoiceInfo.remain > 0 %}
+                                <p class="h3 text-info">
+                                    {{ basicInvoiceInfo.remain }}
+                                </p>
+                                <input class="d-none" value="{{masterInvoice.id}}">
+                                <input class="form-control add_pay_input">
+                                <a href="#" class="btn btn-danger mt-2 pay_btn" >اضافة مبلغ</a>
+                            
+                            {% else %}
+                                <p class="bg-white h4 text-success done_pay">تم السداد بالكامل</p>
+                                <a href="{% url 'order:createDeliverd' masterInvoice.id%}" class="btn btn-success done_pay done_pay_btn">تسليم الطلب</a>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a class="btn btn-primary text-white" href="{% url 'order:listOrderDetails'  masterInvoice.id%}">عرض الطلب</a>
+                        <hr>
+                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                            {% if basicInvoiceInfo.remain == 0 %}
+                            
+                            {% else %}
+                                <a class="btn btn-warning text-white" href="{% url 'order:payDebit'  masterInvoice.id%}">دفع بمديونية</a>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <select class="form-control h5 change_order_statue" id="change_order_statue{{masterInvoice.id}}" name="change_order_statue"  hx-post="/order/changeOrderStatue/{{masterInvoice.id}}">
+                            <option>اختر لتغيير الحالة</option>
+                            <option value="0">غير محدد</option>
+                            <option value="1">تم ارسالها الى المشغل</option>
+                            <option value="2">جاهز للتسليم</option>
+                            <option value="3">مرتجع</option>
+                            <option value="4">تسليم بعد المرتجع</option>
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}    
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+$(".done_pay_statue").each(function(){
+    let statue_txt = $(this).text()
+    if(statue_txt == "تم التسليم"){
+        let td = $(this).parent().parent().find(".done_pay");
+        $(this).parent().parent().find(".done_pay_btn").attr("href","#")
+        td.text("------")
+        console.log("td el => ", td.length)
+    }else{
+
+    }
+})
+
+
+$(".pay_btn").each(function(){
+    $(this).click(function(){
+        $(this).hide()
+    })
+})
+
+
+$(".add_pay_input").each(function(){
+    $(this).keyup(function(){
+        let paid                = $(this).val(),
+            masterInvoice_id    = $(this).prev().val();
+        $(this).next().attr("href", `/kazna/pay/${masterInvoice_id}/${paid}`)
+    })
+})
+
+$("select.change_order_statue").each(function(){
+    $(this).change(function(){
+        location.reload()
+    })
+})
+
+
+$("#id_paid").keyup(function(){
+    $("#id_remain").attr('value', $("#id_total").val() - $("#id_paid").val())
+})
+{% endblock %}

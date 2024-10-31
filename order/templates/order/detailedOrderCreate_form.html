@@ -1,0 +1,236 @@
+{% extends "homee/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>اضافة / تعديل سجل قماش</title>
+{% endblock %}
+
+{% block style %}
+        .image_id_input{
+            position:relative;
+            bottom:10rem
+        }
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid text-center m-auto">
+    <h4 class="h4 border p-3 mb-5 mt-3">{% if form.instance.pk %}تعديل{% else %} انشاء {% endif %} طلب </h4>
+    <div class="row">
+        <div class="col-5 mb-5 border border-danger p-4">
+            <form method="post">
+                    {% csrf_token %}
+                    {{ form | crispy}}
+                <button type="submit" class="btn btn-danger text-white d-block w-100 h3 mt-3">تسجيل باقى البيانات</button>
+            </form>
+        </div>
+        <div class="col-3 mr-auto ml-auto h4">
+            {% if detailedOrders %}
+                {% for detailed_order in detailedOrders %}
+                    <div class="border m-2 p-2">
+                        <label>اسم الطلب : </label>
+                        <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample-{{detailed_order.id}}" aria-expanded="false" aria-controls="collapseExample-{{detailed_order.id}}">
+                            {{ detailed_order.name }}
+                        </button>
+                        <div class="collapse" id="collapseExample-{{detailed_order.id}}">
+                            <div class="card card-body mt-2">
+                                <p class="border p-2   h4">رقم الفاتورة / العملية : {{ detailed_order.masterInvoice.id }}</p>
+                                <p class="border p-2   h4">رقم العميل : {{ detailed_order.masterInvoice.clientMI.id }}</p>
+                                <p class="border p-2   h4">اسم العميل : <a href="#">{{ detailed_order.masterInvoice.clientMI.name }}</a></p>
+                                <p class="border p-2   h4">القماش : {{ detailed_order.clothD }}</p>
+                                <p class="border p-2   h4">الكمية : {{ detailed_order.used }}</p>
+                                <p class="border p-2   h4">التفاصيل : {{ detailed_order.details }}</p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <a class="btn btn-danger" href="{% url 'order:delete_details' pk=detailed_order.masterInvoice.id%}" style=" position: relative; top: 10rem; ">حذف الطلبات<a>
+                {% endfor %}
+                
+                <hr>
+                <a class="btn btn-primary w-100 p-2" href="{% url 'order:finalPart' pk=master_invoice_pk %}">إستكمال باقى البيانات</a>
+
+            {% else %}
+                <h4>لا توجد طلبات سابقة لعملية البيع</h4>
+                ----
+                <h6>
+                    <input disabled id="activated_img_name" value="اسم الصورة">
+                    <label for="new_img_name">تعديل اسم الصورة</label>
+                    <input id="new_img_name" placeholder="تعديل اسم الصورة">
+                    <button class="btn btn-warning mt-3" id="update_button"
+                            hx-confirm="هل تريد تعديل الاسم؟"
+                            hx-swap="none" hx-trigger="click">
+                        تعديل الاسم
+                    </button>
+                </h6>
+            {% endif %}
+        </div>
+        <div class="col-3">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                {%for img in imgs%}                
+                    <ol class="carousel-indicators">
+                        <li data-target="#myCarousel" data-slide-to="{{img.id}}" class="{% if forloop.first %}active{% endif %}"></li>
+                    </ol>
+                {%endfor%}
+                    <div class="carousel-inner">
+                        {%for img in imgs%}                
+                        
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <div class="image-container">
+                                <img src="{{ img.file.url }}" alt="{{ img.name }}" id="{{img.id}}" style="width: 100%; height: 25rem;">
+                            </div>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5 class="bg-dark text-white p-2">{{img.name}}</h5>
+                            </div>
+                        </div>
+                        {%endfor%}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-target="#myCarousel" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-target="#myCarousel" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                    </button>                
+            </div>
+            <div class="image_choosen_holder h3" style="padding-top:3rem">
+                <a class="btn btn-danger text-white mb-3" id="stopCarouselBtn">اختيار الصورة</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+$("#new_img_name").keyup(function(){
+    console.log("updated")
+    var activatedImgId = document.getElementById('activated_img_name').value;
+        var newImgName = document.getElementById('new_img_name').value;
+    $("#update_button").attr('hx-get', "/update_record/" + activatedImgId+"/"+newImgName);
+})
+
+
+
+$("#update_button").click(function(){
+    var activatedImgId = document.getElementById('activated_img_name').value;
+    var newImgName = document.getElementById('new_img_name').value;
+    $.post(`/img/update_record/`,   // url   
+        JSON.stringify({ activatedImgId: activatedImgId,  newImgName:newImgName}), 
+            function(data, status, jqXHR) {// success callback            
+            alert('تم تعديل السجل بنجاح');
+            location.reload();
+        })
+
+    
+})
+
+setInterval(function(){
+    img_id      = $("div.carousel-item.active").find("img").attr("id")
+    img_name    = $("div.carousel-item.active").find("h5").text()
+    $("#activated_img_name").attr('value', img_name);
+},500)
+
+var myCarousel = $('#myCarousel');
+
+// Pause the carousel when the "Stop Carousel" button is clicked
+$('#stopCarouselBtn').on('click', function() {
+    myCarousel.carousel('pause');
+});
+
+$("#id_img").change(function(){
+    let val = $("#id_img").val();
+    $(".carousel-item").each(function(){
+        $(this).removeClass("active")
+    })
+    $(`img#${val}`).parent().parent().addClass("carousel-item active");
+})
+
+
+
+$("#id_img").chosen();
+$("#id_clothD").chosen();
+$(".chosen-results").css('font-size','1.2rem');
+$(".chosen-container.chosen-container-single").css('height', '4rem')
+$(".chosen-container.chosen-container-single").css('width', '20rem')
+$(".chosen-single").css('font-size','2rem');
+$(".chosen-single").css('height','100%');
+$(".chosen-single").css('line-height','3.5rem');
+$(".chosen-single span").css('height','100%');
+
+
+$("#id_used").keyup(function(){
+    let cloth_storged_amount = ($("#id_storge").val()),
+        id_used              = ($("#id_used").val());
+    $("#id_remain").attr('value', cloth_storged_amount-id_used )
+    console.log("remain => ", cloth_storged_amount - id_used)
+})
+
+// get cloth storge amount
+
+$("#id_clothD").change(function(){
+    let clothId = $("#id_clothD").val();
+    $.post('/order/getClothStorgedAmount',   // url   
+        JSON.stringify({ clothId: clothId }), 
+            function(data, status, jqXHR) {// success callback
+                var cloth_storged_amount = data.cloth_storged_amount;
+                console.log("cloth_storged_amount => ", cloth_storged_amount)
+            //$('#id_storge').attr('value', cloth_storged_amount)
+            $('#id_storge').val(data.cloth_storged_amount)
+            
+        })
+})
+
+
+
+$("#div_id_is_deleted").hide()
+$("div.col-5.mb-5.border.border-danger.p-4").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+    
+})
+
+$("#id_masterInvoice").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+    "height":"3rem"
+})
+
+$("#id_name").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+})
+
+$("#id_clothD").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+    "height":"3rem"
+
+})
+
+$("#id_used").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+})
+
+
+$("#id_details").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+})
+
+$("#id_storge").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+})
+
+
+$("#id_remain").css({
+    "font-size":"1.5rem",
+    "font-weight":"900",
+})
+
+
+/// make a fixed 2 function one to change font weight and size and aonther to change too the height of the field 
+
+{% endblock %}

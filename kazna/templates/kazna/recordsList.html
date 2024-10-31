@@ -1,0 +1,94 @@
+{% extends "homee/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>سجل الخزنة</title>
+{% endblock %}
+
+{% block style %}
+
+th, td{
+    border-bottom: 2px solid #000 !important;
+    border-top: 2px solid #000 !important;
+    border-left: 2px solid #000 !important;
+}
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid text-center m-auto">
+    <div class="row w-100" style=" position: fixed; top: 5rem; display: inline-block; left: 1rem; z-index:2;" >
+        <div class="col-12">
+            <form class="border m-auto " action="#" >
+                <div class="row">
+                    <div class="col-4">
+                        <input class="w-100 form-control mt-3" name="q" placeholder="ابحث بالاسم / رقم العملية / رقم العميل">
+                    </div>
+                
+                    <div class="col-3">
+                        من :
+                        <input type="date" class="w-100 form-control" name="from">
+                    </div>
+                    <div class="col-3">
+                        إلى
+                        <input type="date" class="w-100 form-control" name="to">
+                    </div>
+
+                    <div class="form-control mr-auto ml-auto mt-3">
+                        <input type="submit" class="form-control btn btn-info" value="ابحث">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <h1 class="h4 border text-danger" style=" margin-top: 4.5rem; font-size: 2.45rem; font-weight: 900; ">سجل الخزنة</h1>
+    <div class="row bg-white w-100 " style=" position: fixed; top: 17rem; display: inline-block; left: 0rem; z-index:2; overflow:scroll; height:67vh">
+        <table class="table-responsive table border border-danger p-2 text-center table-striped table-hover table-bordered w-50 mr-auto ml-auto" style="margin-bottom:10rem" id="" style="">
+            <thead>
+                <tr>
+                    <th>رقم الفاتورة</th>
+                    <th>اسم العميل</th>
+                    <th>تصنيف الدفع</th>
+                    <th>المبلغ المدفوع</th>
+                    <th>المتبقى</th>
+                    <th>تاريخ الدفع</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{record.masterInvoice.counter}}</td>
+                    <td>{{record.masterInvoice.clientMI.name}}</td>
+                    <td>
+                    {% if record.difference == 0%} - أخر دفع {% else %}  {% endif %}
+                    </td>
+                    <td>
+                        {{record.paid}}
+                    </td>
+                    <td>
+                        {{record.remain}}
+                    </td>
+                    <td>{{record.created_at|date:'d-m-Y'}}</td>
+                </tr>
+                {% endfor %}
+                <tr class="bg-danger text-white">
+                    <td>إجمالى المبلغ المدفوع خلال هذه الفترة</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>{{total_paid}} جنيه</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+
+        
+</div>
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}

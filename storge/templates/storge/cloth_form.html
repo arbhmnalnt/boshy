@@ -1,0 +1,56 @@
+{% extends "homee/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>اضافة / تعديل سجل قماش</title>
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid text-center m-auto">
+    <h1 class="h1 border p-3 mb-5 mt-3">{% if form.instance.pk %}تعديل{% else %} انشاء {% endif %} سجل قماش  {{cloth.name}}</h1>
+    <div class="row">
+        <div class="col-4 mb-5 border border-danger p-4">
+            <form method="post">
+                    {% csrf_token %}
+                    {{ form | crispy}}
+                    <input type="color" id="colorSelect" name="{{ form.color.name }}" value="" style="width: 100px; height: 60px;">
+                <button type="submit" class="btn btn-danger text-white d-block w-100 h3 mt-3">حفظ</button>
+            </form>
+        </div>
+        <div class="col-7 m-auto border p-3">
+            <h2>سجل التغييرات</h2>
+            <table class="table-bordered text-center w-100 h4">
+                <thead>
+                    <tr>
+                        <th>رقم العملية</th>
+                        <th>الكمية المضافة</th>
+                        <th>التاريخ والوقت</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in historyRecords %}
+                        <tr>
+                            <td>{{ entry.get_typee_display }}</td>
+                            <td>{{ entry.amount }} متر</td>
+                            <td>{{ entry.created_at|date:'Y-m-d'}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    $("#colorSelect").change(function(){
+        let color = $(this).val();
+        $("#id_color").css('background',color)
+        console.log($(this).val())
+    })
+{% endblock %}

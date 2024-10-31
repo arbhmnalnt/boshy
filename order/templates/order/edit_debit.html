@@ -1,0 +1,32 @@
+{% extends "homee/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>اضافة / تعديل سجل دفع مديونية</title>
+{% endblock %}
+
+{% block style %}
+
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid text-center m-auto">
+    <h1 class="h1 border p-3 mb-5 mt-3">{% if form.instance.pk %}تعديل{% else %} انشاء {% endif %} سجل دفع مديونية </h1>
+    <div class="row">
+        <div class="col-8 mb-5 border border-danger p-4">
+            <form method="post">
+                    {% csrf_token %}
+                    {{ form | crispy}}
+                <button type="submit" class="btn btn-danger text-white d-block w-100 h3 mt-3">حفظ</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+$("#div_id_is_deleted").hide()
+{% endblock %}

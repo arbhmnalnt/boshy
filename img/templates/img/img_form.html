@@ -1,0 +1,30 @@
+{% extends "homee/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>اضافة / تعديل سجل عميل</title>
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid text-center m-auto">
+    <h1>{% if form.instance.pk %}تعديل{% else %} انشاء {% endif %} صورة</h1>
+    <div class="row">
+        <div class="col-10 ml-auto mr-auto mb-5 border border-danger p-4">
+            <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form | crispy}}
+                <button type="submit" class="btn btn-danger text-white d-block w-100 h3">حفظ</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

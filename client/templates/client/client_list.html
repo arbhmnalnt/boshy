@@ -1,0 +1,60 @@
+{% extends "homee/index.html" %}
+{% block title %}
+    <title>قائمة العملاء</title>
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row bg-white w-100" style="">
+        <div class="col-10 m-auto p-3 text-center">
+            <a class="btn btn-primary w-50 m-auto" href="{% url "client:create" %}">اضافة عميل</a>
+            <button class="btn btn-danger" type="button" data-toggle="collapse" data-target="#search_collapse" aria-expanded="false" aria-controls="search_collapse">البحث عن عميل</button>
+            <form class="form collapse" action="#" method="GET" style="" id="search_collapse">
+                <div class="">
+                    <input name="q" class="form-control m-2" placeholder="ابحث باسم العميل">
+                    <input type="submit" class="form-control btn btn-info" value="ابحث">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12" style="">
+            <h4 class="text-right">قائمة العملاء</h4>
+            <table class="table text-center table-striped table-hover table-bordered w-100" id="" style="">
+                <thead>
+                    <th>رقم العميل</th>
+                    <th>الاسم</th>
+                    <th>العنوان</th>
+                    <th>الصفحة</th>
+                    <th>رقم التليفون</th>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <td><a class="btn btn-info text-white"
+                                href="#">{{ client.counter }}</a></td>
+                            <td>{{ client.name }}</td>
+                            <td>{{ client.address }}</td>
+                            <td>{{ client.page }}</td>
+                            <td>{{ client.phone }}</td>
+                        </tr>
+
+                    {% empty %}
+                        <li>No client found.</li>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}
