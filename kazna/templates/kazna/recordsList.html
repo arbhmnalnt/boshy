@@ -17,14 +17,15 @@ th, td{
 
 {% block content %}
 <div class="container-fluid text-center m-auto">
-    <div class="row w-100" style=" position: fixed; top: 5rem; display: inline-block; left: 1rem; z-index:2;" >
+    <div class="row w-100" style="display: inline-block; left: 1rem; z-index:2;" >
         <div class="col-12">
-            <form class="border m-auto " action="#" >
+          <button class="btn btn-danger" type="button" data-toggle="collapse" data-target="#search_collapse" aria-expanded="false" aria-controls="search_collapse">البحث عن عميل</button>
+            <form class="border m-auto collapse" action="#" id="search_collapse">
                 <div class="row">
                     <div class="col-4">
-                        <input class="w-100 form-control mt-3" name="q" placeholder="ابحث بالاسم / رقم العملية / رقم العميل">
+                        <input class="w-100 form-control mt-1" name="q" placeholder="ابحث بالاسم / رقم العملية / رقم العميل">
                     </div>
-                
+
                     <div class="col-3">
                         من :
                         <input type="date" class="w-100 form-control" name="from">
@@ -41,11 +42,9 @@ th, td{
             </form>
         </div>
     </div>
-    <br>
-    <br>
-    <br>
-    <h1 class="h4 border text-danger" style=" margin-top: 4.5rem; font-size: 2.45rem; font-weight: 900; ">سجل الخزنة</h1>
-    <div class="row bg-white w-100 " style=" position: fixed; top: 17rem; display: inline-block; left: 0rem; z-index:2; overflow:scroll; height:67vh">
+
+    <h1 class="h4 border text-danger" style=" margin-top: 0.1rem; font-size: 2.45rem; font-weight: 900; ">سجل الخزنة</h1>
+    <div class="row bg-white w-100 " style=" position: relative; top:1rem;bottom: 3rem; display: inline-block; left: 0rem; z-index:2; overflow:scroll; height:67vh">
         <table class="table-responsive table border border-danger p-2 text-center table-striped table-hover table-bordered w-50 mr-auto ml-auto" style="margin-bottom:10rem" id="" style="">
             <thead>
                 <tr>
@@ -85,7 +84,7 @@ th, td{
             </tbody>
         </table>
 
-        
+
 </div>
 
 {% endblock %}
