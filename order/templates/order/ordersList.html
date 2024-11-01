@@ -35,7 +35,7 @@
                         <input type="date" class="w-100 form-control" name="to">
                     </div>
                     <div class="col-10 mr-auto ml-auto mt-2 mb-2">
-                        <input type="submit" class="form-control btn btn-info w-100" value="ابحث">    
+                        <input type="submit" class="form-control btn btn-info w-100" value="ابحث">
                     </div>
                 </div>
             </form>
@@ -85,6 +85,10 @@
                             <p class="bg-warning text-white p-1 h4 w-100 done_pay_statue">تسليم بعد المرتجع</p>
                                 {% elif basicInvoiceInfo.get_statue_display == "مرتجع" %}
                             <p class="bg-danger text-white p-2 h4 w-100" style="font-size: 2rem; font-weight: 900;">مرتجع</p>
+                              {% elif basicInvoiceInfo.get_statue_display == "مستعجل" %}
+                            <p class="bg-danger text-white p-2 h4 w-100" style="font-size: 2rem; font-weight: 900;">مستعجل</p>
+                              {% elif basicInvoiceInfo.get_statue_display == "متأخر" %}
+                            <p class="bg-danger text-white p-2 h4 w-100" style="font-size: 2rem; font-weight: 900;">متأخر</p>
                             {% endif %}
                             <!-- Add more fields as needed -->
                         {% endfor %}
@@ -105,7 +109,7 @@
                                 <input class="d-none" value="{{masterInvoice.id}}">
                                 <input class="form-control add_pay_input">
                                 <a href="#" class="btn btn-danger mt-2 pay_btn" >اضافة مبلغ</a>
-                            
+
                             {% else %}
                                 <p class="bg-white h4 text-success done_pay">تم السداد بالكامل</p>
                                 <a href="{% url 'order:createDeliverd' masterInvoice.id%}" class="btn btn-success done_pay done_pay_btn">تسليم الطلب</a>
@@ -117,7 +121,7 @@
                         <hr>
                         {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
                             {% if basicInvoiceInfo.remain == 0 %}
-                            
+
                             {% else %}
                                 <a class="btn btn-warning text-white" href="{% url 'order:payDebit'  masterInvoice.id%}">دفع بمديونية</a>
                             {% endif %}
@@ -131,10 +135,12 @@
                             <option value="2">جاهز للتسليم</option>
                             <option value="3">مرتجع</option>
                             <option value="4">تسليم بعد المرتجع</option>
+                            <option value="5">مستعجل</option>
+                            <option value="6">متأخر</option>
                         </select>
                     </td>
                 </tr>
-                {% endfor %}    
+                {% endfor %}
             </table>
         </div>
     </div>

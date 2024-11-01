@@ -3,79 +3,89 @@
     <title>الصفحة الرئيسية</title>
 {% endblock %}
 {% block style %}
-    <!-- Your styles go here -->
+    <style>
+        .custom-btn:hover {
+            background-color: #007bff;
+        }
+    </style>
 {% endblock %}
 {% block content %}
-    <div class="row border p-4 ">
-        <div class="col-4">
-            <a class="btn btn-info w-100 text-white home" href="{% url 'client:list' %}" style="">
-            <i class="fa-solid fa-users"></i>
-            إدارة العملاء
+    <div class="row border p-4">
+        <div class="col-md-4">
+            <a class="btn btn-info custom-btn" href="{% url 'client:list' %}">
+                <i class="fa-solid fa-users me-2"></i> إدارة العملاء
             </a>
         </div>
-        <div class="col-4">
-            <a class="btn btn-info w-100 text-white home" href="{% url 'cloth:list' %}" style="">
-            <i class="fa-solid fa-warehouse"></i>
-            إدارة القماش
+        <div class="col-md-4">
+            <a class="btn btn-info custom-btn" href="{% url 'cloth:list' %}">
+                <i class="fa-solid fa-warehouse me-2"></i> إدارة القماش
             </a>
         </div>
-
-        <div class="col-4">
-            <a class="btn btn-info w-100 text-white home" href="{% url 'order:createMain' %}" style="">
-            <i class="fa-solid fa-plus"></i>
-            عملية بيع جديدة
+        <div class="col-md-4">
+            <a class="btn btn-info custom-btn" href="{% url 'order:createMain' %}">
+                <i class="fa-solid fa-plus me-2"></i> عملية بيع جديدة
             </a>
         </div>
     </div>
     <div class="row border p-4">
-        <div class="col-4">
-            <a class="btn btn-danger w-100 text-white home" href="{% url 'order:list' %}" style="">
-            <i class="fa-solid fa-table-cells"></i>
-            سجل عمليات البيع
+        <div class="col-md-4">
+            <a class="btn btn-danger custom-btn" href="{% url 'order:list' %}">
+                <i class="fa-solid fa-table-cells me-2"></i> سجل عمليات البيع
             </a>
         </div>
-        <div class="col-2">
-            <a class="btn btn-danger w-100 text-white home" href="{% url 'kazna:list' %}" style="">
-            <i class="fa-solid fa-cash-register"></i>
-            الخزنة
+        <div class="col-md-2">
+            <a class="btn btn-danger custom-btn" href="{% url 'kazna:list' %}">
+                <i class="fa-solid fa-cash-register me-2"></i> الخزنة
             </a>
         </div>
-        <div class="col-2">
-            <a class="btn btn-danger w-100 text-white home" href="{% url 'kazna:list' %}" style="">
-            <i class="fa-solid fa-receipt"></i>
-            اليومية
+        <div class="col-md-2">
+            <a class="btn btn-danger custom-btn" href="{% url 'kazna:list' %}">
+                <i class="fa-solid fa-receipt me-2"></i> اليومية
             </a>
         </div>
-        <div class="col-4">
-            <a class="btn btn-danger w-100 text-white home" href="{% url 'order:orderStatus' %}" style="">
-            <i class="fa-solid fa-truck-ramp-box"></i>
-            متابعة وتسليم الطلبات
+        <div class="col-md-4">
+            <a class="btn btn-danger custom-btn" href="{% url 'order:orderStatus' %}">
+                <i class="fa-solid fa-truck-ramp-box me-2"></i> متابعة وتسليم الطلبات
+            </a>
+        </div>
+    </div>
+    <div class="row border p-4">
+        <div class="col-md-3">
+            <a class="btn btn-success custom-btn" href="{% url 'img:list' %}">
+                <i class="fa-solid fa-images me-2"></i> إدارة مكتبة الصور
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-success custom-btn" href="{% url 'kazna:old_list' %}">
+                <i class="fa-solid fa-table-cells me-2"></i> سجلات الخزنة القديمة - ما قبل 12-05-2024
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-success custom-btn" href="{% url 'kazna:expense_list' %}">
+                صفحة المدفوعات
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-warning custom-btn" href="{% url 'order:listDebit' %}">
+                صفحة المديونيات
             </a>
         </div>
     </div>
     <div class="row border p-4">
         <div class="col">
-            <a class="btn btn-success w-100 text-white home" href="{% url 'img:list' %}" style="">
-            <i class="fa-solid fa-images"></i>
-            إدارة مكتبة الصور
+            <a class="btn btn-warning custom-btn" href="#">
+              صفحة الطلبات المستعجلة
             </a>
         </div>
         <div class="col">
-            <a class="btn btn-success w-100 text-white home" href="{% url 'kazna:old_list' %}" style="">
-            <i class="fa-solid fa-table-cells"></i>
-            سجلات الخزنة القديمة - ما قبل 12-05-2024
-            </a>
-        </div>
-        <div class="col">
-          <a class="btn btn-success w-100 home"  href="{% url 'kazna:expense_list' %}">
-            صفحة المدفوعات
+          <a class="btn btn-warning custom-btn" href="#">
+            صفحة الطلبات المتأخرة
           </a>
-        </div>
-        <div class="col">
-          <a class="btn btn-warning text-white w-100 home"  href="{% url 'order:listDebit' %}">
-            صفحة المديونيات
-          </a>
-        </div>
+      </div>
+      <div class="col">
+        <a class="btn btn-warning custom-btn" href="#">
+          صفحة المهام
+        </a>
     </div>
-
+    </div>
 {% endblock %}

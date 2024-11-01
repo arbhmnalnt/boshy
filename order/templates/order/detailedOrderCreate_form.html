@@ -46,7 +46,7 @@
                                             hx-target="#detailsTextarea"
                                             class="form-control"></textarea>
                                 </p>
-                                <button onClick="window.location.reload()" class="btn btn-warning">تأكيد</button>
+                                <button onClick="" id="reload" class="btn btn-warning">تأكيد</button>
 
 
 
@@ -113,6 +113,13 @@
 {% endblock %}
 
 {% block script %}
+$("#reload").click(function() {
+  setTimeout(function() {
+    location.reload();
+    console.log("reloading...");
+  }, 500);
+})
+
 $("#new_img_name").keyup(function(){
     console.log("updated")
     var activatedImgId = document.getElementById('activated_img_name').value;
