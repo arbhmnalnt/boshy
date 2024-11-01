@@ -39,13 +39,23 @@
                                 <p class="border p-2   h4">القماش : {{ detailed_order.clothD }}</p>
                                 <p class="border p-2   h4">الكمية : {{ detailed_order.used }}</p>
                                 <p class="border p-2   h4">التفاصيل : {{ detailed_order.details }}</p>
-                                
+                                <p class="border p-2 h4">تعديل التفاصيل:
+                                  <textarea id="detailsTextarea"
+                                            name="details"
+                                            hx-get="/order/changeDetails/{{detailed_order.id}}/{{detailed_order.masterInvoice.id}}"
+                                            hx-target="#detailsTextarea"
+                                            class="form-control"></textarea>
+                                </p>
+                                <button onClick="window.location.reload()" class="btn btn-warning">تأكيد</button>
+
+
+
                             </div>
                         </div>
                     </div>
                     <a class="btn btn-danger" href="{% url 'order:delete_details' pk=detailed_order.masterInvoice.id%}" style=" position: relative; top: 10rem; ">حذف الطلبات<a>
                 {% endfor %}
-                
+
                 <hr>
                 <a class="btn btn-primary w-100 p-2" href="{% url 'order:finalPart' pk=master_invoice_pk %}">إستكمال باقى البيانات</a>
 
@@ -66,14 +76,14 @@
         </div>
         <div class="col-3">
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                {%for img in imgs%}                
+                {%for img in imgs%}
                     <ol class="carousel-indicators">
                         <li data-target="#myCarousel" data-slide-to="{{img.id}}" class="{% if forloop.first %}active{% endif %}"></li>
                     </ol>
                 {%endfor%}
                     <div class="carousel-inner">
-                        {%for img in imgs%}                
-                        
+                        {%for img in imgs%}
+
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
                             <div class="image-container">
                                 <img src="{{ img.file.url }}" alt="{{ img.name }}" id="{{img.id}}" style="width: 100%; height: 25rem;">
@@ -91,7 +101,7 @@
                     <button class="carousel-control-next" type="button" data-target="#myCarousel" data-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="sr-only">Next</span>
-                    </button>                
+                    </button>
             </div>
             <div class="image_choosen_holder h3" style="padding-top:3rem">
                 <a class="btn btn-danger text-white mb-3" id="stopCarouselBtn">اختيار الصورة</a>
@@ -115,14 +125,14 @@ $("#new_img_name").keyup(function(){
 $("#update_button").click(function(){
     var activatedImgId = document.getElementById('activated_img_name').value;
     var newImgName = document.getElementById('new_img_name').value;
-    $.post(`/img/update_record/`,   // url   
-        JSON.stringify({ activatedImgId: activatedImgId,  newImgName:newImgName}), 
-            function(data, status, jqXHR) {// success callback            
+    $.post(`/img/update_record/`,   // url
+        JSON.stringify({ activatedImgId: activatedImgId,  newImgName:newImgName}),
+            function(data, status, jqXHR) {// success callback
             alert('تم تعديل السجل بنجاح');
             location.reload();
         })
 
-    
+
 })
 
 setInterval(function(){
@@ -170,14 +180,14 @@ $("#id_used").keyup(function(){
 
 $("#id_clothD").change(function(){
     let clothId = $("#id_clothD").val();
-    $.post('/order/getClothStorgedAmount',   // url   
-        JSON.stringify({ clothId: clothId }), 
+    $.post('/order/getClothStorgedAmount',   // url
+        JSON.stringify({ clothId: clothId }),
             function(data, status, jqXHR) {// success callback
                 var cloth_storged_amount = data.cloth_storged_amount;
                 console.log("cloth_storged_amount => ", cloth_storged_amount)
             //$('#id_storge').attr('value', cloth_storged_amount)
             $('#id_storge').val(data.cloth_storged_amount)
-            
+
         })
 })
 
@@ -187,7 +197,7 @@ $("#div_id_is_deleted").hide()
 $("div.col-5.mb-5.border.border-danger.p-4").css({
     "font-size":"1.5rem",
     "font-weight":"900",
-    
+
 })
 
 $("#id_masterInvoice").css({
@@ -231,6 +241,6 @@ $("#id_remain").css({
 })
 
 
-/// make a fixed 2 function one to change font weight and size and aonther to change too the height of the field 
+/// make a fixed 2 function one to change font weight and size and aonther to change too the height of the field
 
 {% endblock %}

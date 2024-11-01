@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView 
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from .models import *
 from django.db.models import Q
 from .forms import *
@@ -15,6 +15,20 @@ from img.models import *
 from django.utils.timezone import make_aware
 from django.utils import timezone
 
+
+
+@csrf_exempt
+def change_details(request, order_id, masterInvoicePK):
+    # Get the updated details from the request body
+    updated_details = request.GET.get('details')
+    print(f"order_id ===> {order_id}")
+    DetailedOrder.objects.filter(pk=order_id).update(details=updated_details)
+    # Process the updated details (e.g., save to the database)
+    # Replace this with your actual logic to process the updated details
+    print("Updated details:", updated_details)
+
+    # # Redirect to a success page or reload the current page
+    success_url = request.get_full_path()
 
 class editDebitFormEditView(UpdateView):
     model           = DebitOrder
@@ -73,7 +87,7 @@ def payDebit(request, pk):
 
 def DetailedOrderDelete(request, pk):
     masterInvoicePK = pk
-    # delete details order 
+    # delete details order
     old_DetailedOrder       = DetailedOrder.objects.filter(masterInvoice=masterInvoicePK).delete()
     print("done!")
     success_url = reverse('order:createDetails', kwargs={'pk': masterInvoicePK})
@@ -85,7 +99,7 @@ def dublicate(request,pk):
     old_master_invoice      = MasterInvoice.objects.get(pk=masterInvoicePK)
     old_DetailedOrder       = DetailedOrder.objects.get(masterInvoice=old_master_invoice)
     old_basicInvoiceInfo    = basicInvoiceInfo.objects.get(masterInvoice=old_master_invoice)
-    # create new records 
+    # create new records
     new_master_invoice = MasterInvoice.objects.create(
         invoiceType =old_master_invoice.invoiceType,
         clientMI    =old_master_invoice.clientMI,
@@ -94,7 +108,7 @@ def dublicate(request,pk):
     new_detail = DetailedOrder.objects.create(
         masterInvoice   =  new_master_invoice,
         name            =  old_DetailedOrder.name ,
-        img             =  old_DetailedOrder.img,  
+        img             =  old_DetailedOrder.img,
         clothD          =  old_DetailedOrder.clothD ,
         used            =  old_DetailedOrder.used,
         details         =  old_DetailedOrder.details ,
@@ -156,7 +170,7 @@ def getClothStorgedAmount(request):
         cloth_id                = data.get('clothId', 'No data received.')
         print(f"cloth_id =====================> {cloth_id}")
         cloth_storged_amount    = Cloth.objects.get(pk=cloth_id).amount
-    
+
         response_data = {
             'status': 'success',
             'cloth_storged_amount': cloth_storged_amount
@@ -183,7 +197,7 @@ class ordersDetailView(DetailView):
 
 from datetime import datetime
 class orderStatusListView(ListView):
-    #TODO filter orders based on statues  
+    #TODO filter orders based on statues
     model = MasterInvoice
     template_name = 'order/orders_statue_List.html'
     context_object_name = 'masterInvoices'
@@ -205,7 +219,7 @@ class orderStatusListView(ListView):
                 ~Q(basicinvoiceinfo__statue='done'),
                 basicinvoiceinfo__receve_date__lte=today_date
             ).order_by('-basicinvoiceinfo__receve_date')
-        
+
         # Filter by receve date range
         if search_by == "receve" and from_date and to_date:
             from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
@@ -214,13 +228,13 @@ class orderStatusListView(ListView):
                 basicinvoiceinfo__receve_date__gte=from_date_aware,
                 basicinvoiceinfo__receve_date__lte=to_date_aware
             ).order_by('-basicinvoiceinfo__receve_date')
-        
+
         # Filter by specific order status if not already filtered by outdated status
         if order_status and order_status != "outdated":
             queryset = queryset.filter(basicinvoiceinfo__statue=order_status).order_by('-basicinvoiceinfo__receve_date')
 
         return queryset
-    
+
 class ordersListView(ListView):
     model = MasterInvoice
     template_name = 'order/ordersList.html'
@@ -233,7 +247,7 @@ class ordersListView(ListView):
         queryset = super().get_queryset()
         order_counter = len(queryset.all()) + 1
         # print(f'order_counter = > {order_counter}')
-        # for ord in queryset:            
+        # for ord in queryset:
         #     print(f"order_counter before = > {order_counter}")
         #     if ord.counter == None or ord.counter == 0:
         #         order_counter -= 1
@@ -259,17 +273,17 @@ class ordersListView(ListView):
             if from_date and to_date:
                 from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
                 to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d"))
-                
+
                 # Filter based on receve_date in basicInvoiceInfo
                 basic_invoice_info_queryset = basicInvoiceInfo.objects.filter(receve_date__gte=from_date_aware, receve_date__lte=to_date_aware)
-                
+
                 # Get the related MasterInvoice records
                 master_invoices = MasterInvoice.objects.filter(id__in=basic_invoice_info_queryset.values('masterInvoice')).distinct()
-                
+
                 return master_invoices
 
         return queryset.order_by('-created_at')
-    
+
 from decimal import Decimal
 
 class BasicOrderFormCreateView(FormView):
@@ -288,7 +302,7 @@ class BasicOrderFormCreateView(FormView):
         clientSizes = ClientSizes.objects.filter(clientS=client).count()
         if clientSizes > 0 :
             clientSizes = ClientSizes.objects.filter(clientS=client).first()
-            # set sizes 
+            # set sizes
             initial['tall'] = clientSizes.tall
             initial['kom'] = clientSizes.kom
             initial['ktf'] = clientSizes.ktf
@@ -302,7 +316,7 @@ class BasicOrderFormCreateView(FormView):
     def form_valid(self, form):
         response    = super().form_valid(form)
         # make record save to basicInvoiceInfo,
-        
+
 
         masterInvoice = form.cleaned_data["masterInvoice"]
         masterInvoice.confirmed=True
@@ -328,11 +342,11 @@ class BasicOrderFormCreateView(FormView):
 
         tall  = form.cleaned_data["tall"]
         kom   = form.cleaned_data["kom"]
-        ktf   = form.cleaned_data["ktf"] 
-        sadr  = form.cleaned_data["sadr"] 
+        ktf   = form.cleaned_data["ktf"]
+        sadr  = form.cleaned_data["sadr"]
         leaka = form.cleaned_data["leaka"]
         kazna = form.cleaned_data["kazna"]
-        atak  = form.cleaned_data["atak"] 
+        atak  = form.cleaned_data["atak"]
         client = form.cleaned_data["clientS"]
 
         client_id = client.id
@@ -348,10 +362,10 @@ class BasicOrderFormCreateView(FormView):
                 'atak': atak,
             }
         )
-        
+
         success_url = reverse('order:list')
         return HttpResponseRedirect(success_url)
-    
+
 class DetailedOrderFormCreateView(CreateView):
     model           = DetailedOrder
     form_class       = DetailedOrderForm
@@ -371,7 +385,7 @@ class DetailedOrderFormCreateView(CreateView):
         initial['img'] = imgs
         return initial
 
-    
+
     def get_context_data(self, **kwargs):
         print(f"kwargs =>  {kwargs}")
         context = super().get_context_data()
@@ -391,7 +405,7 @@ class DetailedOrderFormCreateView(CreateView):
         context['detailedOrders']       = detailedOrders
         context['master_invoice_pk']    = master_invoice_pk
         context['instance']             = None
-        
+
         return context
     def form_valid(self, form):
         response    = super().form_valid(form)
@@ -420,15 +434,15 @@ class MasterInvoiceFormCreateView(CreateView):
         invoiceType = form.cleaned_data["invoiceType"]
         # print(f'invoiceType => {invoiceType}')
         self.request.session['first_step_complete'] = True
-        
+
         print(f"self.request.session['first_step_complete'] => {self.request.session['first_step_complete']}")
         success_url = reverse('order:createDetails', kwargs={'pk': form_id})
         return HttpResponseRedirect(success_url)
 
-##TO Do   make a function as first step order create is done already 
-##TO Do   make a function as second step order create is done already 
-##TO Do   make a function as third step order create is done already 
-##TO Do   function to check a;; 3 steps is done already or delete all the order related records 
+##TO Do   make a function as first step order create is done already
+##TO Do   make a function as second step order create is done already
+##TO Do   make a function as third step order create is done already
+##TO Do   function to check a;; 3 steps is done already or delete all the order related records
 
 #-------------------- functions
 ## createMain_ConfirmStep()

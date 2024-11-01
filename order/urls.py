@@ -10,7 +10,7 @@ urlpatterns = [
     path('changeOrderStatue/<int:pk>', chabgeOrderStatue),
     path('getClothStorgedAmount', getClothStorgedAmount),
     path('dublicate/<int:pk>', dublicate),
-    path('delete_details/<int:pk>', DetailedOrderDelete, name='delete_details'),   # DetailedOrder   delete 
+    path('delete_details/<int:pk>', DetailedOrderDelete, name='delete_details'),   # DetailedOrder   delete
     # ========= END API    ==================
     path('editDebit/<int:pk>', editDebitFormEditView.as_view(), name="editDebit"),
     path('listDebit/', debitListView.as_view(), name="listDebit"),
@@ -20,6 +20,6 @@ urlpatterns = [
     path('createBasicInfos/<int:pk>', BasicOrderFormCreateView.as_view(),name="finalPart"),
     path('list', ordersListView.as_view(), name="list"),
     path('listOrderDetails/<int:pk>', ordersDetailView.as_view(), name="listOrderDetails"),
-    path('listorderStatus/', orderStatusListView.as_view(), name="orderStatus")
-
+    path('listorderStatus/', orderStatusListView.as_view(), name="orderStatus"),
+    path('changeDetails/<int:order_id>/<int:masterInvoicePK>', change_details, name='changeDetails'),
 ]
