@@ -19,7 +19,7 @@ class MasterInvoice( TimeStampMixin,models.Model):
     clientMI    = models.ForeignKey(Client, related_name='master_invoices', on_delete=models.CASCADE, verbose_name="العميل")
     invoiceType = models.CharField(max_length=35, choices=invoiceType, null=True, blank=True, verbose_name="نوع الطلب", default="قماش الدكان-رجالى")
     confirmed   = models.BooleanField(default=False)
-    
+
     def save(self, *args, **kwargs):
         # Check if the instance is being saved for the first time
         if not self.id:
@@ -33,7 +33,7 @@ class MasterInvoice( TimeStampMixin,models.Model):
 
     def get_absolute_url(self):
         return reverse('order:createDetails', kwargs={'pk': self.pk})
-    
+
     def __str__(self):
         return f" الفاتورة رقم ({self.id})"
 
@@ -41,7 +41,7 @@ class MasterInvoice( TimeStampMixin,models.Model):
 # ==========  tables for many orders in on Invoice
 class DetailedOrder (TimeStampMixin,models.Model):
     masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
-    name            = models.CharField(max_length=90, null=True, blank=True, verbose_name="اسم الطلب") 
+    name            = models.CharField(max_length=90, null=True, blank=True, verbose_name="اسم الطلب")
     img             = models.ForeignKey(Img, on_delete=models.CASCADE,  null=True, blank=True, verbose_name="الصورة")
     clothD          = models.ForeignKey(Cloth, on_delete=models.CASCADE, verbose_name="القماش")
     used            = models.DecimalField(max_digits=4, decimal_places=2,null=True, blank=True, verbose_name="الكمية المستخدمة")
@@ -50,7 +50,7 @@ class DetailedOrder (TimeStampMixin,models.Model):
     def get_absolute_url(self):
             return reverse('order:createDetails', kwargs={'pk': self.pk})
 
-# ==========  tables for basics infos 
+# ==========  tables for basics infos
 class basicInvoiceInfo(TimeStampMixin,models.Model):
     orderStatue = [
         ('unknwon','غير محدد'),
@@ -58,7 +58,9 @@ class basicInvoiceInfo(TimeStampMixin,models.Model):
         ('done','جاهز للتسليم'),
         ('delivered','تم التسليم'),
         ('returned','مرتجع'),
-        ('doneAgain','تسليم بعد المرتجع')
+        ('doneAgain','تسليم بعد المرتجع'),
+        ('urgent','مستعجل'),
+        ('late','متأخر')
     ]
     masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
     total           = models.IntegerField(null=True, blank=True, verbose_name="المبلغ الإجمالى")
@@ -66,6 +68,12 @@ class basicInvoiceInfo(TimeStampMixin,models.Model):
     remain          = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المتبقى")
     receve_date     = models.DateField(blank=True, null=True)
     statue          = models.CharField(max_length=35, choices=orderStatue, null=True, blank=True, verbose_name="حالة الطلب", default="unknwon")
+    @property
+    def statue_display(self):
+        return dict(self.orderStatue).get(self.statue, 'غير محدد')  # Default to 'غير محدد'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
 class DebitOrder(TimeStampMixin, models.Model):
     MasterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")

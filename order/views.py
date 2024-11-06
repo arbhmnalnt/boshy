@@ -151,6 +151,10 @@ def chabgeOrderStatue(request, pk):
         val = "returned"
     elif statueVal == "4":
         val = "doneAgain"
+    elif statueVal == "5":
+        val = "urgent"
+    elif statueVal == "6":
+        val = "late"
     else :
         val = "unknwon"
 
@@ -158,7 +162,11 @@ def chabgeOrderStatue(request, pk):
     print(f"val => {val}")
 
     masterInvoice = MasterInvoice.objects.get(pk=pk)
-    basicInvoiceInfoRecord = basicInvoiceInfo.objects.filter(masterInvoice=masterInvoice).update(statue=val)
+    basicInvoiceInfoRecords = basicInvoiceInfo.objects.filter(masterInvoice=masterInvoice)
+    for record in basicInvoiceInfoRecords:
+        record.statue = val  # Update the statue
+        record.save()  # This will trigger the `updated_at` field to update
+
     return JsonResponse({'message': 'done'})
 
 

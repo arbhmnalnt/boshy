@@ -14,7 +14,21 @@
     <script src="https://unpkg.com/htmx.org@2.0.3"></script>
 
     <style>
-        {% block style %}
+		.content-wrapper {
+            display: flex;
+            gap: 5px; /* Adds space between main and aside */
+        }
+        .main-content {
+            flex: 3;
+            background-color: #ffffff52;
+        }
+        .aside-section {
+			width: 30%; /* Or use a percentage if you prefer */
+			background-color: #f8f9fa;
+			padding: 20px;
+		}
+		{% block style %}
+
 
         {% endblock %}
     </style>
@@ -71,9 +85,16 @@
 
         </div>
     </nav>
-    <main role="main" class="container-fluid mt-5 pt-3" style="background-color:#ffffff52">
-        {% block content %}{% endblock %}
-    </main>
+
+    <div class="container-fluid mt-1 pt-1 content-wrapper">
+      <main role="main" class="container-fluid mt-5 pt-3" style="background-color:#ffffff52">
+          {% block content %}{% endblock %}
+      </main>
+
+      <aside class="aside-section">
+          {% block aside %}{% endblock %}
+      </aside>
+  </div>
 
     <script src="{% static 'homee/js/jquery.min.js' %}"></script>
     <script src="{% static 'homee/js/popper.min.js' %}"></script>
