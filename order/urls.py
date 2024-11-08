@@ -22,4 +22,5 @@ urlpatterns = [
     path('listOrderDetails/<int:pk>', ordersDetailView.as_view(), name="listOrderDetails"),
     path('listorderStatus/', orderStatusListView.as_view(), name="orderStatus"),
     path('changeDetails/<int:order_id>/<int:masterInvoicePK>', change_details, name='changeDetails'),
+    path('needToBeDoneOrders/', needToBeDoneOrders.as_view(), name="needToBeDoneOrders")
 ]

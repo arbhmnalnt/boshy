@@ -7,7 +7,7 @@ body, .h3, h1.h1, .btn:not(:disabled):not(.disabled), label, select, input{
 
 .btn.custom-btn:not(:disabled):not(.disabled){
   width: 100% !important;
-  color: white;
+  color: white !important;;
 }
 
 label, h1.h1{

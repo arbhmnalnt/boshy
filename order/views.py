@@ -203,7 +203,33 @@ class ordersDetailView(DetailView):
         context["kaznaRecords"]     = Record.objects.filter(masterInvoice=master_invoice_pk)
         return context
 
-from datetime import datetime
+from datetime import datetime, timedelta
+
+
+class needToBeDoneOrders(ListView):
+    model = MasterInvoice
+    template_name = 'order/orders_statue_List.html'
+    context_object_name = 'masterInvoices'
+    ordering = '-created_at'
+
+    def get_queryset(self):
+      today_date = timezone.now().date()
+      three_days_ago = today_date - timedelta(days=3)
+      today_date = timezone.now().date()
+      queryset = MasterInvoice.objects.all().order_by('-basicinvoiceinfo__receve_date')
+
+      # Filter by outdated status
+      queryset = queryset.filter(
+          Q(basicinvoiceinfo__statue='unknwon')|
+          Q(basicinvoiceinfo__statue='sent'),
+          basicinvoiceinfo__receve_date__gte=three_days_ago,
+          basicinvoiceinfo__receve_date__lte=today_date
+      ).order_by('-basicinvoiceinfo__receve_date')
+
+      return queryset
+
+
+
 class orderStatusListView(ListView):
     #TODO filter orders based on statues
     model = MasterInvoice
