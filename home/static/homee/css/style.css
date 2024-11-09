@@ -1,14 +1,18 @@
-body, .h3, h1.h1, .btn:not(:disabled):not(.disabled), label, select, input{
+
+.btn.custom-btn:not(:disabled):not(.disabled){
+  width: 100% !important;
+  color: white !important;;
+}
+
+ /*.btn:not(:disabled):not(.disabled)*/
+
+body, .h3, h1.h1, label, select, input{
     text-align: center!important;
     font-size: 1rem!important;
     font-weight: 900!important;
     font-family: none!important;
 }
 
-.btn.custom-btn:not(:disabled):not(.disabled){
-  width: 100% !important;
-  color: white !important;;
-}
 
 label, h1.h1{
     color:red
