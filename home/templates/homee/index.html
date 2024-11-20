@@ -27,6 +27,10 @@
 			background-color: #f8f9fa;
 			padding: 20px;
 		}
+    .hr{
+      border: 4px solid red;
+      margin-bottom: 10px;
+    }
 		{% block style %}
 
 
@@ -85,16 +89,12 @@
 
         </div>
     </nav>
-
     <div class="container-fluid mt-1 pt-1 content-wrapper">
-      <main role="main" class="container-fluid mt-5 pt-3" style="background-color:#ffffff52">
+      <main role="main" class="main-content container-fluid mt-5 pt-3">
           {% block content %}{% endblock %}
       </main>
-
-      <aside class="aside-section">
-          {% block aside %}{% endblock %}
-      </aside>
-  </div>
+      {% block aside %}{% endblock %}
+    </div>
 
     <script src="{% static 'homee/js/jquery.min.js' %}"></script>
     <script src="{% static 'homee/js/popper.min.js' %}"></script>

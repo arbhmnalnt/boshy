@@ -114,6 +114,7 @@
                           {% for DetailedOrder in DetailedOrders %}
                               <li><label>اسم الطلب</label> : <span>{{ DetailedOrder.name }}</span></li>
                               <li><label>القماش</label> : <span>{{ DetailedOrder.clothD.name }}</span></li>
+                              <li><label>لون القماش : </label> : <div class="w-100 border" style="height: 2.5rem;"><input style="height: 100%;" type="color" class="form-control" value="{{ DetailedOrder.clothD.color }}"></div></li>
                               <li><label>كمية القماش المستهلكة</label> : <span>{{ DetailedOrder.used }}</span></li>
                               <li><label>التفصيل</label> : <span>{{ DetailedOrder.details }}</span></li>
                               <img src="/media/{{ DetailedOrder.img.file }}" class="img-fluid my-2" alt="Order Image">

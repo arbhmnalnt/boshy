@@ -79,43 +79,44 @@
 	</div>
 </div>
 {% endblock %}
-
 {% block aside %}
-<!-- First Scrollable Section -->
-<div class="mt-5 mb-2">
-	<h5 class="mt-2">الطلبات المستعجلة</h5>
+<aside class="aside-section">
+  <!-- First Scrollable Section -->
+  <div class="mt-5 mb-2">
+    <h5 class="mt-2">الطلبات المستعجلة</h5>
 
-	<div class="scrollable-content overflow-auto p-2 border rounded bg-white">
-		{% if urgentOrders %}
-			<ol>
-			{% for order in urgentOrders %}
-				<li class="border-bottom border-primary m-1 p-1">
-					<a class="btn btn-info" href="{% url 'order:listOrderDetails' order.master_invoice.pk%}">رقم العملية : {{OverTimeOrder.master_invoice.counter}}</a>
-					<p class="text-primary">إسم العميل : {{order.master_invoice.clientMI.name}}</p>
-					<strong>تاريخ الاستعجال : </strong> {{ order.last_modified_date|date:"d-m-y"}}
-				</li>
-			{% endfor %}
-			</ol>
-		{% else %}
-			<p>لا توجد طلبات مستعجلة حاليا</p>
-		{% endif %}
-	</div>
-</div>
-<!-- Second Scrollable Section -->
-<div class="mb-4">
-	<h5 class="mb-2">الطلبات المتأخرة</h5>
-	<p class="text-muted">الطلبات التى فات معاد تسليمها .</p>
-	<div class="scrollable-content overflow-auto p-2 border rounded bg-white">
-		<ol>
-		{%for OverTimeOrder in overTimeOrders%}
-			<li class="border-bottom border-primary m-1 p-1">
-				<a class="btn btn-info" href="{% url 'order:listOrderDetails' OverTimeOrder.master_invoice.pk%}">رقم العملية : {{OverTimeOrder.master_invoice.counter}}</a>
-				<p class="text-primary">إسم العميل : {{OverTimeOrder.master_invoice.clientMI.name}}</p>
-				<p class="text-primary">حالة الطلب : {{OverTimeOrder.statue }}</p>
-			</li>
-		{% endfor %}
-	</ol>
-		<!-- Add more items as needed -->
-	</div>
-</div>
+    <div class="scrollable-content overflow-auto p-2 border rounded bg-white">
+      {% if urgentOrders %}
+        <ol>
+        {% for order in urgentOrders %}
+          <li class="border-bottom border-primary m-1 p-1">
+            <a class="btn btn-info" href="{% url 'order:listOrderDetails' order.master_invoice.pk %}">رقم العملية : {{ order.master_invoice.counter }}</a>
+            <p class="text-primary">إسم العميل : {{ order.master_invoice.clientMI.name }}</p>
+            <strong>تاريخ الاستعجال : </strong> {{ order.last_modified_date|date:"d-m-y" }}
+          </li>
+        {% endfor %}
+        </ol>
+      {% else %}
+        <p>لا توجد طلبات مستعجلة حاليا</p>
+      {% endif %}
+    </div>
+  </div>
+  <hr class="hr">
+  <!-- Second Scrollable Section -->
+  <div class="mb-4">
+    <h5 class="mb-2">الطلبات المتأخرة</h5>
+    <p class="text-muted">الطلبات التى فات معاد تسليمها.</p>
+    <div class="scrollable-content overflow-auto p-2 border rounded bg-white">
+      <ol>
+      {% for OverTimeOrder in overTimeOrders %}
+        <li class="border-bottom border-primary m-1 p-1">
+          <a class="btn btn-info" href="{% url 'order:listOrderDetails' OverTimeOrder.master_invoice.pk %}">رقم العملية : {{ OverTimeOrder.master_invoice.counter }}</a>
+          <p class="text-primary">إسم العميل : {{ OverTimeOrder.master_invoice.clientMI.name }}</p>
+          <p class="text-primary">حالة الطلب : {{ OverTimeOrder.statue }}</p>
+        </li>
+      {% endfor %}
+      </ol>
+    </div>
+  </div>
+</aside>
 {% endblock %}

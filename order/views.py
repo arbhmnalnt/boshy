@@ -332,6 +332,17 @@ class BasicOrderFormCreateView(FormView):
         client = master_invoice.clientMI
         initial['masterInvoice'] = master_invoice
         initial['clientS'] = client
+        # get related basicInvoiceInfo, if exists, populate form with its values, else set default values
+        basic_info = master_invoice.basicinvoiceinfo_set.first()  # Assuming one-to-one or one-to-many, adjust if needed
+        if basic_info:
+            initial['paid'] = basic_info.paid
+            initial['total'] = basic_info.total
+            initial['remain'] = basic_info.remain
+        else:
+            # Provide default values if no related basicInvoiceInfo exists
+            initial['paid'] = 0
+            initial['total'] = 0
+            initial['remain'] = 0
 
         clientSizes = ClientSizes.objects.filter(clientS=client).count()
         if clientSizes > 0 :
