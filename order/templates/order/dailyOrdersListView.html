@@ -1,0 +1,92 @@
+{% extends "homee/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>سجل اليومية</title>
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid text-center m-auto">
+    <button class="h4 btn btn-danger" type="button" data-toggle="collapse" data-target="#search_collapse" aria-expanded="false" aria-controls="search_collapse">ابحث بتاريخ اليوم</button>
+    <div class="row">
+        <div class="col-12">
+            <form class="border m-auto collapse" action="#" id="search_collapse">
+                <div class="row">
+                    <div class="col-4">
+                        <input class="w-100 form-control mt-4" name="q" placeholder="ابحث بالاسم / رقم العملية / رقم العميل">
+                    </div>
+                    <div class="col-2">
+                        <select class="form-control mt-4" name="search_by">
+                            <option value="0" selected>اختر</option>
+                            <option value="created">تاريخ الطلب</option>
+                            <option value="receve">تاريخ التسليم</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        من :
+                        <input type="date" class="w-100 form-control" name="from">
+                    </div>
+                    <div class="col-3">
+                        إلى
+                        <input type="date" class="w-100 form-control" name="to">
+                    </div>
+                    <div class="col-10 mr-auto ml-auto mt-2 mb-2">
+                        <input type="submit" class="form-control btn btn-info w-100" value="ابحث">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <h1 class="h1 border p-3">سجل اليومية</h1>
+    <h3 class="h3">جارى عمل جدول اخر بالمصروفات او دمج الجدولين</h3>
+    <div class="row mb-3 bg-white w-100" style="">
+        <div class="col-12 border border-primary p-4">
+            <table class="table text-center table-striped table-hover table-bordered w-100 h3" id="" style="">
+                <tr>
+                    <th>رقم العملية</th>
+                    <th>اسم العميل</th>
+                    <th>نوع الطلب</th>
+                    <th>تاريخ الطلب</th>
+                    <th>المدفوع</th>
+                    <th>عرض</th>
+                </tr>
+                {% for masterInvoice in  masterInvoices%}
+                <tr>
+                    <td class="bg-success text-white">{{masterInvoice.counter}}</td>
+                    <td>{{masterInvoice.clientMI.name}}</td>
+                    <td>{{masterInvoice.invoiceType}}</td>
+                    <td>
+                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                            <!-- Display details from BasicInvoiceInfo model -->
+                          {{ basicInvoiceInfo.created_at|date:'Y-m-d'}}</span>
+                            <!-- Add more fields as needed -->
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                            {% if basicInvoiceInfo.remain > 0 %}
+                                <p class="h3 text-info">
+                                    {{ basicInvoiceInfo.paid }}
+                                </p>
+
+                            {% else %}
+                                <p class="bg-white h4 text-success done_pay">تم السداد بالكامل</p>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a class="btn btn-primary text-white" href="{% url 'order:listOrderDetails'  masterInvoice.id%}">عرض الطلب</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

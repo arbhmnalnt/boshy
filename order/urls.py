@@ -19,6 +19,8 @@ urlpatterns = [
     path('createDetails/<int:pk>', DetailedOrderFormCreateView.as_view(), name="createDetails"),
     path('createBasicInfos/<int:pk>', BasicOrderFormCreateView.as_view(),name="finalPart"),
     path('list', ordersListView.as_view(), name="list"),
+    path('daily_list', dailyOrdersListView.as_view(), name="daily_list"),
+
     path('listOrderDetails/<int:pk>', ordersDetailView.as_view(), name="listOrderDetails"),
     path('listorderStatus/', orderStatusListView.as_view(), name="orderStatus"),
     path('changeDetails/<int:order_id>/<int:masterInvoicePK>', change_details, name='changeDetails'),

@@ -269,6 +269,42 @@ class orderStatusListView(ListView):
 
         return queryset
 
+class dailyOrdersListView(ListView):
+    model = MasterInvoice
+    template_name = 'order/dailyOrdersListView.html'
+    context_object_name = 'masterInvoices'
+    ordering = '-created_at'
+
+    def get_queryset(self):
+        # MasterInvoice
+        not_confirmed_orders = MasterInvoice.objects.filter(confirmed=False).delete()
+        queryset = super().get_queryset()
+        order_counter = len(queryset.all()) + 1
+        search_query = self.request.GET.get('q')
+        search_by = self.request.GET.get('search_by')
+
+        if search_query:
+            q_object = Q(clientMI__name__icontains=search_query)
+            q_object |= Q(invoiceType__icontains=search_query)
+            if search_query.isdigit():
+                q_object |= Q(counter=int(search_query))
+            queryset = queryset.filter(q_object)
+        elif search_by == "receve":
+            from_date = self.request.GET.get('from')
+            to_date = self.request.GET.get('to')
+
+            if from_date and to_date:
+                from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
+                to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d"))
+
+                basic_invoice_info_queryset = basicInvoiceInfo.objects.filter(receve_date__gte=from_date_aware, receve_date__lte=to_date_aware)
+
+                master_invoices = MasterInvoice.objects.filter(id__in=basic_invoice_info_queryset.values('masterInvoice')).distinct()
+
+                return master_invoices
+
+        return queryset.order_by('-created_at')
+
 class ordersListView(ListView):
     model = MasterInvoice
     template_name = 'order/ordersList.html'

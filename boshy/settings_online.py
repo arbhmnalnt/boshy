@@ -42,13 +42,10 @@ INSTALLED_APPS = [
     'simple_history',
     'crispy_forms',
     'crispy_bootstrap4',
-    'bootstrap_datepicker_plus',
     'home',
     'client',
     'storge',
     'order',
-    'kazna',
-    'img',
 
 ]
 
@@ -143,21 +140,12 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-onlineLocalPath = "/home/boshi/boshy"
+# default static files settings for PythonAnywhere.
+offlineLocalPath = "/boshy"
 
 # see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
-MEDIA_ROOT = onlineLocalPath + '/media'
+MEDIA_ROOT = offlineLocalPath + '/media'
 MEDIA_URL = '/media/'
-STATIC_ROOT = onlineLocalPath + '/static'
+STATIC_ROOT = offlineLocalPath + '/static'
 STATIC_URL = '/static/'
-# ===========
-
-# # default static files settings for PythonAnywhere.
-# # see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
-# MEDIA_ROOT = '/home/boshi/boshy/media'
-# MEDIA_URL = '/media/'
-# STATIC_ROOT = '/home/boshi/boshy/static'
-# STATIC_URL = '/static/'
-
 
