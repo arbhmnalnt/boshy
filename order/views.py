@@ -295,6 +295,7 @@ class dailyOrdersListView(ListView):
 			basic_invoice_info_queryset = basicInvoiceInfo.objects.filter(
 				receve_date__gte=from_date_aware, receve_date__lte=to_date_aware
 			)
+			total_paid = basic_invoice_info_queryset.aggregate(total_paid=Sum('paid'))['total_paid'] or 0
 			master_invoices = MasterInvoice.objects.filter(id__in=basic_invoice_info_queryset.values('masterInvoice')
 			).distinct().annotate(record_type=Value("orders", output_field=CharField()))
 			expenses = Expense.objects.filter(created_at__range=(from_date_aware, to_date_aware)
@@ -310,7 +311,9 @@ class dailyOrdersListView(ListView):
 		)
 		context['records'] = combined_records  # Unified key for both orders and expenses
 		context['total_expenses'] = expenses.aggregate(total=Sum('amount'))['total'] or 0
-
+		context["total_paid"] = total_paid
+		context["remain"] = total_paid - context['total_expenses']
+		context["is_profit"] = total_paid > context['total_expenses']
 		return context
 
 class ordersListView(ListView):

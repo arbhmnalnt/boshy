@@ -37,7 +37,7 @@
     <h3 class="h3">جارى عمل جدول اخر بالمصروفات او دمج الجدولين</h3>
     <div class="row mb-3 bg-white w-100" style="">
         <div class="col-12 border border-primary p-4">
-            <table class="table text-center table-striped table-hover table-bordered w-100 h3" id="" style="">
+            <table class="table table-bordered text-center table-stripedd table-hover w-100 h3" id="" style="">
                 <tr>
                     <th>رقم العملية</th>
                     <th>اسم العميل</th>
@@ -45,21 +45,48 @@
                     <th>تاريخ الطلب</th>
                     <th>المدفوع</th>
                     <th>عرض</th>
+                    <th>تفاصيل الصادر</th>
                 </tr>
-                {% for masterInvoice in  masterInvoices%}
+                {% for record in  records%}
                 <tr>
-                    <td class="bg-success text-white">{{masterInvoice.counter}}</td>
-                    <td>{{masterInvoice.clientMI.name}}</td>
-                    <td>{{masterInvoice.invoiceType}}</td>
-                    <td>
-                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
-                            <!-- Display details from BasicInvoiceInfo model -->
-                          {{ basicInvoiceInfo.created_at|date:'Y-m-d'}}</span>
-                            <!-- Add more fields as needed -->
-                        {% endfor %}
+                    <td class="bg-success text-white">
+                      {% if record.title %}
+                        {{forloop.counter}}
+                      {% else %}
+                        {{record.counter}}
+                      {% endif %}
                     </td>
                     <td>
-                        {% for basicInvoiceInfo in masterInvoice.basicinvoiceinfo_set.all %}
+                      {% if record.title %}
+                        {{record.title}}
+                      {% else %}
+                        {{record.clientMI.name}}
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if record.title %}
+                        صادر / خارج
+                      {% else %}
+                      {{record.invoiceType}}
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if record.title %}
+                        {{record.created_at|date:'Y-m-d'}}
+                      {% else %}
+                        {% for basicInvoiceInfo in record.basicinvoiceinfo_set.all %}
+                              <!-- Display details from BasicInvoiceInfo model -->
+                            {{ basicInvoiceInfo.created_at|date:'Y-m-d'}}</span>
+                              <!-- Add more fields as needed -->
+                        {% endfor %}
+                      {% endif %}
+
+                    </td>
+                    <td>
+                      {% if record.title %}
+                        {{record.amount}}
+                      {% else %}
+                      {% for basicInvoiceInfo in record.basicinvoiceinfo_set.all %}
                             {% if basicInvoiceInfo.remain > 0 %}
                                 <p class="h3 text-info">
                                     {{ basicInvoiceInfo.paid }}
@@ -69,12 +96,46 @@
                                 <p class="bg-white h4 text-success done_pay">تم السداد بالكامل</p>
                             {% endif %}
                         {% endfor %}
+                      {% endif %}
+
                     </td>
                     <td>
-                        <a class="btn btn-primary text-white" href="{% url 'order:listOrderDetails'  masterInvoice.id%}">عرض الطلب</a>
+
+                      {% if record.title %}
+                      <a class="btn btn-primary text-white" href="{% url 'kazna:expense_list'%}">عرض السجل</a>
+                      {% else %}
+                        <a class="btn btn-primary text-white" href="{% url 'order:listOrderDetails' record.id%}">عرض الطلب</a>
+                      {% endif %}
                     </td>
+                    <td>
+                      {% if record.title %}
+                        {{record.details}}
+                      {% else %}
+                       <p class="h4 text-info">لا يوجد سجل صادر</p>
+                      {% endif %}
+                  </td>
                 </tr>
                 {% endfor %}
+                <tr>
+                  <td colspan="4">اجمالى المصروفات</td>
+                  <td>{{total_expenses}}</td>
+                  <td>اجمالى الوارد</td>
+                  <td>{{total_paid}}</td>
+                </tr>
+                <tr>
+
+
+                </tr>
+                <tr class="">
+                  <td colspan="4">المتبقى = الوارد - الصادر </td>
+                  <td>
+                    {% if is_profit == 0 %}
+                      <p class="p-2 bg-danger text-white">{{remain}}</p>
+                    {% else %}
+                      <p class="p-2 bg-success text-white">{{remain}}</p>
+                    {% endif %}
+                  </td>
+                </tr>
             </table>
         </div>
     </div>

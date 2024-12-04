@@ -17,3 +17,10 @@ class DetailpayRecordAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display    = ('id',)
 
 admin.site.register(DetailpayRecord, DetailpayRecordAdmin)
+
+class DetailpayRecordAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    search_fields   = ('id',)
+    list_display    = ('id',)
+
+admin.site.register(Expense, ExpenseAdmin)
+
