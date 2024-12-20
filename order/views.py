@@ -301,6 +301,7 @@ class dailyOrdersListView(ListView):
 			expenses = Expense.objects.filter(created_at__range=(from_date_aware, to_date_aware)
 			).annotate(record_type=Value("expenses", output_field=CharField()))
 		else:
+			total_paid = 0
 			# Fetch all records if no date filter is provided
 			master_invoices = MasterInvoice.objects.all().annotate(record_type=Value("orders", output_field=CharField()))
 			expenses = Expense.objects.all().annotate(record_type=Value("expenses", output_field=CharField()))
