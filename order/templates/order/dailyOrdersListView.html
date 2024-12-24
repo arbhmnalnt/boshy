@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-    <title>سجل اليومية</title>
+<title>سجل اليومية</title>
 {% endblock %}
 
 {% block style %}
@@ -11,134 +11,96 @@
 
 {% block content %}
 <div class="container-fluid text-center m-auto">
-    <button class="h4 btn btn-danger" type="button" data-toggle="collapse" data-target="#search_collapse" aria-expanded="false" aria-controls="search_collapse">ابحث بتاريخ اليوم</button>
-    <div class="row">
-        <div class="col-12">
-            <form class="border m-auto collapse" action="#" id="search_collapse">
-                <div class="row">
+  <button class="h4 btn btn-danger" type="button" data-toggle="collapse" data-target="#search_collapse"
+    aria-expanded="false" aria-controls="search_collapse">ابحث بتاريخ اليوم</button>
+  <div class="row">
+    <div class="col-12">
+      <form class="border m-auto collapse" action="#" id="search_collapse">
+        <div class="row">
 
 
-                    <div class="col-3">
-                        من :
-                        <input type="date" class="w-100 form-control" name="from">
-                    </div>
-                    <div class="col-3">
-                        إلى
-                        <input type="date" class="w-100 form-control" name="to">
-                    </div>
-                    <div class="col-10 mr-auto ml-auto mt-2 mb-2">
-                        <input type="submit" class="form-control btn btn-info w-100" value="ابحث">
-                    </div>
-                </div>
-            </form>
+          <div class="col-3">
+            من :
+            <input type="date" class="w-100 form-control" name="from">
+          </div>
+          <div class="col-3">
+            إلى
+            <input type="date" class="w-100 form-control" name="to">
+          </div>
+          <div class="col-10 mr-auto ml-auto mt-2 mb-2">
+            <input type="submit" class="form-control btn btn-info w-100" value="ابحث">
+          </div>
         </div>
+      </form>
     </div>
-    <h1 class="h1 border p-3">سجل اليومية</h1>
-    <h3 class="h3">جارى عمل جدول اخر بالمصروفات او دمج الجدولين</h3>
-    <div class="row mb-3 bg-white w-100" style="">
-        <div class="col-12 border border-primary p-4">
-            <table class="table table-bordered text-center table-stripedd table-hover w-100 h3" id="" style="">
-                <tr>
-                    <th>رقم العملية</th>
-                    <th>اسم العميل</th>
-                    <th>نوع الطلب</th>
-                    <th>تاريخ الطلب</th>
-                    <th>المدفوع</th>
-                    <th>عرض</th>
-                    <th>تفاصيل الصادر</th>
-                </tr>
-                {% for record in  records%}
-                <tr>
-                    <td class="bg-success text-white">
-                      {% if record.title %}
-                        {{forloop.counter}}
-                      {% else %}
-                        {{record.counter}}
-                      {% endif %}
-                    </td>
-                    <td>
-                      {% if record.title %}
-                        {{record.title}}
-                      {% else %}
-                        {{record.clientMI.name}}
-                      {% endif %}
-                    </td>
-                    <td>
-                      {% if record.title %}
-                        صادر / خارج
-                      {% else %}
-                      {{record.invoiceType}}
-                      {% endif %}
-                    </td>
-                    <td>
-                      {% if record.title %}
-                        {{record.created_at|date:'Y-m-d'}}
-                      {% else %}
-                        {% for basicInvoiceInfo in record.basicinvoiceinfo_set.all %}
-                              <!-- Display details from BasicInvoiceInfo model -->
-                            {{ basicInvoiceInfo.created_at|date:'Y-m-d'}}</span>
-                              <!-- Add more fields as needed -->
-                        {% endfor %}
-                      {% endif %}
+  </div>
+  <h1 class="h1 border p-3">سجل اليومية</h1>
+  <h3 class="h3">جارى عمل جدول اخر بالمصروفات او دمج الجدولين</h3>
+  <div class="row mb-3 bg-white w-100" style="">
+    <div class="col-12 border border-primary p-4">
+      <table class="table table-bordered text-center table-stripedd table-hover w-100 h3" id="" style="">
+        <tr>
+          <th>رقم العملية</th>
+          <th>اسم العميل</th>
+          <th>نوع الطلب</th>
+          <th>تاريخ الطلب</th>
+          <th>المدفوع</th>
+          <th>عرض</th>
+          <th>تفاصيل الصادر</th>
+        </tr>
+        {% for record in records%}
+        {% if record.kind or record.title or record.counter%}
+        <tr>
+          <td>{{record.counter}}</td>
+          <td>{{record.clientMI.name}}</td>
+          <td>
+            {{record.id}}
+            {% if record.kind %}
+            <p class="p-2 bg-success text-white">وارد</p>
+            {% else %}
+            <p class="p-2 bg-danger text-white">صادر</p>
+            {% endif %}
 
-                    </td>
-                    <td>
-                      {% if record.title %}
-                        {{record.amount}}
-                      {% else %}
-                      {% for basicInvoiceInfo in record.basicinvoiceinfo_set.all %}
-                            {% if basicInvoiceInfo.remain > 0 %}
-                                <p class="h3 text-info">
-                                    {{ basicInvoiceInfo.paid }}
-                                </p>
-
-                            {% else %}
-                                <p class="bg-white h4 text-success done_pay">تم السداد بالكامل</p>
-                            {% endif %}
-                        {% endfor %}
-                      {% endif %}
-
-                    </td>
-                    <td>
-
-                      {% if record.title %}
-                      <a class="btn btn-primary text-white" href="{% url 'kazna:expense_list'%}">عرض السجل</a>
-                      {% else %}
-                        <a class="btn btn-primary text-white" href="{% url 'order:listOrderDetails' record.id%}">عرض الطلب</a>
-                      {% endif %}
-                    </td>
-                    <td>
-                      {% if record.title %}
-                        {{record.details}}
-                      {% else %}
-                       <p class="h4 text-info">لا يوجد سجل صادر</p>
-                      {% endif %}
-                  </td>
-                </tr>
-                {% endfor %}
-                <tr>
-                  <td colspan="4">اجمالى المصروفات</td>
-                  <td>{{total_expenses}}</td>
-                  <td>اجمالى الوارد</td>
-                  <td>{{total_paid}}</td>
-                </tr>
-                <tr>
+          </td>
+          <td>{{record.created_at}}</td>
+          <td>{{record.amount}}</td>
+          <td>
+            {% if record.title %}
+            <a class="btn btn-primary text-white" href="{% url 'kazna:expense_list'%}">عرض السجل</a>
+            {% else %}
+            <a class="btn btn-primary text-white" href="{% url 'order:listOrderDetails' record.id%}">عرض الطلب</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr class="d-none">
+          <td colspan="6" class="h4 text-danger">لا يوجد طلبات مدفوعة</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        <tr>
+          <td colspan="4">اجمالى المصروفات</td>
+          <td>{{total_expenses}}</td>
+          <td>اجمالى الوارد</td>
+          <td>{{total_paid}}</td>
+        </tr>
+        <tr>
 
 
-                </tr>
-                <tr class="">
-                  <td colspan="4">المتبقى = الوارد - الصادر </td>
-                  <td>
-                    {% if is_profit == 0 %}
-                      <p class="p-2 bg-danger text-white">{{remain}}</p>
-                    {% else %}
-                      <p class="p-2 bg-success text-white">{{remain}}</p>
-                    {% endif %}
-                  </td>
-                </tr>
-            </table>
-        </div>
+        </tr>
+        <tr class="">
+          <td colspan="4">المتبقى = الوارد - الصادر </td>
+          <td>
+            {% if is_profit == 0 %}
+            <p class="p-2 bg-danger text-white">{{remain}}</p>
+            {% else %}
+            <p class="p-2 bg-success text-white">{{remain}}</p>
+            {% endif %}
+          </td>
+        </tr>
+      </table>
     </div>
+  </div>
 </div>
 
 
