@@ -21,7 +21,7 @@ class DetailpayRecord(TimeStampMixin,models.Model):
     paid              = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المدفوع")
     remain              = models.IntegerField(null=True, blank=True, verbose_name="المبلغ المتبقى")
 
-    
+
 class Expense(TimeStampMixin,models.Model):
     title           = models.CharField(max_length=50, null=True, blank=True, verbose_name="مسمى الدفع")
     amount          = models.IntegerField(null=True, blank=True, verbose_name="المبلغ")
