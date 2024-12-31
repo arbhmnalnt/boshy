@@ -33,7 +33,7 @@ class clientListView(ListView):
         queryset = super().get_queryset().order_by('-id')
         clinets_counter = len(queryset.all()) + 1
         print(f'order_counter = > {clinets_counter}')
-        for cl in queryset:            
+        for cl in queryset:
             if cl.counter == None or cl.counter == 0:
                 print(f"order_counter before = > {clinets_counter}")
                 clinets_counter -= 1
@@ -41,11 +41,17 @@ class clientListView(ListView):
                 print(f'client id => {cl.id} // client counter =>>>>>>>>>>>{cl.counter}')
                 cl.save()
             else:
-                pass            
+                pass
         search_query = self.request.GET.get('q')
         if search_query:
-            queryset = queryset.filter(
-                Q(name__icontains=search_query) | Q(counter=search_query)
-            ).order_by('-id')
-        queryset = queryset.order_by('-id')
+            # تحقق مما إذا كان البحث رقميًا أو نصيًا
+            if search_query.isdigit():  # إذا كان رقميًا
+                queryset = queryset.filter(
+                    Q(counter=search_query)
+                ).order_by('-id')
+            else:  # إذا كان نصيًا
+                queryset = queryset.filter(
+                    Q(name__icontains=search_query)
+                ).order_by('-id')
+
         return queryset
