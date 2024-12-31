@@ -18,6 +18,7 @@ from django.utils.timezone import make_aware
 from django.utils import timezone
 from itertools import chain
 from django.db.models import  Value, CharField, Sum
+from datetime import datetime, timedelta
 
 
 
@@ -280,10 +281,30 @@ class dailyOrdersListView(ListView):
   ordering = '-created_at'
 
   def get_queryset(self):
-    queryset = super().get_queryset()
-    # today_date = timezone.now().date()
-    # queryset = MasterInvoice.objects.filter(basicinvoiceinfo__receve_date=today_date).order_by('-created_at')
+    queryset = super().get_queryset() 
     return queryset
+  def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from_date, to_date = get_date_range(self.request)
+        kazna_in_records   = DetailpayRecord.objects.filter(created_at__range=(from_date, to_date)).select_related('masterInvoice').annotate(record_type=Value("kazna_in_records", output_field=CharField()))
+        # Calculate the total amount for kazna_in_records
+        kazna_in_total = kazna_in_records.aggregate(total_paid=Sum('paid'))['total_paid'] or 0
+        kazna_out_records  = Expense.objects.filter(created_at__range=(from_date, to_date)).annotate(record_type=Value("kazna_out", output_field=CharField()))
+        # Calculate the total amount for kazna_in_records
+        kazna_out_total = kazna_out_records.aggregate(total_amount=Sum('amount'))['total_amount'] or 0
+        merged_records = sorted(
+            chain(kazna_in_records, kazna_out_records),
+            key=lambda record: record.created_at,
+            reverse=True
+        )
+        
+        context['records'] = merged_records
+        context['from_date'] = from_date
+        context['to_date'] = to_date
+        context['kazna_in_total'] = kazna_in_total
+        context['kazna_out_total'] = kazna_out_total
+        context['remain'] = kazna_in_total - kazna_out_total
+        return context
 
 class ordersListView(ListView):
   model = MasterInvoice
@@ -499,6 +520,8 @@ class MasterInvoiceFormCreateView(CreateView):
     print(f"self.request.session['first_step_complete'] => {self.request.session['first_step_complete']}")
     success_url = reverse('order:createDetails', kwargs={'pk': form_id})
     return HttpResponseRedirect(success_url)
+  
+
 
 ##TO Do   make a function as first step order create is done already
 ##TO Do   make a function as second step order create is done already
@@ -513,3 +536,26 @@ class MasterInvoiceFormCreateView(CreateView):
 
 ## confirm order all info or delete all order related info
 ### Confirm_Order_or_delete_all_realted_order_info()
+def get_date_range(request):
+    """
+    Extracts and processes 'date_from' and 'date_to' from the request.
+    Returns a tuple (from_date_aware, to_date_aware).
+    """
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+
+    from_date_aware = None
+    to_date_aware = None
+
+    try:
+        if date_from:
+            # Parse and make the start date timezone-aware
+            from_date_aware = make_aware(datetime.strptime(date_from, "%Y-%m-%d"))
+        if date_to:
+            # Parse and make the end date timezone-aware, inclusive of the entire day
+            to_date_aware = make_aware(datetime.strptime(date_to, "%Y-%m-%d")) + timedelta(days=1, seconds=-1)
+    except ValueError:
+        # Handle invalid date formats gracefully (optional)
+        pass
+
+    return from_date_aware, to_date_aware

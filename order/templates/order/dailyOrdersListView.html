@@ -6,9 +6,76 @@
 {% endblock %}
 
 {% block style %}
-
+.form-inline label, .form-inline input, .form-inline button{
+    font-size:1.3rem!important
+}
 {% endblock %}
 
 {% block content %}
 
+<header>
+    <h1 class="d-inline-block">سجل اليومية //  من : <span class="d-inline-block border p-1 text-info">{{from_date|date:'Y-m-d'}} </span> إلى :<span  class="d-inline-block border p-1 text-danger">{{to_date|date:'d-m-Y'}}</span></h1>
+    <div class="row">
+        <div class="col">
+            <form class="form-inline" method="GET" action="{% url 'order:daily_list' %}">
+                <label for="date_from" class="ml-2">من:</label>
+                <input type="date" class="ml-4" name="date_from" value="" type="date" class=>
+                <label for="date_to" class="ml-2">إلى:</label>
+                <input type="date"  class="ml-4" name="date_to" value="" type="date" class= >
+                <button type="submit" class="btn btn-info">بحث</button>
+                
+            </form>
+        </div>
+        <div class="col h3">
+            <span class="d-inline-block ml-2 border p-2"><label for="">الوارد = </label><span> {{kazna_in_total}}</span></span>
+            <span class="d-inline-block ml-2 border p-2"><label for="">الصادر  = </label><span> {{kazna_out_total}}</span></span>
+            <span class="d-inline-block ml-2 border p-2"><label for="">الوارد - الصادر = </label><span> {{remain}}</span></span>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col">
+            <table class="table table-hover table-bordered table-bordered">
+                <caption>سجل اليومية خلال الفترة المحددة</caption>
+                <thead>
+                    <tr>
+                        <th>رقم الطلب</th>
+                        <th>اسم العميل / المسمى</th>
+                        <th>نوع الدفع</th>
+                        <th>المبلغ المدفوع</th>
+                        <th>عرض الطلب</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    {% if record.record_type == "kazna_in_records" %}
+                    <tr>
+                        <td>{{ record.masterInvoice.counter }}</td>
+                        <td>{{ record.masterInvoice.clientMI.name }}</td>
+                        <td>وارد</td>
+                        <td>{{ record.paid }}</td>
+                        <td>
+                            <a class="btn btn-info" href="{% url 'order:listOrderDetails' record.masterInvoice.id %}">عرض التفاصيل</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td>{{ record.id }} </td>
+                        <td>{{ record.title }}</td>
+                        <td>صادر</td>
+                        <td>{{ record.amount }}</td>
+                        <td>
+                            <a class="btn btn-info" href="{% url 'kazna:expense_list' %}">عرض التفاصيل</a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</header>
 {% endblock %}
