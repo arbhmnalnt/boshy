@@ -12,8 +12,8 @@
 {% endblock %}
 
 {% block content %}
-
-<header>
+<div class="" style="position: relative;">
+  <header class="filter_holder" style="background: white; position:sticky; z-index:2;top:0px">
     <h1 class="d-inline-block">سجل اليومية //  من : <span class="d-inline-block border p-1 text-info">{{from_date|date:'Y-m-d'}} </span> إلى :<span  class="d-inline-block border p-1 text-danger">{{to_date|date:'d-m-Y'}}</span></h1>
     <div class="row">
         <div class="col">
@@ -23,7 +23,7 @@
                 <label for="date_to" class="ml-2">إلى:</label>
                 <input type="date"  class="ml-4" name="date_to" value="" type="date" class= >
                 <button type="submit" class="btn btn-info">بحث</button>
-                
+
             </form>
         </div>
         <div class="col h3">
@@ -33,6 +33,7 @@
         </div>
     </div>
     <hr>
+  </header>
     <div class="row">
         <div class="col">
             <table class="table table-hover table-bordered table-bordered">
@@ -77,5 +78,5 @@
             </table>
         </div>
     </div>
-</header>
+</</div>>
 {% endblock %}
