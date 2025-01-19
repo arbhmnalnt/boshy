@@ -32,7 +32,6 @@ class clientListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset().order_by('-id')
         clinets_counter = len(queryset.all()) + 1
-        print(f'order_counter = > {clinets_counter}')
         for cl in queryset:
             if cl.counter == None or cl.counter == 0:
                 print(f"order_counter before = > {clinets_counter}")

@@ -32,6 +32,7 @@
                     <th>العنوان</th>
                     <th>الصفحة</th>
                     <th>رقم التليفون</th>
+                    <th>عرض طلبات العميل</th>
                 </thead>
                 <tbody>
                     {% for client in clients %}
@@ -42,6 +43,9 @@
                             <td>{{ client.address }}</td>
                             <td>{{ client.page }}</td>
                             <td>{{ client.phone }}</td>
+
+                            <td><a class="btn btn-danger text-white" href=
+                              "{% url 'order:list' %}?q={{client.name}}">عرض طلبات العميل</a></td>
                         </tr>
 
                     {% empty %}

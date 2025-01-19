@@ -354,10 +354,6 @@ class ordersListView(ListView):
 								# Convert from_date and to_date into timezone-aware datetime objects
 								from_date_aware = make_aware(datetime.strptime(from_date, "%Y-%m-%d"))
 								to_date_aware = make_aware(datetime.strptime(to_date, "%Y-%m-%d"))
-
-								# Print debug information for verification
-								print(f"Filtering by created_at from {from_date_aware} to {to_date_aware}")
-
 								# Filter by created_at date range
 								q_object &= Q(created_at__gte=from_date_aware, created_at__lte=to_date_aware)
 
@@ -370,10 +366,6 @@ class ordersListView(ListView):
 
 			# Combine all filters
 			queryset = queryset.filter(q_object)
-
-			# Debug: Check the final filtered queryset count and content
-			print(f"Filtered queryset count: {queryset.count()}")
-			print(f"Filtered queryset: {list(queryset)}")
 
 		# Order results by created_at descending and return
 			return queryset.order_by('-created_at')
