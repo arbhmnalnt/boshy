@@ -2,111 +2,92 @@
 <html lang="ar">
 <head>
     {% load static %}
-    {% block title %}{% endblock %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
 
-    <link rel="stylesheet" href="{% static 'homee/css/bootstrap_5.min.css' %}"/>
-    <link rel="stylesheet" href="{% static 'homee/css/bootstrap.min.css' %}"/>
-    <link rel="stylesheet" href="{% static 'homee/css/chosen.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'homee/css/all.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'homee/css/style.css' %}" />
-    <script src="{% static 'homee/js/jquery.min.js' %}"></script>
-    <script src="{% static 'homee/js/htmx.js' %}"></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'homee/css/bootstrap_5.min.css' %}">
+    <link rel="stylesheet" href="{% static 'homee/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'homee/css/chosen.min.css' %}">
+    <link rel="stylesheet" href="{% static 'homee/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'homee/css/style.css' %}">
 
+    <!-- Inline styles -->
     <style>
-		.content-wrapper {
+        .content-wrapper {
             display: flex;
-            gap: 5px; /* Adds space between main and aside */
+            gap: 5px;
         }
         .main-content {
             flex: 3;
             background-color: #ffffff52;
         }
         .aside-section {
-			width: 30%; /* Or use a percentage if you prefer */
-			background-color: #f8f9fa;
-			padding: 20px;
-		}
-    .hr{
-      border: 4px solid red;
-      margin-bottom: 10px;
-    }
-		{% block style %}
-
-
+            width: 30%;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .hr {
+            border: 4px solid red;
+            margin-bottom: 10px;
+        }
+        {% block style %}
         {% endblock %}
     </style>
+
     {{ form.media }}
 </head>
 <body style="direction:rtl;">
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand h3" href="{% url 'home:homepage' %}">البوشى</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand h3" href="{% url 'home:homepage' %}">البوشى</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'home:homepage' %}">الرئيسية <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-danger text-white ml-4" href="{% url "client:create" %}">اضافة عميل</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-danger text-white ml-4" href="{% url "order:createMain" %}">عملية بيع جديدة</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-primary text-white ml-4" href="{% url "order:list" %}">البحث عن عملية بيع</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link btn btn-primary text-white ml-4" href="{% url "kazna:list" %}">سجل الخزنة</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link btn btn-info text-white ml-4" href="{% url 'order:daily_list' %}">سجل اليومية</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link btn btn-info"  href="{% url 'order:listDebit' %}"> صفحة المديونيات</a>
-                </li>
-
-
-
-                <li class="nav-item dropdown d-inline-block">
-                    <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="">باقى لينكات الوصول السريع</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown01">
-                        <a class="dropdown-item btn btn-success" href="{% url "client:list" %}">قائمة العملاء</a>
-                        <a class="dropdown-item btn btn-info" href="{% url "client:create" %}">اضافة عميل جديد</a>
-                        <a class="dropdown-item btn btn-danger" href="{% url "order:createMain" %}">عملية بيع جديدة</a>
-                        <a class="dropdown-item btn btn-danger" href="{% url "cloth:list" %}">مخزن القماش</a>
-                        <a class="dropdown-item btn btn-danger" href="{% url 'order:orderStatus' %}">متابعة وتسليم الطلبات</a>
-                        <a class="btn btn-warning text-white w-100 home"  href="{% url 'order:listDebit' %}">
-                          صفحة المديونيات
-                        </a>
-                    </div>
-                </li>
-            </ul>
-
-        </div>
-    </nav>
-    <div class="container-fluid mt-1 pt-1 content-wrapper">
-      <main role="main" class="main-content container-fluid mt-5 pt-3">
-          {% block content %}{% endblock %}
-      </main>
-      {% block aside %}{% endblock %}
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home:homepage' %}">الرئيسية</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-danger text-white ml-4" href="{% url 'client:create' %}">اضافة عميل</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-danger text-white ml-4" href="{% url 'order:createMain' %}">عملية بيع جديدة</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-primary text-white ml-4" href="{% url 'order:list' %}">البحث عن عملية بيع</a>
+            </li>
+            <li class="nav-item dropdown d-inline-block">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">لينكات سريعة</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a class="dropdown-item" href="{% url 'client:list' %}">قائمة العملاء</a>
+                    <a class="dropdown-item" href="{% url 'order:createMain' %}">عملية بيع جديدة</a>
+                </div>
+            </li>
+        </ul>
     </div>
+</nav>
 
-    <script src="{% static 'homee/js/jquery.min.js' %}"></script>
-    <script src="{% static 'homee/js/popper.min.js' %}"></script>
-    <script src="{% static 'homee/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'homee/js/htmx.js' %}"></script>
-    <script src="{% static 'homee/js/chosen.js'%}"></script>
-    <script src="{% static 'homee/js/bootstrap_5.bundle.min.js'%}"></script>
-    <script src="{% static 'homee/css/all.min.css'%}"></script>
-    <script src="{% static 'homee/css/all.min.css'%}"></script>
-    <script>
-        {% block script %}{% endblock %}
-    </script>
+<!-- Content Wrapper -->
+<div class="container-fluid mt-1 pt-1 content-wrapper">
+    <main class="main-content container-fluid mt-5 pt-3">
+        {% block content %}
+        {% endblock %}
+    </main>
+    {% block aside %}
+    {% endblock %}
+</div>
 
+<!-- Scripts -->
+<script src="{% static 'homee/js/jquery.min.js' %}"></script>
+<script src="{% static 'homee/js/popper.min.js' %}"></script>
+<script src="{% static 'homee/js/bootstrap.min.js' %}"></script>
+<script>
+    {% block script %}
+    {% endblock %}
+</script>
 </body>
+</html>

@@ -1,122 +1,96 @@
 {% extends "homee/index.html" %}
+
 {% block title %}
 <title>الصفحة الرئيسية</title>
 {% endblock %}
+
 {% block style %}
 <style>
-	.custom-btn:hover {
-		background-color: #007bff;
-	}
-	.scrollable-content {
-		height: 12rem; /* Fixed height to enable scrolling */
-	}
+    .custom-btn:hover {
+        background-color: #007bff;
+    }
+    .scrollable-content {
+        height: 12rem;
+        overflow-y: auto;
+    }
+    .section {
+        margin-bottom: 1.5rem;
+    }
 </style>
 {% endblock %}
+
 {% block content %}
-<div class="row border p-4">
-	<div class="col-md-3">
-		<a class="btn btn-info custom-btn" href="{% url 'client:list' %}">
-			<i class="fa-solid fa-users me-2"></i> إدارة العملاء
-		</a>
-	</div>
-	<div class="col-md-3">
-		<a class="btn btn-info custom-btn" href="{% url 'cloth:list' %}">
-			<i class="fa-solid fa-warehouse me-2"></i> إدارة القماش
-		</a>
-	</div>
-	<div class="col-md-4">
-		<a class="btn btn-info custom-btn" href="{% url 'order:createMain' %}">
-			<i class="fa-solid fa-plus me-2"></i> عملية بيع جديدة
-		</a>
-	</div>
-</div>
-<div class="row border p-4">
-	<div class="col-md-3">
-		<a class="btn btn-danger custom-btn" href="{% url 'order:list' %}">
-			<i class="fa-solid fa-table-cells me-2"></i> سجل العمليات
-		</a>
-	</div>
-	<div class="col-md-2">
-		<a class="btn btn-danger custom-btn" href="{% url 'kazna:list' %}">
-			<i class="fa-solid fa-cash-register me-2"></i> الخزنة
-		</a>
-	</div>
-	<div class="col-md-2">
-		<a class="btn btn-danger custom-btn" href="{% url 'order:daily_list' %}">
-			<i class="fa-solid fa-receipt me-2"></i> اليومية
-		</a>
-	</div>
-	<div class="col-md-3">
-		<a class="btn btn-danger custom-btn" href="{% url 'order:orderStatus' %}">
-			<i class="fa-solid fa-truck-ramp-box me-2"></i> متابعة وتسليم </a>
-	</div>
-</div>
-<div class="row border p-4">
-	<div class="col-md-2">
-		<a class="btn btn-success custom-btn" href="{% url 'img:list' %}">
-			<i class="fa-solid fa-images me-2"></i> الصور
-		</a>
-	</div>
-	<div class="col-md-2">
-		<a class="btn btn-success custom-btn" href="{% url 'kazna:old_list' %}">
-			<i class="fa-solid fa-table-cells me-2"></i> سجلات الخزنة القديمة - ما قبل 12-05-2024
-		</a>
-	</div>
-	<div class="col-md-2">
-		<a class="btn btn-success custom-btn" href="{% url 'kazna:expense_list' %}">
-			المدفوعات
-		</a>
-	</div>
-	<div class="col-md-2">
-		<a class="btn btn-warning custom-btn" href="{% url 'order:listDebit' %}">
-			المديونيات
-		</a>
-	</div>
-	<div class="col-2">
-		<a class="btn btn-warning custom-btn" href="{% url 'order:needToBeDoneOrders' %}">
-			 المهام
-		</a>
-	</div>
+<div class="container-fluid mt-5 pt-3">
+    <!-- Quick Actions Section -->
+    <div class="section row border p-4">
+        <div class="col-md-3">
+            <a class="btn btn-info custom-btn w-100" href="{% url 'client:list' %}">
+                <i class="fa-solid fa-users me-2"></i> إدارة العملاء
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-info custom-btn w-100" href="{% url 'cloth:list' %}">
+                <i class="fa-solid fa-warehouse me-2"></i> إدارة القماش
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-info custom-btn w-100" href="{% url 'order:createMain' %}">
+                <i class="fa-solid fa-plus me-2"></i> عملية بيع جديدة
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-primary custom-btn w-100" href="{% url 'order:list' %}">
+                <i class="fa-solid fa-search me-2"></i> البحث عن عملية بيع
+            </a>
+        </div>
+    </div>
+
+    <!-- Secondary Actions Section -->
+    <div class="section row border p-4">
+        <div class="col-md-3">
+            <a class="btn btn-success custom-btn w-100" href="{% url 'client:create' %}">
+                <i class="fa-solid fa-user-plus me-2"></i> إضافة عميل جديد
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-warning custom-btn w-100" href="">
+                <i class="fa-solid fa-plus-circle me-2"></i> إضافة قماش جديد
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-danger custom-btn w-100" href="">
+                <i class="fa-solid fa-clock me-2"></i> الطلبات المستعجلة
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-dark custom-btn w-100" href="">
+                <i class="fa-solid fa-chart-bar me-2"></i> التقارير والإحصائيات
+            </a>
+        </div>
+    </div>
 </div>
 {% endblock %}
-{% block aside %}
-<aside class="aside-section">
-  <!-- First Scrollable Section -->
-  <div class="mt-5 mb-2">
-    <h5 class="mt-2">الطلبات المستعجلة</h5>
 
-    <div class="scrollable-content overflow-auto p-2 border rounded bg-white">
-      {% if urgentOrders %}
-        <ol>
-        {% for order in urgentOrders %}
-          <li class="border-bottom border-primary m-1 p-1">
-            <a class="btn btn-info" href="{% url 'order:listOrderDetails' order.master_invoice.pk %}">رقم العملية : {{ order.master_invoice.counter }}</a>
-            <p class="text-primary">إسم العميل : {{ order.master_invoice.clientMI.name }}</p>
-            <strong>تاريخ الاستعجال : </strong> {{ order.last_modified_date|date:"d-m-y" }}
-          </li>
-        {% endfor %}
-        </ol>
-      {% else %}
-        <p>لا توجد طلبات مستعجلة حاليا</p>
-      {% endif %}
+{% block aside %}
+<!-- Urgent Orders Section -->
+<aside class="aside-section">
+    <h5 class="text-center">الطلبات المستعجلة</h5>
+    <div class="scrollable-content bg-white border rounded p-3">
+        {% if urgentOrders %}
+            <ul class="list-group">
+            {% for order in urgentOrders %}
+                <li class="list-group-item">
+                    <a href="{% url 'order:listOrderDetails' order.master_invoice.pk %}">
+                        رقم العملية: {{ order.master_invoice.counter }}
+                    </a>
+                    <p>اسم العميل: {{ order.master_invoice.clientMI.name }}</p>
+                    <p>تاريخ التسليم: {{ order.due_date }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-center text-muted">لا توجد طلبات مستعجلة حاليا</p>
+        {% endif %}
     </div>
-  </div>
-  <hr class="hr">
-  <!-- Second Scrollable Section -->
-  <div class="mb-4">
-    <h5 class="mb-2">الطلبات المتأخرة</h5>
-    <p class="text-muted">الطلبات التى فات معاد تسليمها.</p>
-    <div class="scrollable-content overflow-auto p-2 border rounded bg-white">
-      <ol>
-      {% for OverTimeOrder in overTimeOrders %}
-        <li class="border-bottom border-primary m-1 p-1">
-          <a class="btn btn-info" href="{% url 'order:listOrderDetails' OverTimeOrder.master_invoice.pk %}">رقم العملية : {{ OverTimeOrder.master_invoice.counter }}</a>
-          <p class="text-primary">إسم العميل : {{ OverTimeOrder.master_invoice.clientMI.name }}</p>
-          <p class="text-primary">حالة الطلب : {{ OverTimeOrder.statue }}</p>
-        </li>
-      {% endfor %}
-      </ol>
-    </div>
-  </div>
 </aside>
 {% endblock %}
