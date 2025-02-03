@@ -11,6 +11,8 @@ urlpatterns = [
     path('getClothStorgedAmount', getClothStorgedAmount),
     path('dublicate/<int:pk>', dublicate),
     path('delete_details/<int:pk>', DetailedOrderDelete, name='delete_details'),   # DetailedOrder   delete
+    path('cleanup_orders/', cleanup_orders, name='cleanup_orders'),
+
     # ========= END API    ==================
     path('editDebit/<int:pk>', editDebitFormEditView.as_view(), name="editDebit"),
     path('listDebit/', debitListView.as_view(), name="listDebit"),

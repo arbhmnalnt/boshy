@@ -10,7 +10,7 @@ class Img (models.Model):
     name          = models.CharField(max_length=75, null=True, blank=True, verbose_name="اسم الصورة")
     GENDER_CHOICES = [
         ('male'   ,   'رجالى'),
-        ('femal'  ,   'حريمى')
+        ('female'  ,   'حريمى')
     ]
     kind            = models.CharField(max_length=10, choices=GENDER_CHOICES, null=True, blank=True, verbose_name="نوع العميل", default="male" )
     sort            = models.ForeignKey("Sort", verbose_name="تصنيف الصورة", on_delete=models.CASCADE, null=True, blank=True)

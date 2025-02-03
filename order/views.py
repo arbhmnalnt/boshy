@@ -19,7 +19,7 @@ from django.utils import timezone
 from itertools import chain
 from django.db.models import  Value, CharField, Sum
 from datetime import datetime, timedelta
-
+from .utils import del_un_complete_order
 
 
 @csrf_exempt
@@ -306,7 +306,12 @@ class dailyOrdersListView(ListView):
 				context['remain'] = kazna_in_total - kazna_out_total
 				return context
 
+def cleanup_orders(request):
+	str = del_un_complete_order()
+	return JsonResponse({"message": str})
+
 class ordersListView(ListView):
+
 	model = MasterInvoice
 	template_name = 'order/ordersList.html'
 	context_object_name = 'masterInvoices'
@@ -468,6 +473,17 @@ class DetailedOrderFormCreateView(CreateView):
 	form_class       = DetailedOrderForm
 	template_name   = 'order/detailedOrderCreate_form.html'
 
+	def get_form_kwargs(self):
+		kwargs = super().get_form_kwargs()
+		master_invoice_pk = self.kwargs.get('pk')
+		master_invoice = MasterInvoice.objects.get(pk=master_invoice_pk)
+
+		# Pass invoice type to form
+
+		print(f"str(master_invoice.invoiceType) => {str(master_invoice.invoiceType)}")
+		kwargs['invoice_type'] = str(master_invoice.invoiceType)
+		return kwargs
+
 	def get_initial(self):
 		initial = super().get_initial()
 		master_invoice_pk = self.kwargs.get('pk')
@@ -478,10 +494,15 @@ class DetailedOrderFormCreateView(CreateView):
 		if 'رجالى' in str(orderType):
 			imgs = Img.objects.filter(kind='male')
 		elif 'حريمى' in str(orderType):
-			imgs = Img.objects.filter(kind='femal')
+			imgs = Img.objects.filter(kind='female')
 		initial['img'] = imgs
 		return initial
 
+
+
+		# Pass invoice type to form
+		kwargs['invoice_type'] = str(master_invoice.invoiceType)
+		return kwargs
 
 	def get_context_data(self, **kwargs):
 		print(f"kwargs =>  {kwargs}")
@@ -493,7 +514,7 @@ class DetailedOrderFormCreateView(CreateView):
 		if 'رجالى' in str(orderType):
 			imgs = Img.objects.filter(kind='male')
 		elif 'حريمى' in str(orderType):
-			imgs = Img.objects.filter(kind='femal')
+			imgs = Img.objects.filter(kind='female')
 		else:
 			imgs = ''
 
@@ -551,6 +572,11 @@ class MasterInvoiceFormCreateView(CreateView):
 
 ## confirm order all info or delete all order related info
 ### Confirm_Order_or_delete_all_realted_order_info()
+
+
+
+
+
 def get_date_range(request):
 		"""
 		Extracts and processes 'date_from' and 'date_to' from the request.

@@ -35,7 +35,7 @@ class MasterInvoice( TimeStampMixin,models.Model):
         return reverse('order:createDetails', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return f" الفاتورة رقم ({self.id})"
+        return f" الفاتورة رقم ({self.counter})"
 
 
 # ==========  tables for many orders in on Invoice

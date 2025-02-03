@@ -30,7 +30,7 @@ class Client(TimeStampMixin, models.Model):
     address     = models.CharField(max_length=50, null=True, blank=True, verbose_name="العنوان")
 
     def __str__(self):
-        return f"{self.name} ({str(self.id)}) "
+        return f"{self.name} ({str(self.counter)}) "
 
     def save(self, *args, **kwargs):
         # Automatically populate the 'name' field with the concatenation of fName, SName, TName, and LName

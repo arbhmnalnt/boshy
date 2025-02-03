@@ -148,11 +148,13 @@ setInterval(function(){
     $("#activated_img_name").attr('value', img_name);
 },500)
 
-var myCarousel = $('#myCarousel');
+$(document).ready(function() {
+    var myCarousel = $('#myCarousel');
 
-// Pause the carousel when the "Stop Carousel" button is clicked
-$('#stopCarouselBtn').on('click', function() {
-    myCarousel.carousel('pause');
+    $('#stopCarouselBtn').on('click', function() {
+        console.log("Carousel should pause");
+        myCarousel.carousel('pause');
+    });
 });
 
 $("#id_img").change(function(){
