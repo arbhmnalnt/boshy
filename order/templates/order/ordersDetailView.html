@@ -65,18 +65,25 @@
           </div>
       </div>
 
-      <!-- Client Sizes Section -->
-      <div class="col-md-3 col-lg-3 mb-4">
-          <ul class="list-unstyled text-start">
-              <li><label>الطول</label> : <span>{{ clientSizes.tall }}</span></li>
-              <li><label>الكم</label> : <span>{{ clientSizes.kom }}</span></li>
-              <li><label>الكتف</label> : <span>{{ clientSizes.ktf }}</span></li>
-              <li><label>الصدر</label> : <span>{{ clientSizes.sadr }}</span></li>
-              <li><label>اللياقة</label> : <span>{{ clientSizes.leaka }}</span></li>
-              <li><label>الخزنة</label> : <span>{{ clientSizes.kazna }}</span></li>
-              <li><label>الأتك</label> : <span>{{ clientSizes.atak }}</span></li>
-          </ul>
-      </div>
+        <!-- Client Sizes Section -->
+        <div class="col-md-3 col-lg-3 mb-4">
+            <ul class="list-unstyled text-start">
+                <li><label>الطول</label> : <span>{{ clientSizes.tall }}</span></li>
+                <li><label>الكم</label> : <span>{{ clientSizes.kom }}</span></li>
+                <li><label>الكتف</label> : <span>{{ clientSizes.ktf }}</span></li>
+                <li><label>الصدر</label> : <span>{{ clientSizes.sadr }}</span></li>
+                <li><label>الخزنة</label> : <span>{{ clientSizes.kazna }}</span></li>
+                <li><label>الأتك</label> : <span>{{ clientSizes.atak }}</span></li>
+              {% if clientSizes.batn %}
+                <li><label>البطن</label> : <span>{{ clientSizes.batn }}</span></li>
+                <li><label>الهنش</label> : <span>{{ clientSizes.hanch }}</span></li>
+                <li><label>س / ص</label> : <span>{{ clientSizes.sd }}</span></li>
+                <li><label>س / هـ</label> : <span>{{ clientSizes.sh }}</span></li>
+              {% else %}
+                <li><label>اللياقة</label> : <span>{{ clientSizes.leaka }}</span></li>
+              {% endif %}
+            </ul>
+        </div>
 
       <!-- Content Section -->
       <div class="col-md-6 col-lg-6">

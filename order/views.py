@@ -198,14 +198,50 @@ class ordersDetailView(DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data()
-		master_invoice_pk   = self.kwargs.get('pk')
-		masterInvoice       = MasterInvoice.objects.get(pk=master_invoice_pk)
-		clientMI            = masterInvoice.clientMI
-		context["masterInvoice"]    = masterInvoice
-		context["DetailedOrders"]   = DetailedOrder.objects.filter(masterInvoice=masterInvoice)
-		context['basicInfo']        = basicInvoiceInfo.objects.get(masterInvoice=masterInvoice)
-		context["clientSizes"]      = ClientSizes.objects.get(clientS=clientMI)
-		context["kaznaRecords"]     = Record.objects.filter(masterInvoice=master_invoice_pk)
+		master_invoice_pk = self.kwargs.get('pk')
+		masterInvoice = MasterInvoice.objects.get(pk=master_invoice_pk)
+		clientMI = masterInvoice.clientMI
+
+		# Fetch client sizes
+		client_sizes = ClientSizes.objects.get(clientS=clientMI)
+
+		# Convert client sizes to a dictionary
+		clientSizesDict = {
+				"tall": client_sizes.tall,
+				"kom": client_sizes.kom,
+				"ktf": client_sizes.ktf,
+				"sadr": client_sizes.sadr,
+				"leaka": client_sizes.leaka,
+				"kazna": client_sizes.kazna,
+				"atak": client_sizes.atak,
+		}
+
+		# If the client is female, extract extra fields from `leaka`
+		if clientMI.kindMale == "female":
+				pass
+
+				# Split leaka values
+				leaka_values = client_sizes.leaka.split(":")  # Assuming "batn:hanch:sd:sh"
+
+				# Ensure there are enough values before assigning
+				if len(leaka_values) == 4:
+						clientSizesDict.update({
+								"batn": leaka_values[0] or "غير متوفر",
+								"hanch": leaka_values[1] or "غير متوفر",
+								"sd": leaka_values[2] or "غير متوفر",
+								"sh": leaka_values[3] or "غير متوفر",
+						})
+				else:
+						print(f"Warning: Unexpected leaka format -> {client_sizes.leaka}")
+
+
+		# Add to context
+		context["clientSizes"] = clientSizesDict
+		context["masterInvoice"] = masterInvoice
+		context["DetailedOrders"] = DetailedOrder.objects.filter(masterInvoice=masterInvoice)
+		context["basicInfo"] = basicInvoiceInfo.objects.get(masterInvoice=masterInvoice)
+		context["kaznaRecords"] = Record.objects.filter(masterInvoice=master_invoice_pk)
+
 		return context
 
 from datetime import datetime, timedelta
@@ -381,6 +417,13 @@ class BasicOrderFormCreateView(FormView):
 	form_class  = basicInvoiceInfoForm
 	template_name   = 'order/basicOrderCreate_form.html'
 	success_url = reverse_lazy('order:list')
+
+	def get_form_kwargs(self):
+		kwargs = super().get_form_kwargs()
+		master_invoice_pk = self.kwargs.get('pk')
+		master_invoice = MasterInvoice.objects.get(pk=master_invoice_pk)
+		kwargs['client'] = master_invoice.clientMI  # Pass the client object
+		return kwargs
 
 	def get_initial(self):
 		initial = super().get_initial()

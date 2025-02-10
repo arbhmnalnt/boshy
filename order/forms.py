@@ -55,16 +55,38 @@ class basicInvoiceInfoForm(forms.Form):
 		statue          = forms.ChoiceField(choices=basicInvoiceInfo.orderStatue, required=False, label="حالة الطلب", initial='unknwon')
 		receve_date = forms.DateField( required=False, label="تاريخ التسليم", widget=DatePickerInput())
 
+		def __init__(self, *args, **kwargs):
+			client = kwargs.pop('client', None)  # Get client if passed from the view
+			super().__init__(*args, **kwargs)
+			if client:
+				print(f"Client: {client.name}, Gender: {client.kindMale}")  # Debugging
+			# Check if client is female
+			if client and client.kindMale == 'female':
+				# Add new female-specific fields
+				self.fields['batn'] = forms.CharField(max_length=15, required=False, label="البطن")
+				self.fields['hanch'] = forms.CharField(max_length=15, required=False, label="الهنش")
+				self.fields['sd'] = forms.CharField(max_length=15, required=False, label="س/ص")
+				self.fields['sh'] = forms.CharField(max_length=15, required=False, label="س/هـ")
+
+				# Populate values from `leaka` field if editing an existing entry
+				if 'leaka' in self.initial and self.initial['leaka']:
+					try:
+						batn, hanch, sd, sh = self.initial['leaka'].split(':')
+						self.initial.update({'batn': batn, 'hanch': hanch, 'sd': sd, 'sh': sh})
+					except ValueError:
+						pass  # If leaka isn't in the expected format, ignore
+
 		def clean(self):
-				cleaned_data = super().clean()
-				total   = cleaned_data.get('total')
-				paid    = cleaned_data.get('paid')
+			""" Override clean() to store female-specific fields in `leaka`. """
+			cleaned_data = super().clean()
+			client = cleaned_data.get('clientS')
 
-				if total is not None and paid is not None:
-						remain = total - paid
-						cleaned_data['remain'] = remain
+			if client and client.kindMale == 'female':
+				# Save female-specific sizes in `leaka`
+				cleaned_data['leaka'] = f"{cleaned_data.get('batn', '')}:{cleaned_data.get('hanch', '')}:{cleaned_data.get('sd', '')}:{cleaned_data.get('sh', '')}"
 
-				return cleaned_data
+			return cleaned_data
+
 
 class DeliverdForm(forms.ModelForm):
 		class Meta:

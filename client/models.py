@@ -78,5 +78,16 @@ class ClientSizes(TimeStampMixin, models.Model):
     t       = models.CharField(max_length=5, null=True, blank=True, verbose_name="دوران الرقبه")
     atak    = models.CharField(max_length=5, null=True, blank=True, verbose_name="الأتك") # الأتك
 
+    def get_extra_sizes(self):
+        """Retrieve batn, hanch, sd, sh values if client is female"""
+        if self.clientS.kindMale == "female" and self.leaka:
+            sizes = self.leaka.split(":")
+            return {
+                "batn": sizes[0] if len(sizes) > 0 else None,
+                "hanch": sizes[1] if len(sizes) > 1 else None,
+                "sd": sizes[2] if len(sizes) > 2 else None,
+                "sh": sizes[3] if len(sizes) > 3 else None,
+            }
+        return {}
     def __str__(self):
         return self.clientS.name

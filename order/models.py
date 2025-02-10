@@ -39,6 +39,7 @@ class MasterInvoice( TimeStampMixin,models.Model):
 
 
 # ==========  tables for many orders in on Invoice
+
 class DetailedOrder (TimeStampMixin,models.Model):
     masterInvoice   = models.ForeignKey(MasterInvoice, on_delete=models.CASCADE, verbose_name="الفاتورة")
     name            = models.CharField(max_length=90, null=True, blank=True, verbose_name="اسم الطلب")

@@ -17,7 +17,7 @@
         <div class="col-12 mb-5 border border-danger p-4">
             <form method="post" class="h3">
                 {{ form.media }}
-                
+
                 {% csrf_token %}
                 <div class="form-row">
                     <div class="form-group col-4 mb-0">
@@ -60,20 +60,49 @@
                     <div class="form-group col">
                         {{ form.ktf|as_crispy_field }}
                     </div>
-                    <div class="form-group col-3">
-                        {{ form.leaka|as_crispy_field }}
-                    </div>
                     <div class="form-group col">
-                        {{ form.kazna|as_crispy_field }}
-                    </div>
-                    <div class="form-group col">
-                        {{ form.atak|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-2">
-                        {{ form.t|as_crispy_field }}
-                    </div>
+                      {{ form.kazna|as_crispy_field }}
+                  </div>
+                  <div class="form-group col">
+                      {{ form.atak|as_crispy_field }}
+                  </div>
+                  <div class="form-group col-2">
+                      {{ form.t|as_crispy_field }}
+                  </div>
+                    <!-- Female-specific Fields (Only if they exist in form) -->
+                    {% if form.batn or form.hanch or form.sd or form.sh %}
+                    <hr>
 
-                    
+                    <div class="form-row">
+                      <span class="text-danger">قياسات خاصة بالملابس الحريمى</span>
+                        {% if form.batn %}
+                            <div class="form-group col">
+                                {{ form.batn|as_crispy_field }}
+                            </div>
+                        {% endif %}
+                        {% if form.hanch %}
+                            <div class="form-group col">
+                                {{ form.hanch|as_crispy_field }}
+                            </div>
+                        {% endif %}
+                        {% if form.sd %}
+                            <div class="form-group col">
+                                {{ form.sd|as_crispy_field }}
+                            </div>
+                        {% endif %}
+                        {% if form.sh %}
+                            <div class="form-group col">
+                                {{ form.sh|as_crispy_field }}
+                            </div>
+                        {% endif %}
+                        {% else %}
+                      <div class="form-group col-3">
+                          {{ form.leaka|as_crispy_field }}
+                      </div>
+
+                    </div>
+                {% endif %}
+
                 </div>
 
                 <button type="submit" class="btn btn-danger text-white d-block w-100 h3 mt-3">تسجيل باقى البيانات</button>
@@ -99,7 +128,7 @@ setTimeout(function(){
 $("#div_id_is_deleted").hide()
 
 $("#id_paid").keyup(function(){
-    
+
     $("#id_remain").attr('value', $("#id_total").val() - $("#id_paid").val())
 
 })
